@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_6"
+            android:background="@drawable/blue_shadows"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabBar" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tabBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_64"
+            android:background="#2699fb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:layout_width="@dimen/icon_32"
+                android:layout_height="@dimen/icon_32"
+                android:layout_marginStart="@dimen/margin_32"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/back_arrow_icon"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="@dimen/width_320"
+                android:layout_height="@dimen/height_32"
+                android:gravity="center"
+                android:text="@string/my_info"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/profile_view"
+            android:layout_width="@dimen/icon_128"
+            android:layout_height="@dimen/icon_128"
+            android:layout_marginTop="@dimen/margin_19"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@+id/tabBar"
+            app:srcCompat="@drawable/profile_base"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/my_info_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginTop="@dimen/margin_32"
+            android:text="@string/ex_name"
+            android:textColor="#666666"
+            android:textSize="@dimen/font_20sp"
+            app:layout_constraintStart_toEndOf="@id/profile_view"
+            app:layout_constraintTop_toTopOf="@id/profile_view" />
+
+        <TextView
+            android:id="@+id/photo_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:text="@string/photo_change"
+            android:textColor="#1d429a"
+            android:textSize="@dimen/font_20sp"
+            app:layout_constraintStart_toEndOf="@id/profile_view"
+            app:layout_constraintTop_toBottomOf="@id/my_info_name" />
+
+        <ImageView
+            android:id="@+id/photo_change_icon"
+            android:layout_width="@dimen/icon_32"
+            android:layout_height="@dimen/icon_32"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@id/photo_change"
+            app:layout_constraintStart_toEndOf="@id/photo_change"
+            app:layout_constraintTop_toTopOf="@id/photo_change"
+            app:srcCompat="@drawable/motive_icon_compose"
+            tools:ignore="ContentDescription" />
+
+        <View
+            android:id="@+id/boundary"
+            android:layout_width="@dimen/width_416"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/margin_32"
+            android:background="#b3b3b3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_view" />
+
+        <TextView
+            android:id="@+id/explainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="계정정보"
+            android:textColor="#b3b3b3"
+            android:textSize="@dimen/font_20sp"
+            android:layout_marginTop="@dimen/margin_16"
+            app:layout_constraintStart_toStartOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@id/boundary" />
+
+        <TextView
+            android:id="@+id/explainTextId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아이디"
+            android:textColor="#202020"
+            android:textSize="@dimen/font_20sp"
+            android:layout_marginTop="@dimen/margin_16"
+            app:layout_constraintStart_toStartOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@id/explainText" />
+
+        <TextView
+            android:id="@+id/TextId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="superbrain"
+            android:textColor="#1d429a"
+            android:textSize="@dimen/font_20sp"
+            android:layout_marginTop="@dimen/margin_16"
+            android:layout_marginEnd="@dimen/margin_32"
+            app:layout_constraintEnd_toEndOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@id/explainText"
+            />
+
+
+        <TextView
+            android:id="@+id/explainTextEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이메일"
+            android:textColor="#202020"
+            android:textSize="@dimen/font_20sp"
+            android:layout_marginTop="@dimen/margin_16"
+            app:layout_constraintStart_toStartOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@id/explainTextId" />
+
+        <TextView
+            android:id="@+id/TextEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="superbrain@superbrain.co.kr"
+            android:textColor="#1d429a"
+            android:textSize="@dimen/font_20sp"
+            android:layout_marginTop="@dimen/margin_16"
+            android:layout_marginEnd="@dimen/margin_32"
+            app:layout_constraintEnd_toEndOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@id/explainTextId"
+            />
+
+        <TextView
+            android:id="@+id/explainTextPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비밀번호"
+            android:textColor="#202020"
+            android:textSize="@dimen/font_20sp"
+            android:layout_marginTop="@dimen/margin_16"
+            app:layout_constraintStart_toStartOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@id/explainTextEmail" />
+
+        <TextView
+            android:id="@+id/TextPass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비밀번호 변경하기"
+            android:textColor="#1d429a"
+            android:textSize="@dimen/font_20sp"
+            app:layout_constraintEnd_toEndOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@id/explainTextEmail"
+            android:layout_marginEnd="@dimen/margin_32"
+            android:layout_marginTop="@dimen/margin_16"
+            />
+
+        <ImageView
+            android:id="@+id/pass_change_icon"
+            android:layout_width="@dimen/icon_32"
+            android:layout_height="@dimen/icon_32"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@id/TextPass"
+            app:layout_constraintStart_toEndOf="@id/TextPass"
+            app:layout_constraintTop_toTopOf="@id/TextPass"
+            app:srcCompat="@drawable/motive_icon_compose"
+            tools:ignore="ContentDescription" />
+
+        <View
+            android:id="@+id/boundary2"
+            android:layout_width="@dimen/width_416"
+            android:layout_height="2dp"
+            android:layout_marginTop="@dimen/margin_32"
+            android:background="#b3b3b3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/explainTextPass" />
+
+
+        <TextView
+            android:id="@+id/explainText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="계정관리"
+            android:textColor="#b3b3b3"
+            android:textSize="@dimen/font_20sp"
+            android:layout_marginTop="@dimen/margin_16"
+            app:layout_constraintStart_toStartOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@id/boundary2" />
+
+
+        <TextView
+            android:id="@+id/explainTextLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="로그아웃 "
+            android:textColor="#202020"
+            android:textSize="@dimen/font_20sp"
+            android:layout_marginTop="@dimen/margin_16"
+            app:layout_constraintStart_toStartOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@id/explainText2" />
+
+        <TextView
+            android:id="@+id/TextLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="계정에서 로그아웃합니다."
+            android:textColor="#808080"
+            android:textSize="@dimen/font_16sp"
+            app:layout_constraintStart_toEndOf="@id/explainTextLogout"
+            app:layout_constraintTop_toTopOf="@id/explainTextLogout"
+            app:layout_constraintBottom_toBottomOf="@id/explainTextLogout"
+            />
+
+        <TextView
+            android:id="@+id/explainTextWithdrawal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="회원탈퇴 "
+            android:textColor="#202020"
+            android:textSize="@dimen/font_20sp"
+            android:layout_marginTop="@dimen/margin_16"
+            app:layout_constraintStart_toStartOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@id/explainTextLogout" />
+
+        <TextView
+            android:id="@+id/TextWithdrawal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="영구적으로 계정을 탈퇴합니다."
+            android:textColor="#808080"
+            android:textSize="@dimen/font_16sp"
+            app:layout_constraintStart_toEndOf="@id/explainTextWithdrawal"
+            app:layout_constraintTop_toTopOf="@id/explainTextWithdrawal"
+            app:layout_constraintBottom_toBottomOf="@id/explainTextWithdrawal"
+            />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

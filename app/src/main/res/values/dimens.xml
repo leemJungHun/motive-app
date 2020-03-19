@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--width-->
+    <dimen name="width_416">416dp</dimen>
+    <dimen name="width_384">384dp</dimen>
+    <dimen name="width_352">352dp</dimen>
+    <dimen name="width_320">320dp</dimen>
+    <dimen name="width_304">304dp</dimen>
+    <dimen name="width_288">288dp</dimen>
+    <dimen name="width_272">272dp</dimen>
+    <dimen name="width_256">256dp</dimen>
+    <dimen name="width_240">240dp</dimen>
+    <dimen name="width_224">224dp</dimen>
+    <dimen name="width_173">173dp</dimen>
+    <dimen name="width_144">144dp</dimen>
+    <dimen name="width_96">96dp</dimen>
+    <dimen name="width_48">48dp</dimen>
+    <dimen name="width_32">32dp</dimen>
+
+
+    <!--height-->
+    <dimen name="height_448">448dp</dimen>
+    <dimen name="height_400">400dp</dimen>
+    <dimen name="height_288">288dp</dimen>
+    <dimen name="height_224">224dp</dimen>
+    <dimen name="height_208">208dp</dimen>
+    <dimen name="height_96">96dp</dimen>
+    <dimen name="height_64">64dp</dimen>
+    <dimen name="height_32">32dp</dimen>
+    <dimen name="height_28">28dp</dimen>
+    <dimen name="height_24">24dp</dimen>
+    <dimen name="height_6">6dp</dimen>
+
+    <!--font-->
+    <dimen name="font_48sp">48sp</dimen>
+    <dimen name="font_32sp">32sp</dimen>
+    <dimen name="font_28sp">28sp</dimen>
+    <dimen name="font_24sp">24sp</dimen>
+    <dimen name="font_20sp">20sp</dimen>
+    <dimen name="font_17sp">17.2sp</dimen>
+    <dimen name="font_16sp">16sp</dimen>
+
+    <!--margin-->
+    <dimen name="margin_176">176dp</dimen>
+    <dimen name="margin_112">112dp</dimen>
+    <dimen name="margin_80">80dp</dimen>
+    <dimen name="margin_76">76dp</dimen>
+    <dimen name="margin_64">64dp</dimen>
+    <dimen name="margin_56">56dp</dimen>
+    <dimen name="margin_48">48dp</dimen>
+    <dimen name="margin_36">36dp</dimen>
+    <dimen name="margin_32">32dp</dimen>
+    <dimen name="margin_24">24dp</dimen>
+    <dimen name="margin_21">21dp</dimen>
+    <dimen name="margin_16">16dp</dimen>
+    <dimen name="margin_12">12dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+
+    <!--icon-->
+    <dimen name="icon_128">128dp</dimen>
+    <dimen name="icon_64">64dp</dimen>
+    <dimen name="icon_32">32dp</dimen>
+    <dimen name="icon_24">24dp</dimen>
+    <dimen name="icon_8">8dp</dimen>
+
+    <!--radius-->
+    <dimen name="radius_7">7dp</dimen>
+
+</resources>

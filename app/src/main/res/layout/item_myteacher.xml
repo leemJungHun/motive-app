@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/width_416"
+    android:layout_height="@dimen/height_64"
+    android:layout_marginBottom="@dimen/margin_16"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/teacher_img"
+        android:layout_width="@dimen/icon_64"
+        android:layout_height="@dimen/icon_64"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/profile_base"
+        android:scaleType="fitXY"
+        />
+
+    <TextView
+        android:id="@+id/teacher_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/teacher_img"
+        android:layout_marginStart="@dimen/margin_16"
+        android:textSize="@dimen/font_28sp"
+        android:textColor="#202020"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

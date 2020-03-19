@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFFFF">
+
+        <ScrollView
+            android:id="@+id/scroll_View"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/explainText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_32"
+                    android:layout_marginTop="@dimen/height_96"
+                    android:textColor="#666666"
+                    android:textSize="@dimen/font_32sp"
+                    android:text="@string/rest_data_input"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:targetApi="p"/>
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="@dimen/width_240"
+                    android:layout_height="@dimen/height_24"
+                    android:layout_marginStart="@dimen/margin_32"
+                    android:layout_marginTop="@dimen/margin_48"
+                    android:lineHeight="@dimen/font_24sp"
+                    android:text="@string/name"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/explainText"
+                    tools:ignore="UnusedAttribute" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/register_name_view"
+                    android:layout_width="@dimen/width_416"
+                    android:layout_height="@dimen/height_64"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:background="@drawable/text_border_5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/name">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/register_name_textInputLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/margin_16"
+                        app:hintEnabled="false"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/register_name_text"
+                            android:layout_width="@dimen/width_256"
+                            android:layout_height="@dimen/height_32"
+                            android:background="@null"
+                            android:hint="@string/name_input"
+                            android:importantForAutofill="no"
+                            android:inputType="text"
+                            android:textSize="@dimen/font_20sp"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/register_name_icon"
+                        android:layout_width="@dimen/icon_32"
+                        android:layout_height="@dimen/icon_32"
+                        app:srcCompat="@drawable/motive_icon_check_on"
+                        android:onClick="iconClick"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/id"
+                    android:layout_width="@dimen/width_240"
+                    android:layout_height="@dimen/height_24"
+                    android:layout_marginStart="@dimen/margin_32"
+                    android:layout_marginTop="@dimen/margin_16"
+                    android:lineHeight="@dimen/font_24sp"
+                    android:text="@string/id"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/register_name_view"
+                    tools:ignore="UnusedAttribute" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/register_id_view"
+                    android:layout_width="@dimen/width_416"
+                    android:layout_height="@dimen/height_64"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:background="@drawable/text_border_5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/id">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/register_id_textInputLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/margin_16"
+                        app:hintEnabled="false"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/register_id_text"
+                            android:layout_width="@dimen/width_256"
+                            android:layout_height="@dimen/height_32"
+                            android:background="@null"
+                            android:hint="@string/id_input2"
+                            android:importantForAutofill="no"
+                            android:textSize="@dimen/font_20sp"
+                            android:inputType="text"
+                            android:maxLength="16"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <ImageView
+                        android:id="@+id/register_id_icon"
+                        android:layout_width="@dimen/icon_32"
+                        android:layout_height="@dimen/icon_32"
+                        app:srcCompat="@drawable/motive_icon_check_on"
+                        android:onClick="iconClick"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/pass"
+                    android:layout_width="@dimen/width_240"
+                    android:layout_height="@dimen/height_24"
+                    android:layout_marginStart="@dimen/margin_32"
+                    android:layout_marginTop="@dimen/margin_16"
+                    android:lineHeight="@dimen/font_24sp"
+                    android:text="@string/password"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/register_id_view"
+                    tools:ignore="UnusedAttribute" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/register_pass_view"
+                    android:layout_width="@dimen/width_416"
+                    android:layout_height="@dimen/height_64"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:background="@drawable/text_border_5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pass">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/register_pass_textInputLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/margin_16"
+                        app:hintEnabled="false"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+
+                            android:id="@+id/register_pass_text"
+                            android:layout_width="@dimen/width_256"
+                            android:layout_height="@dimen/height_32"
+                            android:background="@null"
+                            android:hint="@string/pass_input2"
+                            android:textSize="@dimen/font_20sp"
+                            android:inputType="textPassword"
+                            android:maxLength="16"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/register_pass_icon"
+                        android:layout_width="@dimen/icon_32"
+                        android:layout_height="@dimen/icon_32"
+                        app:srcCompat="@drawable/motive_icon_check_on"
+                        android:onClick="iconClick"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/passCheck"
+                    android:layout_width="@dimen/width_240"
+                    android:layout_height="@dimen/height_24"
+                    android:layout_marginStart="@dimen/margin_32"
+                    android:layout_marginTop="@dimen/margin_16"
+                    android:lineHeight="@dimen/font_24sp"
+                    android:text="@string/password_check"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/register_pass_view"
+                    tools:ignore="UnusedAttribute" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/register_passCheck_view"
+                    android:layout_width="@dimen/width_416"
+                    android:layout_height="@dimen/height_64"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:background="@drawable/text_border_5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/passCheck">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/register_passCheck_textInputLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/margin_16"
+                        app:hintEnabled="false"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/register_passCheck_text"
+                            android:layout_width="@dimen/width_256"
+                            android:layout_height="@dimen/height_32"
+                            android:background="@null"
+                            android:hint="@string/pass_input_again"
+                            android:textSize="@dimen/font_20sp"
+                            android:inputType="textPassword"
+                            android:maxLength="16"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/register_passCheck_icon"
+                        android:layout_width="@dimen/icon_32"
+                        android:layout_height="@dimen/icon_32"
+                        app:srcCompat="@drawable/motive_icon_check_on"
+                        android:onClick="iconClick"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/phoneNum"
+                    android:layout_width="@dimen/width_240"
+                    android:layout_height="@dimen/height_24"
+                    android:layout_marginStart="@dimen/margin_32"
+                    android:layout_marginTop="@dimen/margin_16"
+                    android:lineHeight="@dimen/font_24sp"
+                    android:text="@string/tel_num"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/register_passCheck_view"
+                    tools:ignore="UnusedAttribute" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/register_phoneNum_view"
+                    android:layout_width="@dimen/width_416"
+                    android:layout_height="@dimen/height_64"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:background="@drawable/text_border_5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/phoneNum">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/register_phoneNum_textInputLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/margin_16"
+                        app:hintEnabled="false"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/register_phoneNum_text"
+                            android:layout_width="@dimen/width_256"
+                            android:layout_height="@dimen/height_32"
+                            android:background="@null"
+                            android:hint="@string/no_hyphen"
+                            android:textSize="@dimen/font_20sp"
+                            android:inputType="phone"
+                            android:maxLength="13"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/register_phoneNum_icon"
+                        android:layout_width="@dimen/icon_32"
+                        android:layout_height="@dimen/icon_32"
+                        app:srcCompat="@drawable/motive_icon_check_on"
+                        android:onClick="iconClick"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/birth"
+                    android:layout_width="@dimen/width_240"
+                    android:layout_height="@dimen/height_24"
+                    android:layout_marginStart="@dimen/margin_32"
+                    android:layout_marginTop="@dimen/margin_16"
+                    android:lineHeight="@dimen/font_24sp"
+                    android:text="@string/data_of_birth"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/register_phoneNum_view"
+                    tools:ignore="UnusedAttribute" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/register_birth_view"
+                    android:layout_width="@dimen/width_416"
+                    android:layout_height="@dimen/height_64"
+                    android:layout_marginTop="@dimen/margin_8"
+                    android:background="@drawable/text_border_5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/birth">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/register_birth_text_textInputLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/margin_16"
+                        app:hintEnabled="false"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/register_birth_text"
+                            android:layout_width="@dimen/width_352"
+                            android:layout_height="@dimen/height_32"
+                            android:background="@null"
+                            android:hint="@string/date_of_birth_input"
+                            android:textSize="@dimen/font_20sp"
+                            android:maxLength="8"
+                            android:inputType="number"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <ImageView
+                        android:id="@+id/register_birth_icon"
+                        android:layout_width="@dimen/icon_32"
+                        android:layout_height="@dimen/icon_32"
+                        android:onClick="iconClick"
+                        app:srcCompat="@drawable/motive_icon_check_on"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="@dimen/margin_8"
+                        android:visibility="gone"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@+id/ok_register_btn"
+                    app:layout_constraintTop_toBottomOf="@id/register_birth_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="@dimen/margin_16"
+                    android:layout_marginBottom="@dimen/margin_32"
+                    >
+
+                    <CheckBox
+                        android:id="@+id/register_checkBox"
+                        android:layout_width="@dimen/icon_32"
+                        android:layout_height="@dimen/icon_32"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/terms_of_use"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_8"
+                        android:text="@string/provision_consent"
+                        android:textSize="@dimen/font_16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@id/register_checkBox"
+                        app:layout_constraintStart_toEndOf="@id/register_checkBox"
+                        app:layout_constraintTop_toTopOf="@id/register_checkBox" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <Button
+                    android:id="@+id/ok_register_btn"
+                    android:layout_width="@dimen/width_416"
+                    android:layout_height="@dimen/height_64"
+                    android:layout_marginBottom="116dp"
+                    android:enabled="false"
+                    android:background="@drawable/btn_back_gray"
+                    android:text="@string/register_ok"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/font_20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <View
+            android:id="@+id/tabBar_Shadow"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_6"
+            android:background="@drawable/blue_shadows"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabBar" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tabBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_64"
+            android:background="#2699fb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:layout_width="@dimen/icon_32"
+                android:layout_height="@dimen/icon_32"
+                android:layout_marginStart="@dimen/margin_32"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/back_arrow_icon"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="@dimen/width_320"
+                android:layout_height="@dimen/height_32"
+                android:gravity="center"
+                android:text="@string/register"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

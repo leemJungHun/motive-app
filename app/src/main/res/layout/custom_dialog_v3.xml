@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="@dimen/width_352"
+            android:layout_height="@dimen/height_448"
+            android:background="@drawable/text_border_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/margin_176"
+            >
+
+            <TextView
+                android:id="@+id/dialog_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16"
+                android:gravity="center"
+                android:text="회원탈퇴"
+                android:textColor="#666666"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/explainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/name"
+                android:textColor="#414141"
+                android:textSize="@dimen/font_16sp"
+                app:layout_constraintStart_toStartOf="@id/withdrawal_name_view"
+                app:layout_constraintTop_toBottomOf="@id/dialog_title" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/withdrawal_name_view"
+                android:layout_width="@dimen/width_320"
+                android:layout_height="@dimen/height_64"
+                android:layout_marginTop="@dimen/margin_8"
+                android:background="@drawable/text_border_15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/explainText">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/withdrawal_name_textInputLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_16"
+                    app:hintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/withdrawal_name"
+                        android:layout_width="@dimen/width_256"
+                        android:layout_height="@dimen/height_32"
+                        android:background="@null"
+                        android:hint="@string/name_input3"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:textSize="@dimen/font_17sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/explainText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/id"
+                android:textColor="#414141"
+                android:textSize="@dimen/font_16sp"
+                app:layout_constraintStart_toStartOf="@id/withdrawal_name_view"
+                app:layout_constraintTop_toBottomOf="@id/withdrawal_name_view" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/withdrawal_id_view"
+                android:layout_width="@dimen/width_320"
+                android:layout_height="@dimen/height_64"
+                android:layout_marginTop="@dimen/margin_8"
+                android:background="@drawable/text_border_15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/explainText2">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/withdrawal_id_textInputLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_16"
+                    app:hintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/withdrawal_id"
+                        android:layout_width="@dimen/width_256"
+                        android:layout_height="@dimen/height_32"
+                        android:background="@null"
+                        android:hint="@string/id_input2"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:textSize="@dimen/font_17sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/explainText3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/password"
+                android:textColor="#414141"
+                android:textSize="@dimen/font_16sp"
+                app:layout_constraintStart_toStartOf="@id/withdrawal_name_view"
+                app:layout_constraintTop_toBottomOf="@id/withdrawal_id_view" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/withdrawal_pass_view"
+                android:layout_width="@dimen/width_320"
+                android:layout_height="@dimen/height_64"
+                android:layout_marginTop="@dimen/margin_8"
+                android:background="@drawable/text_border_15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/explainText3">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/withdrawal_pass_textInputLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_16"
+                    app:hintEnabled="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/withdrawal_pass"
+                        android:layout_width="@dimen/width_256"
+                        android:layout_height="@dimen/height_32"
+                        android:background="@null"
+                        android:hint="@string/pass_input2"
+                        android:importantForAutofill="no"
+                        android:inputType="textPassword"
+                        android:textSize="@dimen/font_17sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <LinearLayout
+                android:id="@+id/button_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/margin_48"
+                android:background="#b3b3b3"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/dialog_Ok"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/margin_48"
+                android:background="@null"
+                android:gravity="center"
+                android:text="@string/check"
+                android:textColor="#2699fb"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_line_height"
+                app:layout_constraintTop_toBottomOf="@id/button_line"
+
+                />
+
+            <LinearLayout
+                android:id="@+id/button_line_height"
+                android:layout_width="1dp"
+                android:layout_height="@dimen/margin_48"
+                android:background="#b3b3b3"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/dialog_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/margin_48"
+                android:background="@null"
+                android:gravity="center"
+                android:text="@string/cancel"
+                android:textColor="#ff1414"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_line_height"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/button_line"
+
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="@dimen/width_352"
+            android:layout_height="@dimen/height_448"
+            android:background="@drawable/text_border_15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/margin_176"
+            >
+
+            <TextView
+                android:id="@+id/dialog_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16"
+                android:gravity="center"
+                android:text="@string/base_name"
+                android:textColor="#666666"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/explainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/tel_num"
+                android:textColor="#414141"
+                android:textSize="@dimen/font_16sp"
+                app:layout_constraintStart_toStartOf="@id/find_family_phone_view"
+                app:layout_constraintTop_toBottomOf="@id/dialog_name" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/find_family_phone_view"
+                android:layout_width="@dimen/width_320"
+                android:layout_height="@dimen/height_64"
+                android:layout_marginTop="@dimen/margin_8"
+                android:background="@drawable/text_border_15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/explainText">
+
+                <TextView
+                    android:id="@+id/find_family_phone"
+                    android:layout_width="@dimen/width_256"
+                    android:layout_height="@dimen/height_32"
+                    android:layout_marginStart="@dimen/margin_16"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="@dimen/font_17sp"
+                    android:background="@null"
+                    android:textColor="#202020"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/explainText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/institution"
+                android:textColor="#414141"
+                android:textSize="@dimen/font_16sp"
+                app:layout_constraintStart_toStartOf="@id/find_family_phone_view"
+                app:layout_constraintTop_toBottomOf="@id/find_family_phone_view" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/find_family_institution_view"
+                android:layout_width="@dimen/width_320"
+                android:layout_height="@dimen/height_64"
+                android:layout_marginTop="@dimen/margin_8"
+                android:background="@drawable/text_border_15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/explainText2">
+                <TextView
+                    android:id="@+id/find_family_institution"
+                    android:layout_width="@dimen/width_256"
+                    android:layout_height="@dimen/height_32"
+                    android:layout_marginStart="@dimen/margin_16"
+                    android:background="@null"
+                    android:textSize="@dimen/font_17sp"
+                    android:textColor="#202020"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/explainText3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_16"
+                android:text="@string/member_relation"
+                android:textColor="#414141"
+                android:textSize="@dimen/font_16sp"
+                app:layout_constraintStart_toStartOf="@id/find_family_phone_view"
+                app:layout_constraintTop_toBottomOf="@id/find_family_institution_view" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/find_family_relation_view"
+                android:layout_width="@dimen/width_320"
+                android:layout_height="@dimen/height_64"
+                android:layout_marginTop="@dimen/margin_8"
+                android:background="@drawable/text_border_15"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/explainText3">
+
+                <EditText
+                    android:id="@+id/find_family_relation"
+                    android:layout_width="@dimen/width_256"
+                    android:layout_height="@dimen/height_32"
+                    android:layout_marginStart="@dimen/margin_16"
+                    android:background="@null"
+                    android:textSize="@dimen/font_17sp"
+                    android:hint="@string/input_relation"
+                    android:textColor="#202020"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:inputType="text"
+                    android:importantForAutofill="no" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <LinearLayout
+                android:id="@+id/button_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/margin_48"
+                android:background="#b3b3b3"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/dialog_Ok"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/margin_48"
+                android:background="@null"
+                android:gravity="center"
+                android:text="@string/check"
+                android:textColor="#2699fb"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_line_height"
+                app:layout_constraintTop_toBottomOf="@id/button_line"
+
+                />
+
+            <LinearLayout
+                android:id="@+id/button_line_height"
+                android:layout_width="1dp"
+                android:layout_height="@dimen/margin_48"
+                android:background="#b3b3b3"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/dialog_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/margin_48"
+                android:background="@null"
+                android:gravity="center"
+                android:text="@string/cancel"
+                android:textColor="#ff1414"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_line_height"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/button_line"
+
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/width_352"
+    android:layout_height="@dimen/height_208"
+    android:layout_gravity="center"
+    android:gravity="center">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="@dimen/width_352"
+        android:layout_height="@dimen/height_208"
+        android:background="@drawable/text_border_15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/dialog_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="인증되었습니다"
+            android:textColor="#666666"
+            android:textSize="@dimen/font_20sp"
+            app:layout_constraintBottom_toTopOf="@id/button_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/button_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/margin_48"
+            android:background="#b3b3b3"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/dialog_Ok"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_48"
+            android:background="@null"
+            android:text="@string/check"
+            android:textColor="#2699fb"
+            android:textSize="@dimen/font_20sp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/button_line_height"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_line"
+
+            />
+
+        <LinearLayout
+            android:id="@+id/button_line_height"
+            android:layout_width="1dp"
+            android:layout_height="@dimen/margin_48"
+            android:background="#b3b3b3"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <Button
+            android:id="@+id/dialog_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/margin_48"
+            android:background="@null"
+            android:text="@string/cancel"
+            android:textColor="#ff1414"
+            android:textSize="@dimen/font_20sp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_line_height"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_line"
+
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

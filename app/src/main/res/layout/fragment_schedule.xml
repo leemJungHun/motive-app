@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f9f9f9">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tabBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_64"
+            android:background="#2699fb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="@dimen/width_320"
+                android:layout_height="@dimen/height_32"
+                android:gravity="center"
+                android:text="일정"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/move_tab"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_64"
+            android:background="#f0f0f0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabBar">
+
+            <ImageView
+                android:id="@+id/tv_prev_month"
+                android:layout_width="@dimen/icon_32"
+                android:layout_height="@dimen/icon_32"
+                android:layout_marginEnd="@dimen/margin_16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_current_month"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/motive_icon_backwardarrow_2"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_current_month"
+                android:layout_width="@dimen/width_320"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="2020년 1월"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/tv_next_month"
+                android:layout_width="@dimen/icon_32"
+                android:layout_height="@dimen/icon_32"
+                android:layout_marginStart="@dimen/margin_16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_current_month"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/motive_icon_forwardarrow_2"
+                tools:ignore="ContentDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/day_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/margin_21"
+            app:layout_constraintTop_toBottomOf="@id/move_tab"
+            android:background="#FFFFFF"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="@dimen/margin_24"
+                android:layout_marginEnd="@dimen/margin_24">
+
+                <TextView
+                    android:id="@+id/sun_text"
+                    android:layout_width="@dimen/width_48"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="일"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_20sp"
+                    app:layout_constraintEnd_toStartOf="@id/mon_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/mon_text"
+                    android:layout_width="@dimen/width_48"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="월"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_20sp"
+                    app:layout_constraintEnd_toStartOf="@id/tus_text"
+                    app:layout_constraintStart_toEndOf="@id/sun_text"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tus_text"
+                    android:layout_width="@dimen/width_48"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="화"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_20sp"
+                    app:layout_constraintEnd_toStartOf="@id/wen_text"
+                    app:layout_constraintStart_toEndOf="@id/mon_text"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/wen_text"
+                    android:layout_width="@dimen/width_48"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="수"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_20sp"
+                    app:layout_constraintEnd_toStartOf="@id/thu_text"
+                    app:layout_constraintStart_toEndOf="@id/tus_text"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/thu_text"
+                    android:layout_width="@dimen/width_48"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="목"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_20sp"
+                    app:layout_constraintEnd_toStartOf="@id/fri_text"
+                    app:layout_constraintStart_toEndOf="@id/wen_text"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/fri_text"
+                    android:layout_width="@dimen/width_48"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="금"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_20sp"
+                    app:layout_constraintEnd_toStartOf="@id/sat_text"
+                    app:layout_constraintStart_toEndOf="@id/thu_text"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/sat_text"
+                    android:layout_width="@dimen/width_48"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="토"
+                    android:textColor="#414141"
+                    android:textSize="@dimen/font_20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/fri_text"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:id="@+id/boundary"
+                    android:layout_width="@dimen/width_416"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:background="#b3b3b3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sun_text" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_schedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_12"
+                    android:layout_marginTop="@dimen/margin_12"
+                    android:overScrollMode="never"
+                    app:layout_constraintStart_toStartOf="@id/sun_text"
+                    app:layout_constraintTop_toBottomOf="@id/boundary">
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/schedule_content_view"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/day_view"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="#f9f9f9"
+            >
+            <ImageView
+                android:id="@+id/schedule_content_icon"
+                android:layout_width="@dimen/icon_8"
+                android:layout_height="@dimen/icon_8"
+                android:src="@drawable/calendar_schedule"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/margin_32"
+                android:layout_marginStart="@dimen/margin_32"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/schedule_content_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="센터 방문"
+                android:textColor="#202020"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintStart_toEndOf="@id/schedule_content_icon"
+                app:layout_constraintTop_toTopOf="@id/schedule_content_icon"
+                app:layout_constraintBottom_toBottomOf="@id/schedule_content_icon"
+                android:layout_marginStart="@dimen/margin_8"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_6"
+            android:background="@drawable/blue_shadows"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabBar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

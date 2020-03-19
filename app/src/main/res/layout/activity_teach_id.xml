@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFFFF">
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_6"
+            app:layout_constraintTop_toBottomOf="@id/tabBar"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/blue_shadows"
+            />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tabBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_64"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="#2699fb"
+            >
+
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:layout_width="@dimen/icon_32"
+                android:layout_height="@dimen/icon_32"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="@dimen/margin_32"
+                app:srcCompat="@drawable/back_arrow_icon"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="@dimen/width_320"
+                android:layout_height="@dimen/height_32"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:textSize="@dimen/font_20sp"
+                android:text="@string/find_id"
+                android:textColor="#FFFFFFFF"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/explainText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_48"
+            android:textColor="#666666"
+            android:textSize="@dimen/font_32sp"
+            android:text="@string/email_auth__find_id"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabBar"
+            android:layout_marginStart="@dimen/margin_32"
+            tools:targetApi="p"/>
+
+        <TextView
+            android:id="@+id/find_id_text"
+            android:layout_width="@dimen/width_352"
+            android:layout_height="@dimen/height_96"
+            android:text=""
+            android:textSize="@dimen/font_20sp"
+            android:textColor="#2699fb"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@id/explainText"
+            android:layout_marginTop="@dimen/margin_48"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <Button
+            android:id="@+id/go_login_btn"
+            android:layout_width="@dimen/width_416"
+            android:layout_height="@dimen/height_64"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="@dimen/margin_32"
+            android:text="@string/go_login"
+            android:textSize="@dimen/font_17sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/btn_back_blue"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

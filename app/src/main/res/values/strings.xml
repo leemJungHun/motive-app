@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">motive_app</string>
+
+    <!--login-->
+    <string name="name">이름</string>
+    <string name="next">다음</string>
+    <string name="id">아이디</string>
+    <string name="check">확인</string>
+    <string name="search">검색</string>
+    <string name="member">회원</string>
+    <string name="family">가족</string>
+    <string name="email">이메일</string>
+    <string name="login">로그인</string>
+    <string name="register">회원가입</string>
+    <string name="find_id">아이디 찾기</string>
+    <string name="confirm_num">인증번호</string>
+    <string name="find_family">가족 찾기</string>
+    <string name="institutionSearch">기관검색</string>
+    <string name="find_id_or_pass">아이디/비밀번호 찾기</string>
+    <string name="tel_num">전화번호</string>
+    <string name="password">비밀번호</string>
+    <string name="password_check">비밀번호 확인</string>
+    <string name="admin_name">관리자명</string>
+    <string name="institution_find">기관 찾기</string>
+    <string name="find_pass">비밀번호 찾기</string>
+    <string name="notification_channel_id">"notification_channel_id"</string>
+    <string name="notification_channel_name">"notification_channel_name"</string>
+
+    <string name="id_input">아이디를 입력하세요</string>
+    <string name="id_input2">아이디를 입력해주세요</string>
+    <string name="name_input2">이름을 입력하세요</string>
+    <string name="name_input">성함을 입력해주세요</string>
+    <string name="pass_input">패스워드를 입력하세요</string>
+    <string name="email_input">이메일을 입력해주세요</string>
+    <string name="forget_id">아이디를 잊어버렸습니다</string>
+    <string name="type_select">회원 유형을\n선택해주세요</string>
+    <string name="forget_pass">비밀번호를 잊어버렸습니다</string>
+    <string name="confirm_6">인증번호 6자리를 입력하세요</string>
+    <string name="helptext">로그인에 어떤 도움이\n필요하신가요?</string>
+    <string name="institution_search">기관의 이름을 검색하세요</string>
+    <string name="confirm_mail_click">인증 메일 보내기를 눌러주세요</string>
+    <string name="search_push_find">검색을 눌러서 해당하는\n기관을 찾아주세요</string>
+    <string name="email_same">가입 이메일 주소와\n입력한 이메일 주소가 같아야,\n인증번호를 받을 수 있습니다.</string>
+    <string name="email_same_pass">가입 이메일 주소와\n입력한 이메일 주소가 같아야,\n비밀번호를 받을 수 있습니다.</string>
+    <string name="input_email">이메일을 입력해주세요</string>
+    <string name="auth_email_send">인증메일 보내기</string>
+    <string name="auth_email_send_push">인증 메일 보내기를 눌러주세요</string>
+    <string name="no_find_institution">검색하신 기관명이 존재하지 않습니다. 관리자명을 다시 확인해주세요.</string>
+    <string name="email_input_confirm_num">이메일을 입력하여\n인증번호를 적어주세요</string>
+    <string name="no_hyphen">-없이 전화번호를 입력해주세요</string>
+    <string name="rest_data_input">나머지 정보를\n입력해주세요</string>
+    <string name="pass_input2">비밀번호를 입력해주세요</string>
+    <string name="pass_input_again">비밀번호를 다시 입력해주세요</string>
+    <string name="data_of_birth">생년월일</string>
+    <string name="date_of_birth_input">생년월일을 입력해주세요 ex)19500505</string>
+    <string name="provision_consent"><u>이용약관 및 개인정보처리방침에 동의하시겠습니까?</u></string>
+    <string name="register_ok">회원가입 완료하기</string>
+    <string name="email_auth__find_id">이메일 본인 확인으로\n아이디를 찾았습니다</string>
+    <string name="go_login">로그인 하러가기</string>
+    <string name="tempo_pass_send">임시 비밀번호 보내기</string>
+    <string name="tempo_pass_send_push">임시 비밀번호 보내기를 눌러주세요</string>
+    <string name="my_medal">나의 메달</string>
+    <string name="my_info">나의 정보</string>
+    <string name="ex_name">홍길동</string>
+    <string name="photo_change">사진 바꾸기</string>
+    <string name="cancel">취소</string>
+    <string name="name_input3">이름을 입력해주세요</string>
+    <string name="base_name">홍길동</string>
+    <string name="institution">기관</string>
+    <string name="member_relation">환자와의 관계</string>
+    <string name="input_relation">입력해주세요 ex)아버님, 어머님</string>
+    <string name="input_family_phoneNum">가족의 전화 번호를\n입력해주세요</string>
+    <string name="my_family">나의 가족</string>
+    <string name="family_add_one">가족이 한명 이상 추가되어야 합니다. 번호를 입력하여 추가해주세요.</string>
+    <string name="send">보내기</string>
+    <string name="send_video">영상보내기</string>
+    <string name="title">제목</string>
+    <string name="input_video_title">영상 제목을 입력해주세요</string>
+    <string name="jump">건너뛰기</string>
+
+    <string name="isFuture">isFuture</string>
+
+</resources>
