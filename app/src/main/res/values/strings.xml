@@ -79,5 +79,6 @@
     <string name="jump">건너뛰기</string>
 
     <string name="isFuture">isFuture</string>
+    <string name="medal_select_text">지난 한 주 동안 열심히 하셨나요?\n열심히 하셨으면 금메달,\n노력이 좀더 필요하다면 은메달을\n선택해 주세요</string>
 
 </resources>

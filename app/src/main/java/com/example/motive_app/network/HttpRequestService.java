@@ -9,6 +9,7 @@ import com.example.motive_app.network.DTO.GetParentsInfoRequest;
 import com.example.motive_app.network.DTO.GetUserAlarmRequest;
 import com.example.motive_app.network.DTO.GetUserScheduleRequest;
 import com.example.motive_app.network.DTO.LoginRequest;
+import com.example.motive_app.network.DTO.PutMedalSelectResultRequest;
 import com.example.motive_app.network.DTO.PutProfileImageRequest;
 import com.example.motive_app.network.DTO.RegistrationRequest;
 import com.example.motive_app.network.DTO.RegistrationTokenRequest;
@@ -173,6 +174,19 @@ public interface HttpRequestService {
      */
     @POST("/members/getVideoList")
     Call<JsonObject> getVideoListRequest(@Body UserIdRequest userIdRequest);
+
+
+    /**
+     *
+     * @param putMedalSelectResultRequest 메달 요청하기
+     * @return 회원 정보
+     */
+    @POST("/members/putMedalSelectResult")
+    Call<JsonObject> putMedalSelectResultRequest(@Body PutMedalSelectResultRequest putMedalSelectResultRequest);
+
+
+
+
 
     //organization
     /**

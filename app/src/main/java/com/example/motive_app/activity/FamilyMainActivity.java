@@ -180,6 +180,15 @@ public class FamilyMainActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
     }
 
+    public void exampleVideoOpen(){
+        Intent intent;
+        intent = new Intent(getApplicationContext(), ExampleVideoListActivity.class);
+
+        startActivity(intent);
+
+        overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+    }
+
     public void logOut(String toastText){
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = auto.edit();

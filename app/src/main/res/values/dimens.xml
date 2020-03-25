@@ -24,6 +24,7 @@
     <dimen name="height_288">288dp</dimen>
     <dimen name="height_224">224dp</dimen>
     <dimen name="height_208">208dp</dimen>
+    <dimen name="height_160">160dp</dimen>
     <dimen name="height_96">96dp</dimen>
     <dimen name="height_64">64dp</dimen>
     <dimen name="height_32">32dp</dimen>
@@ -62,6 +63,7 @@
     <dimen name="icon_32">32dp</dimen>
     <dimen name="icon_24">24dp</dimen>
     <dimen name="icon_8">8dp</dimen>
+    <dimen name="icon_2">2dp</dimen>
 
     <!--radius-->
     <dimen name="radius_7">7dp</dimen>

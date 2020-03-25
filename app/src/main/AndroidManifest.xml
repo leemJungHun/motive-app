@@ -75,7 +75,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activity.registration.FindIdActivity"
@@ -105,8 +104,16 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.PlayVideoActivity"
             android:noHistory="true"
-            android:screenOrientation="landscape"
             />
+        <activity android:name=".activity.MedalSelectActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait">
+
+
+        </activity>
+        <activity android:name=".activity.ExampleVideoListActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".service.notification.MyFireBaseMessagingService"

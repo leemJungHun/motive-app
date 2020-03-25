@@ -253,8 +253,8 @@ public class MyFamilyScheduleFragment extends Fragment implements View.OnClickLi
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                                 if(response.body()!=null){
                                     Gson gson = new Gson();
-                                    JsonObject jsonObject = response.body();
-                                    JsonArray jsonArray = jsonObject.getAsJsonArray("result");
+                                    JsonObject jsonObject = response.body().getAsJsonObject("result");
+                                    JsonArray jsonArray = jsonObject.getAsJsonArray("schedule");
 
                                     for(int index=0;index<jsonArray.size();index++) {
                                         GroupScheduleVO groupScheduleVO = gson.fromJson(jsonArray.get(index).toString(), GroupScheduleVO.class);

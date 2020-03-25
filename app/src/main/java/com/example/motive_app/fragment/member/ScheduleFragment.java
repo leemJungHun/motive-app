@@ -24,6 +24,7 @@ import com.example.motive_app.network.DTO.GetUserScheduleRequest;
 import com.example.motive_app.network.DTO.UserPhoneRequest;
 import com.example.motive_app.network.HttpRequestService;
 import com.example.motive_app.network.VO.GroupScheduleVO;
+import com.example.motive_app.network.VO.MedalInfoVO;
 import com.example.motive_app.network.VO.MemberInfoVO;
 import com.example.motive_app.network.VO.UserInfoVO;
 import com.google.gson.Gson;
@@ -49,10 +50,11 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener{
     private ArrayList<CalendarItem> mItem = new ArrayList<CalendarItem>();
     private boolean dayStart = true;
     private ArrayList<String> attendDates = new ArrayList<>();
-
+    private ArrayList<String> medalDates = new ArrayList<>();
     private ScheduleFragment mFragment=this;
 
     private int scheduleIndex=0;
+    private int medalIndex=0;
 
     private boolean isFuture=false;
 
@@ -106,8 +108,9 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener{
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                                 if(response.body()!=null){
                                     Gson gson = new Gson();
-                                    JsonObject jsonObject = response.body();
-                                    JsonArray jsonArray = jsonObject.getAsJsonArray("result");
+                                    JsonObject jsonObject = response.body().getAsJsonObject("result");
+                                    JsonArray jsonArray = jsonObject.getAsJsonArray("schedule");
+                                    JsonArray medalArray = jsonObject.getAsJsonArray("medalInfo");
 
                                     for(int index=0;index<jsonArray.size();index++) {
                                         GroupScheduleVO groupScheduleVO = gson.fromJson(jsonArray.get(index).toString(), GroupScheduleVO.class);
@@ -116,6 +119,15 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener{
                                             attendDates.add(attendDate);
                                         }
                                     }
+
+                                    for (int i=0;i<medalArray.size();i++){
+                                        MedalInfoVO medalInfoVO = gson.fromJson(medalArray.get(i).toString(), MedalInfoVO.class);
+                                        if(medalInfoVO.getBreakAway().equals("n")||medalInfoVO.getBreakAway().equals("N")){
+                                            String selectDate = medalInfoVO.getSelectedDate() + "-" + medalInfoVO.getGoldMedalCnt();
+                                            medalDates.add(selectDate);
+                                        }
+                                    }
+
 
                                     setCalendarView();
 
@@ -168,6 +180,8 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener{
         }
 
         ArrayList<Integer> haveSchedule = new ArrayList<>();
+        ArrayList<Integer> haveMedal = new ArrayList<>();
+        ArrayList<Integer> whatMedal = new ArrayList<>();
 
         binding.scheduleContentView.setVisibility(View.GONE);
 
@@ -180,6 +194,16 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener{
                 }
             }
         }
+
+        for(int i=0;i<medalDates.size();i++){
+            String[] medalDate = medalDates.get(i).split("-");
+            if(Integer.parseInt(medalDate[0])==cal.get(Calendar.YEAR)&&Integer.parseInt(medalDate[1])==(cal.get(Calendar.MONTH)+1)){
+                haveMedal.add(Integer.parseInt(medalDate[2]));
+                whatMedal.add(Integer.parseInt(medalDate[3]));
+            }
+        }
+
+
 
         Collections.sort(haveSchedule);
 
@@ -206,15 +230,58 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener{
                 }
                 if(haveSchedule.size()!=0) {
                     if (i == haveSchedule.get(scheduleIndex)) {
-                        addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), true, false, false, isFuture);
+                        if(haveMedal.size()!=0) {
+                            if (i == haveMedal.get(medalIndex)) {
+                                if (whatMedal.get(medalIndex) == 0) {
+                                    addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), true, false, true, isFuture);
+                                } else if (whatMedal.get(medalIndex) == 1) {
+                                    addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), true, true, false, isFuture);
+                                }
+                                if (medalIndex < whatMedal.size() - 1) {
+                                    medalIndex++;
+                                }
+                            } else {
+                                addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), true, false, false, isFuture);
+                            }
+                        }else{
+                            addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), true, false, false, isFuture);
+                        }
                         if(scheduleIndex<haveSchedule.size()-1){
                             scheduleIndex++;
                         }
                     }else {
-                        addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), false, false, false, isFuture);
+                        if(haveMedal.size()!=0){
+                            if(i==haveMedal.get(medalIndex)){
+                                if (whatMedal.get(medalIndex)==0) {
+                                    addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), false, false, true, isFuture);
+                                }else if(whatMedal.get(medalIndex)==1){
+                                    addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), false, true, false, isFuture);
+                                }
+                                if(medalIndex<whatMedal.size()-1){
+                                    medalIndex++;
+                                }
+                            }else{
+                                addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), false, false, false, isFuture);
+                            }
+                        } else{
+                            addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), false, false, false, isFuture);
+                        }
                     }
                 }else{
-                    addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), false, false, false, isFuture);
+                    if(haveMedal.size()!=0){
+                            if(i==haveMedal.get(medalIndex)){
+                                if (whatMedal.get(medalIndex)==0) {
+                                    addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), false, false, true, isFuture);
+                                }else if(whatMedal.get(medalIndex)==1){
+                                    addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), false, true, false, isFuture);
+                                }
+                                if(medalIndex<whatMedal.size()-1){
+                                    medalIndex++;
+                                }
+                            }
+                    } else{
+                        addItem(Integer.toString(i), i == cal.get(Calendar.DAY_OF_MONTH), false, false, false, isFuture);
+                    }
                 }
             }
         }
@@ -228,7 +295,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener{
         item.setSelect(isSelect);
         item.setSchedule(haveSchedule);
         item.setHaveGoldMedal(haveGold);
-        item.setHaveGoldMedal(haveSilver);
+        item.setHaveSilverMedal(haveSilver);
         item.setFuture(isFuture);
 
         mItem.add(item);

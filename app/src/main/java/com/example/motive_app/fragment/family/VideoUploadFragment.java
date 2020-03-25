@@ -67,6 +67,8 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
             intent.setType("video/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "동영상을 선택하세요."), 0);
+        }else if(v==binding.exampleVideoBtn){
+            ((FamilyMainActivity) Objects.requireNonNull(getActivity())).exampleVideoOpen();
         }
     }
 
@@ -104,6 +106,7 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
 
     private int getPlayTime(String path) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        Log.d("path",path);
         retriever.setDataSource(path);
         String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
         long timeInmillisec = Long.parseLong( time );

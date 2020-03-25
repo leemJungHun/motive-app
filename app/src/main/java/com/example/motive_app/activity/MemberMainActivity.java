@@ -52,6 +52,7 @@ public class MemberMainActivity extends AppCompatActivity {
     String type;
     String textColorBlack = "#666666";
     String textColorBlue = "#2699fb";
+    String medalVideo="N";
     Fragment nowFragmnet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,10 @@ public class MemberMainActivity extends AppCompatActivity {
         Intent intent = getIntent(); /*데이터 수신*/
         if(intent.getExtras()!=null) {
             vo = (UserInfoVO) intent.getSerializableExtra("userInfoVO");
-
+            medalVideo = intent.getExtras().getString("medalVideo");
+            if(medalVideo==null){
+                medalVideo="N";
+            }
             type = intent.getExtras().getString("type");
             if(vo!=null) {
                 Log.d("getName", vo.getName());
@@ -80,8 +84,11 @@ public class MemberMainActivity extends AppCompatActivity {
         //토큰 등록
         getToken();
         fragmentManager = getSupportFragmentManager();
-        setStartFragment(new MyMedalFragment(vo));
-
+        if (medalVideo.equals("Y")){
+            setStartFragment(new PlayVideoFragment(vo,medalVideo));
+        }else {
+            setStartFragment(new MyMedalFragment(vo));
+        }
     }
 
 
@@ -99,7 +106,7 @@ public class MemberMainActivity extends AppCompatActivity {
                 check = 2;
                 setIcons(R.drawable.motive_icon_menu_star_off, R.drawable.motive_icon_menu_play_on, R.drawable.motive_icon_menu_calendar_off);
                 setTextColor(textColorBlack,textColorBlue,textColorBlack);
-                setStartFragment(new PlayVideoFragment(vo));
+                setStartFragment(new PlayVideoFragment(vo, medalVideo));
                 break;
             case R.id.calender_icon:
             case R.id.calender_text:
@@ -154,13 +161,14 @@ public class MemberMainActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
     }
 
-    public void playVideo(String fileUrl){
+    public void playVideo(String fileUrl, String videoIdx){
         Intent intent;
         intent = new Intent(getApplicationContext(), PlayVideoActivity.class);
 
-        intent.putExtra("userId",vo.getId());
+        intent.putExtra("userInfoVO", vo);
         intent.putExtra("fileUrl", fileUrl);
-
+        intent.putExtra("medalVideo",medalVideo);
+        intent.putExtra("videoIdx",videoIdx);
         startActivity(intent);
 
         overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);

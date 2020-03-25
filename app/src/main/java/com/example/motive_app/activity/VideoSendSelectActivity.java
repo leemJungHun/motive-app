@@ -321,6 +321,13 @@ public class VideoSendSelectActivity extends AppCompatActivity implements View.O
                                     Log.d("썸네일 업로드","성공");
                                     UploadVideoRequest request = new UploadVideoRequest();
                                     Log.d("upload Id", selectFamilyVo.getSelectId());
+                                    Log.d("setFileName", title);
+                                    Log.d("setFileUrl", "videos/" + filename);
+                                    Log.d("setFileSize", Integer.toString((int)FileSize));
+                                    Log.d("setRegisterId", vo.getId());
+                                    Log.d("setRegisterName", vo.getName());
+                                    Log.d("setRegisterRelationship", selectFamilyVo.getSelectRelation());
+                                    Log.d("setThumbnailUrl", "thumbnails/" + thumbnailName);
                                     request.setUserId(selectFamilyVo.getSelectId());
                                     request.setFileName(title);
                                     request.setFileUrl("videos/" + filename);

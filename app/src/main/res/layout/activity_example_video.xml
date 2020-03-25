@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tabBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_64"
+            android:background="#2699fb"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:layout_width="@dimen/icon_32"
+                android:layout_height="@dimen/icon_32"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="@dimen/margin_32"
+                app:srcCompat="@drawable/back_arrow_icon"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="@dimen/width_320"
+                android:layout_height="@dimen/height_32"
+                android:gravity="center"
+                android:text="응원영상"
+                android:textColor="#FFFFFFFF"
+                android:textSize="@dimen/font_20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/height_6"
+            android:background="@drawable/blue_shadows"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabBar" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_video_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabBar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

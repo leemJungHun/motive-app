@@ -25,6 +25,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
         Intent gointent;
         gointent = new Intent(context, LoginActivity.class);
         gointent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        gointent.putExtra("medalVideo","Y");
 
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, gointent,

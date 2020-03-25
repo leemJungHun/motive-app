@@ -46,11 +46,18 @@ public class LoginActivity extends AppCompatActivity{
 
     Intent foregroundServiceIntent;
 
+    String medalVideo="N";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_login);
+
+        Intent intent = getIntent(); /*데이터 수신*/
+        if(intent.getExtras()!=null) {
+            medalVideo = intent.getExtras().getString("medalVideo");
+        }
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(HttpRequestService.URL)
@@ -146,13 +153,25 @@ public class LoginActivity extends AppCompatActivity{
             if(memberLogin) {
                 JobSchedulerStart.start(this);
                 UserInfoVO userInfoVO = gson.fromJson(okResponse.body().get("userInfoVO").toString(), UserInfoVO.class);
-                Log.d("userInfoVO",userInfoVO.getId());
-                intent = new Intent(getApplicationContext(), MemberMainActivity.class);
-                intent.putExtra("userInfoVO", userInfoVO);
-                intent.putExtra("type","users");
-                startActivity(intent);
-                overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                finish();
+                Log.d("userInfoVO", userInfoVO.getId());
+                Log.d("medalVideo",medalVideo);
+                if(medalVideo.equals("N")) {
+                    intent = new Intent(getApplicationContext(), MemberMainActivity.class);
+                    intent.putExtra("userInfoVO", userInfoVO);
+                    intent.putExtra("type", "users");
+                    intent.putExtra("medalVideo", medalVideo);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                    finish();
+                }else if(medalVideo.equals("Y")){
+                    intent = new Intent(getApplicationContext(), MemberMainActivity.class);
+                    intent.putExtra("userInfoVO", userInfoVO);
+                    intent.putExtra("type", "users");
+                    intent.putExtra("medalVideo", medalVideo);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                    finish();
+                }
             }else if(familyLogin){
                 JobSchedulerStart.start(this);
                 FamilyInfoVO familyInfoVO = gson.fromJson(okResponse.body().get("familyInfoVO").toString(), FamilyInfoVO.class);

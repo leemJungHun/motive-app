@@ -79,6 +79,15 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
         if(!item.isFuture()){
             holder.scheduleIcon.setImageResource(R.drawable.calendar_schedule_past);
         }
+        if(item.isHaveGoldMedal()){
+            holder.medalBack.setBackgroundResource(R.drawable.medal_gold_back);
+            holder.medalBack.setVisibility(View.VISIBLE);
+        }else if(item.isHaveSilverMedal()){
+            holder.medalBack.setBackgroundResource(R.drawable.medal_silver_back);
+            holder.medalBack.setVisibility(View.VISIBLE);
+        }else{
+            holder.medalBack.setVisibility(View.GONE);
+        }
     }
 
     // getItemCount() - 전체 데이터 갯수 리턴.
@@ -103,6 +112,7 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
         TextView day;
         TextView calendarBack;
         ConstraintLayout calendarView;
+        TextView medalBack;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -112,6 +122,7 @@ public class CalendarRecyclerAdapter extends RecyclerView.Adapter<CalendarRecycl
             scheduleIcon = itemView.findViewById(R.id.schedule);
             calendarBack = itemView.findViewById(R.id.tv_back);
             calendarView = itemView.findViewById(R.id.calendar_view);
+            medalBack = itemView.findViewById(R.id.medal_back);
 
             calendarView.setOnClickListener(new View.OnClickListener() {
                 @Override
