@@ -136,8 +136,8 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
                             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                                 if (response.body() != null) {
                                     Gson gson = new Gson();
-                                    JsonObject jsonObject = response.body();
-                                    JsonArray jsonArray = jsonObject.getAsJsonArray("result");
+                                    JsonObject jsonObject = response.body().getAsJsonObject("result");
+                                    JsonArray jsonArray = jsonObject.getAsJsonArray("schedule");
 
                                     for (int index = jsonArray.size() - 1; 0 <= index; index--) {
                                         GroupScheduleVO groupScheduleVO = gson.fromJson(jsonArray.get(index).toString(), GroupScheduleVO.class);
