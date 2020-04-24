@@ -8,10 +8,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="@dimen/margin_8"
+        android:padding="@dimen/margin_8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#2699fb"
-        android:textSize="@dimen/font_20sp"
+        android:textSize="@dimen/font_24sp"
         android:text=""
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

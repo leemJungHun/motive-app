@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
-import com.example.motive_app.network.DTO.GetUserAlarmRequest;
+import com.example.motive_app.network.dto.GetUserAlarmRequest;
 import com.example.motive_app.network.HttpRequestService;
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;

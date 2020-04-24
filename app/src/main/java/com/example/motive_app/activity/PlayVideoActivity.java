@@ -18,7 +18,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.example.motive_app.R;
 import com.example.motive_app.databinding.ActivityPlayVideoBinding;
-import com.example.motive_app.network.VO.UserInfoVO;
+import com.example.motive_app.network.vo.UserInfoVO;
 import com.example.motive_app.util.VideoControllerView;
 
 public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControl  {

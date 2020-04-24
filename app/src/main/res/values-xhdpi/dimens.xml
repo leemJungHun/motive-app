@@ -19,6 +19,7 @@
     <dimen name="width_32">24dp</dimen>
 
     <!--height-->
+    <dimen name="height_848">636dp</dimen>
     <dimen name="height_448">336dp</dimen>
     <dimen name="height_400">300dp</dimen>
     <dimen name="height_288">216dp</dimen>
@@ -60,6 +61,7 @@
     <!--icon-->
     <dimen name="icon_128">96dp</dimen>
     <dimen name="icon_64">48dp</dimen>
+    <dimen name="icon_48">36dp</dimen>
     <dimen name="icon_32">24dp</dimen>
     <dimen name="icon_24">18dp</dimen>
     <dimen name="icon_8">6dp</dimen>

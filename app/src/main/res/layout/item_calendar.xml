@@ -1,45 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/width_48"
-    android:layout_height="@dimen/width_48"
-    android:id="@+id/calendar_view"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
 
-    <TextView
-        android:id="@+id/tv_back"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/calendar_view"
+        android:background="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/calender_back"
-        android:visibility="gone"
-        />
-    <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_24"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="@dimen/font_16sp"
-        android:textColor="#414141"
-        android:gravity="center"
-        />
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/schedule"
-        android:visibility="gone"
-        android:layout_width="@dimen/icon_8"
-        android:layout_height="@dimen/icon_8"
-        android:scaleType="centerCrop"
-        android:src="@drawable/calendar_schedule"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_date"
-        />
+        <View
+            android:layout_margin="4dp"
+            android:id="@+id/tv_back"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/tv_date"
+            app:layout_constraintEnd_toEndOf="@id/tv_date"
+            app:layout_constraintBottom_toBottomOf="@id/tv_date"
+            app:layout_constraintTop_toTopOf="@id/tv_date"
+            android:background="@drawable/calender_back"
+            android:visibility="invisible" />
 
-    <TextView
-        android:id="@+id/medal_back"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/medal_gold_back"
-        android:visibility="gone"
-        />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="1231231"
+            android:textColor="#414141"
+            android:textSize="@dimen/font_16sp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/schedule"
+            android:layout_width="@dimen/icon_8"
+            android:layout_height="@dimen/icon_8"
+            app:layout_constraintStart_toStartOf="@id/tv_date"
+            app:layout_constraintEnd_toEndOf="@id/tv_date"
+            app:layout_constraintBottom_toBottomOf="@id/tv_date"
+            app:layout_constraintTop_toTopOf="@id/tv_date"
+            android:layout_marginTop="@dimen/margin_24"
+            android:background="@drawable/schedule_point"
+            android:visibility="invisible" />
+
+        <View
+            android:layout_margin="4dp"
+            android:id="@+id/medal_back"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/tv_date"
+            app:layout_constraintEnd_toEndOf="@id/tv_date"
+            app:layout_constraintBottom_toBottomOf="@id/tv_date"
+            app:layout_constraintTop_toTopOf="@id/tv_date"
+            android:background="@drawable/medal_gold_back"
+            android:visibility="gone" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

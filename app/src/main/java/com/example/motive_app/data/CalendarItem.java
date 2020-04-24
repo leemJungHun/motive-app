@@ -7,6 +7,28 @@ public class CalendarItem {
     private boolean haveGoldMedal;
     private boolean haveSilverMedal;
     private boolean isFuture;
+    private boolean isThisMonth;
+
+    public CalendarItem(){}
+
+    public CalendarItem(String day, boolean isSelect, boolean isSchedule, boolean haveGoldMedal, boolean haveSilverMedal, boolean isFuture, boolean isThisMonth) {
+        this.day = day;
+        this.isSelect = isSelect;
+        this.isSchedule = isSchedule;
+        this.haveGoldMedal = haveGoldMedal;
+        this.haveSilverMedal = haveSilverMedal;
+        this.isFuture = isFuture;
+        this.isThisMonth = isThisMonth;
+    }
+
+    public CalendarItem(String day, boolean isSelect, boolean isSchedule, boolean haveGoldMedal, boolean haveSilverMedal, boolean isFuture) {
+        this.day = day;
+        this.isSelect = isSelect;
+        this.isSchedule = isSchedule;
+        this.haveGoldMedal = haveGoldMedal;
+        this.haveSilverMedal = haveSilverMedal;
+        this.isFuture = isFuture;
+    }
 
     public String getDay() {
         return day;
@@ -54,5 +76,9 @@ public class CalendarItem {
 
     public void setFuture(boolean future) {
         isFuture = future;
+    }
+
+    public boolean isThisMonth() {
+        return isThisMonth;
     }
 }

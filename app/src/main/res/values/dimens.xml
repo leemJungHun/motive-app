@@ -60,6 +60,7 @@
     <!--icon-->
     <dimen name="icon_128">128dp</dimen>
     <dimen name="icon_64">64dp</dimen>
+    <dimen name="icon_48">48dp</dimen>
     <dimen name="icon_32">32dp</dimen>
     <dimen name="icon_24">24dp</dimen>
     <dimen name="icon_8">8dp</dimen>

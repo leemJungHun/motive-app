@@ -29,16 +29,16 @@ public class TeachIdActivity extends AppCompatActivity {
 
         //데이터 전달
         Intent intent = getIntent(); /*데이터 수신*/
-        if(intent.getExtras()!=null) {
+        if (intent.getExtras() != null) {
             findId = intent.getExtras().getString("findId");
-            if(findId!=null) {
+            if (findId != null) {
                 Log.d("findId", findId);
             }
         }
-        String teachId="아이디는 "+findId+" 입니다.";
+        String teachId = "아이디는 " + findId + " 입니다.";
         SpannableStringBuilder ssb = new SpannableStringBuilder(teachId);
         ssb.setSpan(new ForegroundColorSpan(Color.parseColor("#808080")), 0, 4, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ssb.setSpan(new ForegroundColorSpan(Color.parseColor("#808080")), teachId.length()-4, teachId.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ssb.setSpan(new ForegroundColorSpan(Color.parseColor("#808080")), teachId.length() - 4, teachId.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         binding.findIdText.setText(ssb);
 
         binding.backArrow.setOnClickListener(onClickListener);
@@ -58,13 +58,13 @@ public class TeachIdActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             Intent intent;
-            if(v==binding.goLoginBtn){
+            if (v == binding.goLoginBtn) {
                 intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
 
                 overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
                 finish();
-            }else if(v==binding.backArrow){
+            } else if (v == binding.backArrow) {
                 intent = new Intent(getApplicationContext(), FindIdActivity.class);
                 startActivity(intent);
 

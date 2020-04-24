@@ -3,6 +3,7 @@ package com.example.motive_app.fragment.family;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ShapeDrawable;
@@ -28,9 +29,9 @@ import com.example.motive_app.activity.FamilyMainActivity;
 import com.example.motive_app.databinding.FragmentFamilyMyInfoBinding;
 import com.example.motive_app.dialog.CustomDialog_v2;
 import com.example.motive_app.dialog.CustomDialog_v3;
-import com.example.motive_app.network.DTO.PutProfileImageRequest;
+import com.example.motive_app.network.dto.PutProfileImageRequest;
 import com.example.motive_app.network.HttpRequestService;
-import com.example.motive_app.network.VO.FamilyInfoVO;
+import com.example.motive_app.network.vo.FamilyInfoVO;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -61,15 +62,28 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
     //data
     private FamilyInfoVO vo;
 
+    private FamilyMainActivity activity;
+
+
+    @Override
+    public void setArguments(@Nullable Bundle args) {
+        super.setArguments(args);
+        assert args != null;
+        vo = (FamilyInfoVO) args.getSerializable("familyInfoVO");
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (FamilyMainActivity) context;
+    }
+
     private HttpRequestService httpRequestService;
 
     private static final int RESULT_OK = -1;
 
-    private Uri filePath;
 
-    public FamilyInfoFragment(FamilyInfoVO vo){
-        this.vo = vo;
-    }
+    private Uri filePath;
 
     @Nullable
     @Override
@@ -79,7 +93,7 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
                 inflater, R.layout.fragment_family_my_info, container, false);
 
         SharedPreferences profile = Objects.requireNonNull(getActivity()).getSharedPreferences("profile", Activity.MODE_PRIVATE);
-        profilePath = profile.getString("saveProfile",null);
+        profilePath = profile.getString("saveProfile", null);
 
         //retrofit
         //통신
@@ -92,14 +106,13 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
 
         binding.photoChange.setIncludeFontPadding(false);
         binding.profileView.setBackground(new ShapeDrawable(new OvalShape()));
-        if(Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             binding.profileView.setClipToOutline(true);
         }
 
 
         binding.passChangeIcon.setOnClickListener(this);
         binding.TextPass.setOnClickListener(this);
-        binding.backArrow.setVisibility(View.GONE);
         binding.explainTextLogout.setOnClickListener(this);
         binding.explainTextWithdrawal.setOnClickListener(this);
         binding.photoChange.setOnClickListener(this);
@@ -110,11 +123,11 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
         binding.TextId.setText(vo.getId());
         binding.TextEmail.setText(vo.getEmail());
 
-        if(profilePath != null){
+        if (profilePath != null) {
             Glide.with(this)
                     .load(profilePath)
                     .into(binding.profileView);
-        }else if(vo.getProfileImageUrl()!=null) {
+        } else if (vo.getProfileImageUrl() != null) {
             FirebaseStorage fs = FirebaseStorage.getInstance();
             StorageReference imagesRef = fs.getReference().child(vo.getProfileImageUrl());
             Glide.with(this)
@@ -127,17 +140,16 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
     }
 
 
-
     @Override
     public void onClick(View v) {
-        if(v==binding.passChangeIcon||v==binding.TextPass){
+        if (v == binding.passChangeIcon || v == binding.TextPass) {
             ((FamilyMainActivity) Objects.requireNonNull(getActivity())).changePassOpen();
-        }else if(v==binding.explainTextLogout){
-            dialogContent="로그아웃 하시겠습니까?";
+        } else if (v == binding.explainTextLogout) {
+            dialogContent = "로그아웃 하시겠습니까?";
             Dialog_v2();
-        }else if(v==binding.explainTextWithdrawal){
+        } else if (v == binding.explainTextWithdrawal) {
             Dialog_v3();
-        }else if(v==binding.photoChange||v==binding.photoChangeIcon){
+        } else if (v == binding.photoChange || v == binding.photoChangeIcon) {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -145,7 +157,7 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    public void Dialog_v2(){
+    private void Dialog_v2() {
         dialog_v2 = new CustomDialog_v2(getContext(),
                 dialogContent,// 내용
                 btnListener_v2); // 버튼 이벤트
@@ -154,10 +166,11 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
         Objects.requireNonNull(dialog_v2.getWindow()).setGravity(Gravity.CENTER);
         dialog_v2.show();
     }
+
     //다이얼로그_v2 클릭이벤트
     private View.OnClickListener btnListener_v2 = new View.OnClickListener() {
         public void onClick(View v) {
-            if(v.getId()==R.id.dialog_Ok){
+            if (v.getId() == R.id.dialog_Ok) {
                 SharedPreferences profile = Objects.requireNonNull(getActivity()).getSharedPreferences("profile", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor profileSave = profile.edit();
                 profileSave.putString("saveProfile", null);
@@ -169,7 +182,7 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
     };
 
 
-    public void Dialog_v3(){
+    private void Dialog_v3() {
         dialog_v3 = new CustomDialog_v3(getContext(),// 내용
                 vo.getName(),
                 btnListener_v3, "family"); // 버튼 이벤트
@@ -189,7 +202,7 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
     //결과 처리
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 0 && resultCode == RESULT_OK){
+        if (requestCode == 0 && resultCode == RESULT_OK) {
             filePath = data.getData();
             Log.d("data.getData", data.getData() + "");
             Log.d("FamilyInfoFragment", "uri:" + filePath);
@@ -219,59 +232,46 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
             @SuppressLint("SimpleDateFormat")
             SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd_hhmmss");
             Date now = new Date();
-            final String filename = vo.getId()  + "_" + formatter.format(now) + "_profile.jpg";
+            final String filename = vo.getId() + "_" + formatter.format(now) + "_profile.jpg";
             StorageReference storageRef = storage.getReferenceFromUrl("gs://motive-app-3061c.appspot.com").child("images/" + filename);
             storageRef.putFile(filePath)
                     //성공시
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss(); //업로드 진행 Dialog 상자 닫기
-                            Toast.makeText(getContext(), "프로필 변경", Toast.LENGTH_SHORT).show();
-                            PutProfileImageRequest request = new PutProfileImageRequest();
-                            request.setId(vo.getId());
-                            request.setImageUrl("images/" + filename);
-                            request.setType("family");
-                            httpRequestService.putProfileImageRequest(request).enqueue(new Callback<JsonObject>() {
-                                @Override
-                                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                    Log.d("response","onResponse" + response);
-                                    if(response.body()!=null){
-                                        SharedPreferences preProfile = Objects.requireNonNull(getActivity()).getSharedPreferences("preProfile", Activity.MODE_PRIVATE);
-                                        preProfilePath = preProfile.getString("preProfiles",null);
-                                        Log.d("response.body",response.body().get("result").toString());
-                                        if(preProfilePath!=null){
-                                            FirebaseStorage fs = FirebaseStorage.getInstance();
-                                            StorageReference deleteImage = fs.getReference().child(preProfilePath);
-                                            deleteImage.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Log.d("이전 프로필 사진","삭제");
-                                                }
-                                            });
-                                        }else if(vo.getProfileImageUrl()!=null){
-                                            FirebaseStorage fs = FirebaseStorage.getInstance();
-                                            StorageReference deleteImage = fs.getReference().child(vo.getProfileImageUrl());
-                                            deleteImage.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-                                                    Log.d("이전 프로필 사진","삭제");
-                                                }
-                                            });
-                                        }
+                    .addOnSuccessListener(taskSnapshot -> {
+                        progressDialog.dismiss(); //업로드 진행 Dialog 상자 닫기
+                        Toast.makeText(getContext(), "프로필 변경", Toast.LENGTH_SHORT).show();
+                        PutProfileImageRequest request = new PutProfileImageRequest();
+                        request.setId(vo.getId());
+                        request.setImageUrl("images/" + filename);
+                        request.setType("family");
+                        httpRequestService.putProfileImageRequest(request).enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                                Log.d("response", "onResponse" + response);
+                                if (response.body() != null) {
+                                    SharedPreferences preProfile = Objects.requireNonNull(getActivity()).getSharedPreferences("preProfile", Activity.MODE_PRIVATE);
+                                    preProfilePath = preProfile.getString("preProfiles", null);
+                                    Log.d("response.body", response.body().get("result").toString());
+                                    if (preProfilePath != null) {
+                                        FirebaseStorage fs = FirebaseStorage.getInstance();
+                                        StorageReference deleteImage = fs.getReference().child(preProfilePath);
+                                        deleteImage.delete().addOnSuccessListener(aVoid -> Log.d("이전 프로필 사진", "삭제"));
+                                    } else if (vo.getProfileImageUrl() != null) {
+                                        FirebaseStorage fs = FirebaseStorage.getInstance();
+                                        StorageReference deleteImage = fs.getReference().child(vo.getProfileImageUrl());
+                                        deleteImage.delete().addOnSuccessListener(aVoid -> Log.d("이전 프로필 사진", "삭제"));
                                     }
-                                    final SharedPreferences preProfile = Objects.requireNonNull(getActivity()).getSharedPreferences("preProfile", Activity.MODE_PRIVATE);
-                                    SharedPreferences.Editor preProfiles = preProfile.edit();
-                                    preProfiles.putString("preProfiles", "images/" + filename);
-                                    preProfiles.apply();
                                 }
+                                final SharedPreferences preProfile = Objects.requireNonNull(getActivity()).getSharedPreferences("preProfile", Activity.MODE_PRIVATE);
+                                SharedPreferences.Editor preProfiles = preProfile.edit();
+                                preProfiles.putString("preProfiles", "images/" + filename);
+                                preProfiles.apply();
+                            }
 
-                                @Override
-                                public void onFailure(Call<JsonObject> call, Throwable t) {
+                            @Override
+                            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
 
-                                }
-                            });
-                        }
+                            }
+                        });
                     })
                     //실패시
                     .addOnFailureListener(new OnFailureListener() {
@@ -282,14 +282,11 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
                         }
                     })
                     //진행중
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            @SuppressWarnings("VisibleForTests")
-                                    double progress = (100 * taskSnapshot.getBytesTransferred()) /  taskSnapshot.getTotalByteCount();
-                            //dialog에 진행률을 퍼센트로 출력해 준다
-                            progressDialog.setMessage("Uploaded " + ((int) progress) + "% ...");
-                        }
+                    .addOnProgressListener(taskSnapshot -> {
+                        @SuppressWarnings("VisibleForTests")
+                        double progress = (double) (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        //dialog에 진행률을 퍼센트로 출력해 준다
+                        progressDialog.setMessage("Uploaded " + ((int) progress) + "% ...");
                     });
         } else {
             Toast.makeText(getContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();

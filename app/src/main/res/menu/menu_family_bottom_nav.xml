@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/myFamilyInfo"
+        android:title="@string/my_family"
+        android:icon="@drawable/motive_icon_menu_heart_off"
+        android:enabled="true"/>
+
+    <item android:id="@+id/myFamilyVideoInfo"
+        android:title="@string/my_video_info"
+        android:icon="@drawable/motive_icon_menu_play_off"/>
+
+    <item android:id="@+id/myFamilyScheduleInfo"
+        android:title="@string/my_schedule_info"
+        android:icon="@drawable/motive_icon_menu_calendar_off"/>
+
+    <item android:id="@+id/myInfo"
+        android:title="@string/my_info"
+        android:icon="@drawable/motive_icon_menu_teacher_off"/>
+
+</menu>

@@ -8,69 +8,24 @@
         android:layout_height="match_parent"
         android:background="#ffffff">
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/tabBar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height_64"
-            android:background="#2699fb"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/family_prev"
-                android:layout_width="@dimen/icon_32"
-                android:layout_height="@dimen/icon_32"
-                android:layout_marginStart="@dimen/margin_32"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/back_arrow_icon"
-                tools:ignore="ContentDescription" />
-
-            <TextView
-                android:id="@+id/family_name_bar"
-                android:layout_width="@dimen/width_320"
-                android:layout_height="@dimen/height_32"
-                android:gravity="center"
-                android:text="OOO님의 일정"
-                android:textColor="#FFFFFFFF"
-                android:textSize="@dimen/font_20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/family_next"
-                android:layout_width="@dimen/icon_32"
-                android:layout_height="@dimen/icon_32"
-                android:layout_marginEnd="@dimen/margin_32"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/motive_icon_forwardarrow"
-                tools:ignore="ContentDescription" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <View
             android:id="@+id/move_tab"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_64"
             android:background="#f0f0f0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tabBar">
+            app:layout_constraintTop_toTopOf="parent"/>
 
             <ImageView
                 android:id="@+id/tv_prev_month"
-                android:layout_width="@dimen/icon_32"
-                android:layout_height="@dimen/icon_32"
+                android:layout_width="@dimen/icon_48"
+                android:layout_height="@dimen/icon_48"
                 android:layout_marginEnd="@dimen/margin_16"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="@id/move_tab"
                 app:layout_constraintEnd_toStartOf="@+id/tv_current_month"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/motive_icon_backwardarrow_2"
+                app:layout_constraintTop_toTopOf="@id/move_tab"
+                app:srcCompat="@drawable/motive_icon_backwardarrow2"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -80,46 +35,52 @@
                 android:gravity="center"
                 android:text="2020년 1월"
                 android:textSize="@dimen/font_20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@id/move_tab"
+                app:layout_constraintEnd_toEndOf="@id/move_tab"
+                app:layout_constraintStart_toStartOf="@id/move_tab"
+                app:layout_constraintTop_toTopOf="@id/move_tab" />
 
             <ImageView
                 android:id="@+id/tv_next_month"
-                android:layout_width="@dimen/icon_32"
-                android:layout_height="@dimen/icon_32"
+                android:layout_width="@dimen/icon_48"
+                android:layout_height="@dimen/icon_48"
                 android:layout_marginStart="@dimen/margin_16"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="@id/move_tab"
                 app:layout_constraintStart_toEndOf="@id/tv_current_month"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/motive_icon_forwardarrow_2"
+                app:layout_constraintTop_toTopOf="@id/move_tab"
+                app:srcCompat="@drawable/motive_icon_forwardarrow2"
                 tools:ignore="ContentDescription" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/day_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/margin_21"
-            app:layout_constraintTop_toBottomOf="@id/move_tab"
-            android:background="#FFFFFF"
-            >
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/loadingfamilyTxtView"
+            android:gravity="center"
+            android:text="일정을 불러오는 중입니다. \n\n 잠시만 기다려주세요......"
+            android:textStyle="italic|bold"
+            android:textColor="#323232"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@id/day"
+            app:layout_constraintEnd_toEndOf="@id/day"
+            app:layout_constraintTop_toTopOf="@id/day"
+            app:layout_constraintDimensionRatio="5:3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/day"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginStart="@dimen/margin_24"
-                android:layout_marginEnd="@dimen/margin_24">
+                app:layout_constraintTop_toBottomOf="@id/move_tab"
+                android:background="#FFFFFF"
+                android:paddingTop="@dimen/margin_21"
+                android:paddingStart="@dimen/margin_24"
+                android:paddingEnd="@dimen/margin_24">
 
                 <TextView
                     android:id="@+id/sun_text"
-                    android:layout_width="@dimen/width_48"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="일"
@@ -131,7 +92,7 @@
 
                 <TextView
                     android:id="@+id/mon_text"
-                    android:layout_width="@dimen/width_48"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="월"
@@ -143,7 +104,7 @@
 
                 <TextView
                     android:id="@+id/tus_text"
-                    android:layout_width="@dimen/width_48"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="화"
@@ -155,7 +116,7 @@
 
                 <TextView
                     android:id="@+id/wen_text"
-                    android:layout_width="@dimen/width_48"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="수"
@@ -167,7 +128,7 @@
 
                 <TextView
                     android:id="@+id/thu_text"
-                    android:layout_width="@dimen/width_48"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="목"
@@ -179,7 +140,7 @@
 
                 <TextView
                     android:id="@+id/fri_text"
-                    android:layout_width="@dimen/width_48"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="금"
@@ -191,7 +152,7 @@
 
                 <TextView
                     android:id="@+id/sat_text"
-                    android:layout_width="@dimen/width_48"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="토"
@@ -213,16 +174,15 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_schedule"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_12"
-                    android:layout_marginTop="@dimen/margin_12"
+                    android:layout_marginTop="@dimen/margin_8"
                     android:overScrollMode="never"
+                    app:layout_constraintEnd_toEndOf="@id/sat_text"
                     app:layout_constraintStart_toStartOf="@id/sun_text"
                     app:layout_constraintTop_toBottomOf="@id/boundary">
 
                 </androidx.recyclerview.widget.RecyclerView>
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -230,7 +190,7 @@
             android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/day_view"
+            app:layout_constraintTop_toBottomOf="@+id/day"
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="#f9f9f9"
             >

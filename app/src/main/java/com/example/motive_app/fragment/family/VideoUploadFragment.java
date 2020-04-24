@@ -20,7 +20,7 @@ import com.example.motive_app.R;
 import com.example.motive_app.activity.FamilyMainActivity;
 import com.example.motive_app.databinding.FragmentUploadVideoBinding;
 import com.example.motive_app.dialog.CustomDialog;
-import com.example.motive_app.network.VO.FamilyInfoVO;
+import com.example.motive_app.network.vo.FamilyInfoVO;
 import com.example.motive_app.util.RealPathUtil;
 
 import java.io.File;
@@ -34,7 +34,6 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
     private String filePath;
     private String size;
     private float FileSize;
-    private Context context;
 
 
     private ProgressDialog pd;
@@ -43,9 +42,20 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
     CustomDialog dialog;
     private String dialogContent;
 
-    public VideoUploadFragment(FamilyInfoVO vo , Context context){
-        this.vo = vo;
-        this.context = context;
+    private FamilyMainActivity activity;
+
+
+    @Override
+    public void setArguments(@Nullable Bundle args) {
+        super.setArguments(args);
+        assert args != null;
+        vo = (FamilyInfoVO) args.getSerializable("familyInfoVO");
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (FamilyMainActivity) context;
     }
 
     @Nullable
@@ -67,8 +77,8 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
             intent.setType("video/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "동영상을 선택하세요."), 0);
-        }else if(v==binding.exampleVideoBtn){
-            ((FamilyMainActivity) Objects.requireNonNull(getActivity())).exampleVideoOpen();
+        } else if (v == binding.exampleVideoBtn) {
+            activity.exampleVideoOpen();
         }
     }
 
@@ -80,24 +90,24 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
             if (data != null && data.getData() != null) {
                 Log.d("data.getData", data.getData() + "");
 
-                Log.d("path", RealPathUtil.getRealPath(context,data.getData()) + "");
-                filePath = RealPathUtil.getRealPath(context,data.getData());
-                Log.d("filePath",filePath);
+                Log.d("path", RealPathUtil.getRealPath(activity, data.getData()) + "");
+                filePath = RealPathUtil.getRealPath(activity, data.getData());
+                Log.d("filePath", filePath);
                 File selectFIle = new File(filePath);
-                if(selectFIle.exists()){
-                    FileSize = selectFIle.length()/(float)1024/1024;
+                if (selectFIle.exists()) {
+                    FileSize = selectFIle.length() / (float) 1024 / 1024;
                     size = FileSize + "MB";
-                }else{
+                } else {
                     size = "File not exist";
                 }
                 Log.d("selectFile", "size:" + size);
                 Log.d("filePath", filePath);
                 int playTime = getPlayTime(filePath);
-                Log.d("playTime",playTime+" ");
-                if(playTime<=60) {
-                    ((FamilyMainActivity) Objects.requireNonNull(getActivity())).videoSelectActivty(filePath, Integer.toString(playTime));
-                }else{
-                    dialogContent="1분 이하 영상만 업로드 가능합니다.";
+                Log.d("playTime", playTime + " ");
+                if (playTime <= 60) {
+                    activity.videoSelectActivity(filePath, Integer.toString(playTime));
+                } else {
+                    dialogContent = "1분 이하 영상만 업로드 가능합니다.";
                     Dialog();
                 }
             }
@@ -106,19 +116,19 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
 
     private int getPlayTime(String path) {
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        Log.d("path",path);
+        Log.d("path", path);
         retriever.setDataSource(path);
         String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-        long timeInmillisec = Long.parseLong( time );
+        long timeInmillisec = Long.parseLong(time);
         long duration = timeInmillisec / 1000;
         long hours = duration / 3600;
         long minutes = (duration - hours * 3600) / 60;
-        return (int)duration;
+        return (int) duration;
     }
 
     //다이얼로그 클릭이벤트
     public void Dialog() {
-        dialog = new CustomDialog(context,
+        dialog = new CustomDialog(activity,
                 dialogContent,// 내용
                 OkListener); // 왼쪽 버튼 이벤트
         // 오른쪽 버튼 이벤트

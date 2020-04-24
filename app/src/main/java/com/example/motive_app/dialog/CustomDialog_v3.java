@@ -13,9 +13,9 @@ import androidx.databinding.DataBindingUtil;
 import com.example.motive_app.activity.MemberMainActivity;
 import com.example.motive_app.R;
 import com.example.motive_app.databinding.CustomDialogV3Binding;
-import com.example.motive_app.network.DTO.FamilyWithDrawalRequest;
+import com.example.motive_app.network.dto.FamilyWithDrawalRequest;
 import com.example.motive_app.network.HttpRequestService;
-import com.example.motive_app.network.DTO.WithDrawalRequest;
+import com.example.motive_app.network.dto.WithDrawalRequest;
 import com.google.gson.JsonObject;
 
 import java.util.Objects;

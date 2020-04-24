@@ -24,6 +24,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
+        <!-- android:usesCleartextTraffic="true" 를 해야 http:// 주소를 불러올 수 있음.-->
 
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
@@ -34,6 +35,7 @@
 
         <activity
             android:name=".activity.MemberMainActivity"
+            android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait">
 
         </activity>
@@ -112,6 +114,7 @@
 
         </activity>
         <activity android:name=".activity.ExampleVideoListActivity"
+            android:configChanges="orientation|screenSize"
             android:noHistory="true"
             android:screenOrientation="portrait"/>
 

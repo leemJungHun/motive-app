@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,41 +25,39 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class FamilyRecyclerAdapter extends RecyclerView.Adapter<FamilyRecyclerAdapter.ViewHolder> {
-    private ArrayList<FamilyFindItem> mData = new ArrayList<FamilyFindItem>() ;
+    private ArrayList<FamilyFindItem> mData = new ArrayList<>();
     private ArrayList<FamilyItem> familyList = new ArrayList<>();
     private FindFamilyActivity activity;
     private boolean duplicatedId = false;
 
     public FamilyRecyclerAdapter(FindFamilyActivity activity) {
-        this.activity = activity ;
+        this.activity = activity;
     }
+
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
+    @NonNull
     public FamilyRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext() ;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
+        Context context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.item_family, parent, false);
 
-        View view = inflater.inflate(R.layout.item_family, parent, false) ;
-        FamilyRecyclerAdapter.ViewHolder vh = new FamilyRecyclerAdapter.ViewHolder(view) ;
-
-        return vh ;
+        return new FamilyRecyclerAdapter.ViewHolder(view);
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
     public void onBindViewHolder(FamilyRecyclerAdapter.ViewHolder holder, int position) {
 
-        FamilyFindItem item = mData.get(position) ;
-
+        FamilyFindItem item = mData.get(position);
 
 
         holder.familyName.setText(item.getName());
         holder.familyImg.setBackground(new ShapeDrawable(new OvalShape()));
-        if(Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             holder.familyImg.setClipToOutline(true);
         }
 
-        if(!item.getImageUrl().equals("")){
+        if (!item.getImageUrl().equals("")) {
             FirebaseStorage fs = FirebaseStorage.getInstance();
             StorageReference imagesRef = fs.getReference().child(item.getImageUrl());
             Glide.with(activity)
@@ -70,21 +69,21 @@ public class FamilyRecyclerAdapter extends RecyclerView.Adapter<FamilyRecyclerAd
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        return mData.size() ;
+        return mData.size();
     }
 
-    public void addData(FamilyFindItem familyFindItem){
-        for(int i=0;i<mData.size();i++){
-            if(mData.get(i).getUserId().equals(familyFindItem.getUserId())){
-                duplicatedId=true;
+    public void addData(FamilyFindItem familyFindItem) {
+        for (int i = 0; i < mData.size(); i++) {
+            if (mData.get(i).getUserId().equals(familyFindItem.getUserId())) {
+                duplicatedId = true;
             }
         }
-        if(!duplicatedId){
+        if (!duplicatedId) {
             mData.add(familyFindItem);
-            FamilyItem familyData = new FamilyItem(familyFindItem.getUserId(),familyFindItem.getRelation());
+            FamilyItem familyData = new FamilyItem(familyFindItem.getUserId(), familyFindItem.getRelation());
             familyList.add(familyData);
         }
-        duplicatedId=false;
+        duplicatedId = false;
     }
 
     public void updateData(ArrayList<FamilyFindItem> familyFindItem) {
@@ -93,7 +92,7 @@ public class FamilyRecyclerAdapter extends RecyclerView.Adapter<FamilyRecyclerAd
         notifyDataSetChanged();
     }
 
-    public ArrayList<FamilyItem> getFamilyData(){
+    public ArrayList<FamilyItem> getFamilyData() {
         return familyList;
     }
 
@@ -104,22 +103,22 @@ public class FamilyRecyclerAdapter extends RecyclerView.Adapter<FamilyRecyclerAd
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView familyImg ;
-        TextView familyName ;
+        ImageView familyImg;
+        TextView familyName;
         ImageView closeImg;
 
         ViewHolder(View itemView) {
-            super(itemView) ;
+            super(itemView);
 
             // 뷰 객체에 대한 참조. (hold strong reference)
-            familyImg = itemView.findViewById(R.id.family_profile) ;
-            familyName = itemView.findViewById(R.id.family_name) ;
-            closeImg = itemView.findViewById(R.id.family_delete) ;
+            familyImg = itemView.findViewById(R.id.family_profile);
+            familyName = itemView.findViewById(R.id.family_name);
+            closeImg = itemView.findViewById(R.id.family_delete);
 
             closeImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int pos = getAdapterPosition() ;
+                    int pos = getAdapterPosition();
                     deleteData(pos);
                     ((FindFamilyActivity) Objects.requireNonNull(activity)).rvVisible();
                 }

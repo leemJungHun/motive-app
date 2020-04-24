@@ -18,8 +18,8 @@ import com.example.motive_app.R;
 import com.example.motive_app.databinding.ActivityFindIdBinding;
 import com.example.motive_app.dialog.CustomDialog;
 import com.example.motive_app.network.HttpRequestService;
-import com.example.motive_app.network.VO.EmailAuthVO;
-import com.example.motive_app.network.DTO.EmailRequest;
+import com.example.motive_app.network.vo.EmailAuthVO;
+import com.example.motive_app.network.dto.EmailRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 

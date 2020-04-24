@@ -3,17 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/height_400"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/margin_16">
 
     <ImageView
         android:id="@+id/video_main"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/width_240"
+        android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:src="@drawable/profile_base"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
@@ -22,9 +21,9 @@
         android:layout_width="@dimen/icon_64"
         android:layout_height="@dimen/icon_64"
         android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/video_main"
+        app:layout_constraintStart_toStartOf="@id/video_main"
+        app:layout_constraintTop_toTopOf="@id/video_main"
         app:layout_constraintBottom_toBottomOf="@id/video_main"
         app:srcCompat="@drawable/ic_play_arrow_black"
         tools:ignore="ContentDescription" />
@@ -33,7 +32,7 @@
         android:id="@+id/uploader_img"
         android:layout_width="@dimen/icon_64"
         android:layout_height="@dimen/icon_64"
-        android:layout_marginStart="@dimen/margin_32"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="@dimen/margin_16"
         android:scaleType="centerCrop"
         android:src="@drawable/profile_base"
@@ -69,7 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_8"
         android:layout_marginEnd="@dimen/margin_32"
+        android:paddingBottom="@dimen/margin_16"
         android:textColor="#414141"
+        tools:text="aaa"
         android:textSize="@dimen/font_20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/uploader_img"

@@ -8,23 +8,25 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
 import com.example.motive_app.R;
 import com.example.motive_app.databinding.ActivityMedalSelectBinding;
-import com.example.motive_app.network.DTO.GetUserScheduleRequest;
-import com.example.motive_app.network.DTO.PutMedalSelectResultRequest;
-import com.example.motive_app.network.DTO.UserPhoneRequest;
+import com.example.motive_app.network.dto.GetUserScheduleRequest;
+import com.example.motive_app.network.dto.PutMedalSelectResultRequest;
+import com.example.motive_app.network.dto.UserPhoneRequest;
 import com.example.motive_app.network.HttpRequestService;
-import com.example.motive_app.network.VO.GroupScheduleVO;
-import com.example.motive_app.network.VO.MemberInfoVO;
-import com.example.motive_app.network.VO.UserInfoVO;
+import com.example.motive_app.network.vo.GroupScheduleVO;
+import com.example.motive_app.network.vo.MemberInfoVO;
+import com.example.motive_app.network.vo.UserInfoVO;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.lang.reflect.Member;
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -121,23 +123,24 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
 
         httpRequestService.userPhoneRequest(userPhoneRequest).enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                 if (response.body() != null) {
                     Gson gson = new Gson();
                     memberInfoVO = gson.fromJson(response.body().get("memberInfoVO").toString(), MemberInfoVO.class);
                     Log.d("getGroupCode", " " + memberInfoVO.getGroupCode());
                     if (memberInfoVO.getGroupCode() != null) {
-                        GetUserScheduleRequest getUserScheduleRequest = new GetUserScheduleRequest();
-                        getUserScheduleRequest.setUserId(vo.getId());
-                        getUserScheduleRequest.setGroupCode(memberInfoVO.getGroupCode());
+                        GetUserScheduleRequest getUserScheduleRequest = new GetUserScheduleRequest(vo.getId(), memberInfoVO.getGroupCode());
                         groupCode = memberInfoVO.getGroupCode();
                         httpRequestService.getUserScheduleRequest(getUserScheduleRequest).enqueue(new Callback<JsonObject>() {
                             @Override
-                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                                 if (response.body() != null) {
                                     Gson gson = new Gson();
-                                    JsonObject jsonObject = response.body();
-                                    JsonArray jsonArray = jsonObject.getAsJsonArray("result");
+                                    JsonObject res = response.body();
+                                    Log.e("medalinfo", res.toString());
+                                    JsonObject jsonObject = res.getAsJsonObject("result");
+                                    JsonArray jsonArray = jsonObject.getAsJsonArray("schedule");
+                                    JsonArray medalArray = jsonObject.getAsJsonArray("medalInfo");
 
                                     for (int index = jsonArray.size() - 1; 0 <= index; index--) {
                                         GroupScheduleVO groupScheduleVO = gson.fromJson(jsonArray.get(index).toString(), GroupScheduleVO.class);
@@ -176,7 +179,7 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
                             }
 
                             @Override
-                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
 
                             }
                         });
@@ -185,7 +188,7 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
 
             }
         });
@@ -223,6 +226,7 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
             putMedalSelectResultRequest.setWeekSort(Integer.toString(nowSort));
             putMedalSelectResultRequest.setGoldMedalCnt(Integer.toString(goldMedalCnt));
             putMedalSelectResultRequest.setSilverMedalCnt(Integer.toString(silverMedalCnt));
+            putMedalSelectResultRequest.setGroupCode(groupCode);
             Log.d("vo.getId",vo.getId()+" ");
             Log.d("videoIdx",videoIdx+" ");
             Log.d("nowSort",nowSort+" ");
@@ -231,13 +235,18 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
             Log.d("groupCode",groupCode);
             httpRequestService.putMedalSelectResultRequest(putMedalSelectResultRequest).enqueue(new Callback<JsonObject>() {
                 @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                     if (response.body() != null) {
                         String result = response.body().get("result").toString().replace("\"", "");
                         Log.d("putMedal-result", " " + result);
                         switch (result) {
                             case "ok":
-                                Intent intent;
+                                // 메달 선택 성공 후 MemberMainActivity 로 돌아가야함.
+                                Intent intent = new Intent(MedalSelectActivity.this, MemberMainActivity.class);
+                                intent.putExtra("medalVideo", "N");
+                                intent.putExtra("userInfoVO", vo);
+                                startActivity(intent);
+                                finish();
                                 break;
                             case "error":
                                 break;
@@ -246,7 +255,7 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
                 }
 
                 @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
 
                 }
             });

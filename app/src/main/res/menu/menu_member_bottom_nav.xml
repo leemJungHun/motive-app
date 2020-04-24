@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/myMedalInfo"
+        android:title="@string/my_medal"
+        android:icon="@drawable/motive_icon_menu_star_on"
+        android:enabled="true"/>
+
+    <item android:id="@+id/myVideoInfo"
+        android:title="@string/my_video_info"
+        android:icon="@drawable/motive_icon_menu_play_off"/>
+
+    <item android:id="@+id/myScheduleInfo"
+        android:title="@string/my_schedule_info"
+        android:icon="@drawable/motive_icon_menu_calendar_off"/>
+
+</menu>

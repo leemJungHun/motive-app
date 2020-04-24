@@ -1,5 +1,6 @@
 package com.example.motive_app.fragment.family;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,12 +18,13 @@ import com.example.motive_app.activity.FamilyMainActivity;
 import com.example.motive_app.adapter.MyFamilyRecyclerAdapter;
 import com.example.motive_app.data.MyFamilyItem;
 import com.example.motive_app.databinding.FragmentMyFamilyBinding;
-import com.example.motive_app.network.DTO.GetParentsInfoRequest;
+import com.example.motive_app.network.dto.GetParentsInfoRequest;
 import com.example.motive_app.network.HttpRequestService;
-import com.example.motive_app.network.VO.FamilyInfoVO;
-import com.example.motive_app.network.VO.MyFamilyListVO;
+import com.example.motive_app.network.vo.FamilyInfoVO;
+import com.example.motive_app.network.vo.MyFamilyListVO;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -40,10 +42,20 @@ public class MyFamilyFragment extends Fragment {
 
 
     private FamilyInfoVO vo;
+    private FamilyMainActivity activity;
 
 
-    public MyFamilyFragment(FamilyInfoVO vo) {
-        this.vo=vo;
+    @Override
+    public void setArguments(@Nullable Bundle args) {
+        super.setArguments(args);
+        assert args != null;
+        vo = (FamilyInfoVO) args.getSerializable("familyInfoVO");
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        activity = (FamilyMainActivity) context;
     }
 
     @Nullable
@@ -53,6 +65,10 @@ public class MyFamilyFragment extends Fragment {
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_my_family, container, false);
 
+
+        adapter = new MyFamilyRecyclerAdapter((FamilyMainActivity) getActivity());
+        binding.rvFamily.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvFamily.setAdapter(adapter);
 
         //retrofit
         //통신
@@ -69,22 +85,18 @@ public class MyFamilyFragment extends Fragment {
 
         httpRequestService.getParentsInfoRequest(request).enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if(response.body()!=null){
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
                     Gson gson = new Gson();
                     JsonObject jsonObject = response.body();
                     JsonArray jsonArray = jsonObject.getAsJsonArray("result");
 
-
-                    for(int index=0;index<jsonArray.size();index++) {
-                        MyFamilyListVO myFamilyListVO = gson.fromJson(jsonArray.get(index).toString(), MyFamilyListVO.class);
+                    for (JsonElement element : jsonArray) {
+                        MyFamilyListVO myFamilyListVO = gson.fromJson(element, MyFamilyListVO.class);
                         MyFamilyItem myFamilyItem = new MyFamilyItem();
-                        Log.d("MyFamilyListVO Id"+index, myFamilyListVO.getId());
-                        Log.d("MyFamilyListVO Name"+index, myFamilyListVO.getName());
-                        if(myFamilyListVO.getProfileImageUrl()!=null) {
-                            Log.d("MyFamilyListVO ImgUrl" + index, myFamilyListVO.getProfileImageUrl());
+                        if (myFamilyListVO.getProfileImageUrl() != null) {
                             myFamilyItem.setMyFamilyImgUrl(myFamilyListVO.getProfileImageUrl());
-                        }else{
+                        } else {
                             myFamilyItem.setMyFamilyImgUrl("");
                         }
                         myFamilyItem.setMyFamilyId(myFamilyListVO.getId());
@@ -92,15 +104,13 @@ public class MyFamilyFragment extends Fragment {
                         mItem.add(myFamilyItem);
                     }
 
-                    adapter = new MyFamilyRecyclerAdapter(mItem, (FamilyMainActivity) getActivity());
-                    binding.rvFamily.setAdapter(adapter);
-                    binding.rvFamily.setLayoutManager(new LinearLayoutManager(getContext()));
-                    adapter.notifyDataSetChanged() ;
+                    adapter.updateData(mItem);
+                    adapter.notifyDataSetChanged();
                 }
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
 
             }
         });

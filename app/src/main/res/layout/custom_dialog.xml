@@ -41,8 +41,8 @@
 
         <Button
             android:id="@+id/dialog_Ok"
-            android:layout_width="@dimen/width_256"
-            android:layout_height="@dimen/height_32"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="@null"
             android:text="@string/check"
             android:textColor="#2699fb"

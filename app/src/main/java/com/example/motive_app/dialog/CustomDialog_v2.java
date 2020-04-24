@@ -13,9 +13,6 @@ import com.example.motive_app.R;
 import java.util.Objects;
 
 public class CustomDialog_v2 extends Dialog {
-    private TextView mContentView;
-    private Button mOkButton;
-    private Button mCancelButton;
     private String mContent;
 
 
@@ -34,9 +31,9 @@ public class CustomDialog_v2 extends Dialog {
 
         setContentView(R.layout.custom_dialog_v2);
 
-        mContentView = (TextView) findViewById(R.id.dialog_content);
-        mOkButton = (Button) findViewById(R.id.dialog_Ok);
-        mCancelButton = (Button) findViewById(R.id.dialog_cancel);
+        TextView mContentView =  findViewById(R.id.dialog_content);
+        Button mOkButton =  findViewById(R.id.dialog_Ok);
+        Button mCancelButton =  findViewById(R.id.dialog_cancel);
 
         // 제목과 내용을 생성자에서 셋팅한다.
         mContentView.setText(mContent);

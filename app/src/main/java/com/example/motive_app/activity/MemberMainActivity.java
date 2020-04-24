@@ -3,10 +3,16 @@ package com.example.motive_app.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.MediaController;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,20 +25,19 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.motive_app.R;
 import com.example.motive_app.activity.registration.ChangePassActivity;
 import com.example.motive_app.databinding.ActivityMemberMainBinding;
+import com.example.motive_app.fragment.member.MyInfoFragment;
 import com.example.motive_app.fragment.member.MyMedalFragment;
 import com.example.motive_app.fragment.member.PlayVideoFragment;
 import com.example.motive_app.fragment.member.ScheduleFragment;
-import com.example.motive_app.network.DTO.RegistrationTokenRequest;
+import com.example.motive_app.network.dto.RegistrationTokenRequest;
 import com.example.motive_app.network.HttpRequestService;
-import com.example.motive_app.network.VO.UserInfoVO;
+import com.example.motive_app.network.vo.UserInfoVO;
 import com.example.motive_app.service.alarm.JobSchedulerStart;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.JsonObject;
 
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,119 +46,174 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MemberMainActivity extends AppCompatActivity {
+
     FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    ActivityMemberMainBinding binding;
+    public ActivityMemberMainBinding binding;
     int check;
-    int preCheck=0;
-    private final long FINISH_INTERVAL_TIME = 2000;
-    private long   backPressedTime = 0;
+    int preCheck = 0;
+    private static final long FINISH_INTERVAL_TIME = 2000;
+    private long backPressedTime = 0;
+    String medalVideo = "N";
     UserInfoVO vo;
     String type;
-    String textColorBlack = "#666666";
-    String textColorBlue = "#2699fb";
-    String medalVideo="N";
-    Fragment nowFragmnet;
+    public Fragment nowFragment;
+    Bundle args;
+
+    public SurfaceHolder videoHolder;
+    public MediaPlayer videoPlayer;
+    public MediaController mediaController;
+    boolean isFull = false;
+    public String fileUrl;
+    public String videoIdx;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_member_main);
 
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_member_main);
+        videoHolder = binding.cheerUpVideoView.getHolder();
+        binding.cheerUpVideoView.setOnClickListener(null);
         //데이터 전달
         Intent intent = getIntent(); /*데이터 수신*/
-        if(intent.getExtras()!=null) {
+        if (intent.getExtras() != null) {
             vo = (UserInfoVO) intent.getSerializableExtra("userInfoVO");
             medalVideo = intent.getExtras().getString("medalVideo");
-            if(medalVideo==null){
-                medalVideo="N";
+            if (medalVideo == null) {
+                medalVideo = "N";
             }
             type = intent.getExtras().getString("type");
-            if(vo!=null) {
+            if (vo != null) {
                 Log.d("getName", vo.getName());
                 Log.d("getId", vo.getId());
                 Log.d("getEmail", vo.getEmail());
                 Log.d("getOrganizationCode", vo.getOrganizationCode());
                 Log.d("getBirth", vo.getBirth());
                 Log.d("getPhone", vo.getPhone());
-                if(vo.getProfileImageUrl()!=null) {
+                Log.d("getGroupCode", vo.getGroupCode());
+                Log.d("getRegistrationDate", vo.getRegistrationDate() + "");
+                if (vo.getProfileImageUrl() != null) {
                     Log.d("getImageUrl", vo.getProfileImageUrl());
                 }
             }
         }
 
+        binding.mainContainer.setScrollContainer(false);
+        binding.leftIconImageView.setOnClickListener(this::onIconClick);
+        binding.rightIconImageView.setOnClickListener(this::onIconClick);
+
         //토큰 등록
         getToken();
+        binding.bottomNav.setItemTextColor(getResources().getColorStateList(R.drawable.bottom_navigation_colors));
+        binding.bottomNav.setItemIconTintList(getResources().getColorStateList(R.drawable.bottom_navigation_colors));
         fragmentManager = getSupportFragmentManager();
-        if (medalVideo.equals("Y")){
-            setStartFragment(new PlayVideoFragment(vo,medalVideo));
-        }else {
-            setStartFragment(new MyMedalFragment(vo));
+        binding.bottomNav.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+
+        //args = new Bundle();
+        //args.putSerializable("userInfoVO", vo);
+        if (medalVideo.equals("Y")) {
+            binding.bottomNav.setSelectedItemId(R.id.myVideoInfo);
+            //nowFragment = new PlayVideoFragment();
+            //args.putString("medalVideo", medalVideo);
+        } else {
+            binding.bottomNav.setSelectedItemId(R.id.myMedalInfo);
+            //nowFragment = new MyMedalFragment();
+            binding.rightIconImageView.setVisibility(View.VISIBLE);
+            binding.rightIconImageView.setImageResource(R.drawable.motive_icon_settings);
         }
+        //nowFragment.setArguments(args);
+        //setStartFragment();
     }
 
-
-    public void setFragment(View view) {
+    public void onIconClick(View view) {
         switch (view.getId()) {
-            case R.id.star_text:
-            case R.id.star_icon:
-                check = 0;
-                setIcons(R.drawable.motive_icon_menu_star_on, R.drawable.motive_icon_menu_play_off, R.drawable.motive_icon_menu_calendar_off);
-                setTextColor(textColorBlue,textColorBlack,textColorBlack);
-                setStartFragment(new MyMedalFragment(vo));
+            case R.id.leftIconImageView:
+                binding.rightIconImageView.setVisibility(View.VISIBLE);
+                binding.leftIconImageView.setVisibility(View.GONE);
+                binding.currentFragmentNameTextView.setText(getString(R.string.my_medal));
+                nowFragment = new MyMedalFragment();
+                nowFragment.setArguments(args);
+                setStartFragment();
                 break;
-            case R.id.play_icon:
-            case R.id.play_text:
-                check = 2;
-                setIcons(R.drawable.motive_icon_menu_star_off, R.drawable.motive_icon_menu_play_on, R.drawable.motive_icon_menu_calendar_off);
-                setTextColor(textColorBlack,textColorBlue,textColorBlack);
-                setStartFragment(new PlayVideoFragment(vo, medalVideo));
-                break;
-            case R.id.calender_icon:
-            case R.id.calender_text:
+            case R.id.rightIconImageView:
                 check = 3;
-                setIcons(R.drawable.motive_icon_menu_star_off, R.drawable.motive_icon_menu_play_off, R.drawable.motive_icon_menu_calendar_on);
-                setTextColor(textColorBlack,textColorBlack,textColorBlue);
-                setStartFragment(new ScheduleFragment(vo));
+                binding.currentFragmentNameTextView.setText(getString(R.string.my_info));
+                binding.rightIconImageView.setVisibility(View.GONE);
+                binding.leftIconImageView.setVisibility(View.VISIBLE);
+                nowFragment = new MyInfoFragment();
+                nowFragment.setArguments(args);
+                setStartFragment();
                 break;
         }
-
     }
 
-    public void setIcons(int... icons){
-        binding.starIcon.setImageResource(icons[0]);
-        binding.playIcon.setImageResource(icons[1]);
-        binding.calenderIcon.setImageResource(icons[2]);
-    }
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = item -> {
+        args = new Bundle();
+        args.putSerializable("userInfoVO", vo);
+        switch (item.getItemId()) {
+            case R.id.myMedalInfo:
+                if (!(nowFragment instanceof MyMedalFragment)) {
+                    item.setIcon(R.drawable.motive_icon_menu_star_on);
+                    check = 0;
+                    nowFragment = new MyMedalFragment();
+                    nowFragment.setArguments(args);
+                    binding.currentFragmentNameTextView.setText(getString(R.string.my_medal));
+                    binding.leftIconImageView.setVisibility(View.GONE);
+                    binding.rightIconImageView.setVisibility(View.VISIBLE);
+                    binding.rightIconImageView.setImageResource(R.drawable.motive_icon_settings);
 
-    public void setTextColor(String... colorValue){
-        binding.starText.setTextColor(Color.parseColor(colorValue[0]));
-        binding.playText.setTextColor(Color.parseColor(colorValue[1]));
-        binding.calenderText.setTextColor(Color.parseColor(colorValue[2]));
-    }
-
-    public void setStartFragment(Fragment fragment){
-        nowFragmnet=fragment;
-        fragmentTransaction = fragmentManager.beginTransaction();
-
-        if(preCheck<check) {
-            fragmentTransaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left);
-        }else if(preCheck>check){
-            fragmentTransaction.setCustomAnimations(R.anim.pull_in_left, R.anim.push_out_right);
+                    setStartFragment();
+                }
+                return true;
+            case R.id.myVideoInfo:
+                if (!(nowFragment instanceof PlayVideoFragment)) {
+                    check = 1;
+                    nowFragment = new PlayVideoFragment();
+                    args.putString("medalVideo", medalVideo);
+                    nowFragment.setArguments(args);
+                    binding.currentFragmentNameTextView.setText(getString(R.string.my_video_info));
+                    binding.rightIconImageView.setVisibility(View.GONE);
+                    binding.leftIconImageView.setVisibility(View.GONE);
+                    setStartFragment();
+                }
+                return true;
+            case R.id.myScheduleInfo:
+                if (!(nowFragment instanceof ScheduleFragment)) {
+                    check = 2;
+                    nowFragment = new ScheduleFragment();
+                    nowFragment.setArguments(args);
+                    binding.currentFragmentNameTextView.setText(getString(R.string.my_schedule_info));
+                    binding.rightIconImageView.setVisibility(View.GONE);
+                    binding.leftIconImageView.setVisibility(View.GONE);
+                    setStartFragment();
+                }
+                return true;
         }
-        fragmentTransaction.replace(R.id.main_container, fragment).commitAllowingStateLoss();
+        return false;
+    };
 
+    public void setStartFragment() {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        if (preCheck < check) {
+            transaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left, R.anim.pull_in_right, R.anim.push_out_left);
+        } else if (preCheck > check) {
+            transaction.setCustomAnimations(R.anim.pull_in_left, R.anim.push_out_right, R.anim.pull_in_left, R.anim.push_out_right);
+        }
+
+        transaction
+                .setReorderingAllowed(true)
+                .addToBackStack(null)
+                .replace(R.id.main_container, nowFragment).commitAllowingStateLoss();
         preCheck = check;
     }
 
-    public void setFragemntCheck(int check){
-        this.check = check;
-    }
 
-    public void changePassOpen(){
+    public void changePassOpen() {
         Intent intent;
         intent = new Intent(getApplicationContext(), ChangePassActivity.class);
 
-        intent.putExtra("userId",vo.getId());
+        intent.putExtra("userId", vo.getId());
         intent.putExtra("type", type);
 
         startActivity(intent);
@@ -161,20 +221,20 @@ public class MemberMainActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
     }
 
-    public void playVideo(String fileUrl, String videoIdx){
+/*    public void playVideo(String fileUrl, String videoIdx) {
         Intent intent;
         intent = new Intent(getApplicationContext(), PlayVideoActivity.class);
 
         intent.putExtra("userInfoVO", vo);
         intent.putExtra("fileUrl", fileUrl);
-        intent.putExtra("medalVideo",medalVideo);
-        intent.putExtra("videoIdx",videoIdx);
+        intent.putExtra("medalVideo", medalVideo);
+        intent.putExtra("videoIdx", videoIdx);
         startActivity(intent);
 
         overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-    }
+    }*/
 
-    public void logOut(String toastText){
+    public void logOut(String toastText) {
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = auto.edit();
         //editor.clear()는 auto에 들어있는 모든 정보를 기기에서 지웁니다.
@@ -183,14 +243,10 @@ public class MemberMainActivity extends AppCompatActivity {
 
 
         JobSchedulerStart.stop(this);
-
         Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
-
         Intent intent;
         intent = new Intent(getApplicationContext(), LoginActivity.class);
-
         startActivity(intent);
-
         overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right);
 
         finish();
@@ -199,66 +255,114 @@ public class MemberMainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if(check==0){
-            long tempTime = System.currentTimeMillis();
-            long intervalTime = tempTime - backPressedTime;
-            if (0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime)
-            {
-                super.onBackPressed();
+        if (check == 0) {
+            if (System.currentTimeMillis() - backPressedTime < FINISH_INTERVAL_TIME) {
+                finish();
+                return;
             }
-            else
-            {
-                backPressedTime = tempTime;
-                Toast.makeText(getApplicationContext(), "한번 더 뒤로가기를 누르시면 앱을 종료합니다.", Toast.LENGTH_SHORT).show();
+            backPressedTime = System.currentTimeMillis();
+            Snackbar.make(binding.bottomNav, "한번 더 뒤로가기를 누르시면 앱을 종료합니다.", Toast.LENGTH_SHORT).show();
+
+        } else if (binding.cheerUpVideoView.getVisibility() == View.VISIBLE) {
+            if (videoPlayer != null) {
+                videoPlayer.stop();
+                videoPlayer.release();
+                videoPlayer = null;
             }
-        }else{
-            check=0;
-            setIcons(R.drawable.motive_icon_menu_star_on, R.drawable.motive_icon_menu_play_off, R.drawable.motive_icon_menu_calendar_off);
-            setTextColor(textColorBlue,textColorBlack,textColorBlack);
-            setStartFragment(new MyMedalFragment(vo));
+            setFullScreen(false, false);
+            playVideoVisibility(false);
+
+        } else {
+            check = 0;
+            //setIcons(R.drawable.motive_icon_menu_star_on, R.drawable.motive_icon_menu_play_off, R.drawable.motive_icon_menu_calendar_off);
+            //setTextColor(textColorBlue, textColorBlack, textColorBlack);
+            binding.bottomNav.setSelectedItemId(R.id.myMedalInfo);
         }
     }
+
 
     public void getToken() {
         //토큰값을 받아옵니다.
         FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            return;
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        return;
+                    }
+                    assert task.getResult() != null;
+                    String token = task.getResult().getToken(); // 사용자가 입력한 저장할 데이터
+                    Log.d("token", " " + token);
+
+
+                    //기기 토큰 등록
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl(HttpRequestService.URL)
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    HttpRequestService httpRequestService = retrofit.create(HttpRequestService.class);
+
+                    RegistrationTokenRequest request = new RegistrationTokenRequest();
+                    request.setToken(token);
+                    request.setUserId(vo.getId());
+                    httpRequestService.registrationTokenRequest(request).enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                            if (response.body() != null) {
+                                Log.d("result", " " + response.body().get("result").toString());
+                            }
                         }
 
-                        String token = Objects.requireNonNull(task.getResult()).getToken(); // 사용자가 입력한 저장할 데이터
-                        Log.d("token", " " + token);
+                        @Override
+                        public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
 
-
-                        //기기 토큰 등록
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl(HttpRequestService.URL)
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-
-                        HttpRequestService httpRequestService = retrofit.create(HttpRequestService.class);
-
-                        RegistrationTokenRequest request = new RegistrationTokenRequest();
-                        request.setToken(token);
-                        request.setUserId(vo.getId());
-                        httpRequestService.registrationTokenRequest(request).enqueue(new Callback<JsonObject>() {
-                            @Override
-                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                if (response.body() != null) {
-                                    Log.d("result", " " + response.body().get("result").toString());
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-                            }
-                        });
-                    }
+                        }
+                    });
                 });
+    }
+
+    public void setFullScreen(boolean full, boolean isSelectMedal) {
+        isFull = full;
+
+        ViewGroup.LayoutParams params = binding.cheerUpVideoView.getLayoutParams();
+
+        if (full) {
+            isFull = true;
+            // 전체화면 만들 때 가로모드인 경우 폰 픽셀이 아닌 동영상 픽셀에 크기를 맞춘다.
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else {
+            isFull = false;
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            //int height = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT;;
+
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+            if(isSelectMedal) {
+                Intent intent = new Intent(getApplicationContext(), MedalSelectActivity.class);
+
+                intent.putExtra("userInfoVO", vo);
+                intent.putExtra("fileUrl", fileUrl);
+                intent.putExtra("medalVideo",medalVideo);
+                intent.putExtra("videoIdx",videoIdx);
+                startActivity(intent);
+
+                overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+
+                finish();
+            }
+        }
+    }
+
+    public void playVideoVisibility(boolean visible) {
+        binding.cheerUpVideoView.setVisibility(visible ? View.VISIBLE : View.GONE);
+        binding.memberToolbar.setVisibility(visible ? View.GONE : View.VISIBLE);
+        binding.bottomNav.setVisibility(visible ? View.GONE : View.VISIBLE);
     }
 
 }

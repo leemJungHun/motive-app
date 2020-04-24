@@ -3,37 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/tabBar"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/loadingTxtView"
+            android:gravity="center"
+            app:layout_constraintDimensionRatio="5:3"
+            android:text="응원영상을 불러오는 중입니다. \n\n 잠시만 기다려주세요."
+            android:textStyle="italic|bold"
+            android:textColor="#323232"
+            android:textSize="18sp"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/height_64"
-            android:background="#2699fb"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:layout_width="@dimen/width_320"
-                android:layout_height="@dimen/height_32"
-                android:gravity="center"
-                android:text="응원영상"
-                android:textColor="#FFFFFFFF"
-                android:textSize="@dimen/font_20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/height_6"
-            android:background="@drawable/blue_shadows"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tabBar" />
+            android:layout_height="0dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_video_list"
@@ -41,9 +24,7 @@
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tabBar"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

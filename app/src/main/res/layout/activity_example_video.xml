@@ -7,38 +7,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/tabBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_64"
             android:background="#2699fb"
+            app:contentInsetStart="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/back_arrow"
-                android:layout_width="@dimen/icon_32"
-                android:layout_height="@dimen/icon_32"
+                android:layout_width="@dimen/icon_48"
+                android:layout_height="@dimen/icon_48"
+                android:scaleType="centerInside"
+                android:layout_marginStart="@dimen/margin_24"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="@dimen/margin_32"
-                app:srcCompat="@drawable/back_arrow_icon"
+                app:srcCompat="@drawable/motive_icon_backwardarrow"
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:layout_width="@dimen/width_320"
-                android:layout_height="@dimen/height_32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:gravity="center"
                 android:text="응원영상"
                 android:textColor="#FFFFFFFF"
-                android:textSize="@dimen/font_20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="@dimen/font_20sp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
 
         <View
             android:layout_width="wrap_content"
@@ -56,6 +55,18 @@
             app:layout_constraintTop_toBottomOf="@id/tabBar"
             app:layout_constraintBottom_toBottomOf="parent"
             />
+
+
+
+        <SurfaceView
+            android:visibility="gone"
+            android:id="@+id/exampleVideoView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

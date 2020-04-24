@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -16,11 +17,11 @@ import com.example.motive_app.activity.registration.LoginHelpActivity;
 import com.example.motive_app.activity.registration.TypeChoiceActivity;
 import com.example.motive_app.databinding.ActivityLoginBinding;
 import com.example.motive_app.dialog.CustomDialog;
-import com.example.motive_app.network.DTO.FamilyLoginRequest;
-import com.example.motive_app.network.DTO.LoginRequest;
+import com.example.motive_app.network.dto.FamilyLoginRequest;
+import com.example.motive_app.network.dto.LoginRequest;
 import com.example.motive_app.network.HttpRequestService;
-import com.example.motive_app.network.VO.FamilyInfoVO;
-import com.example.motive_app.network.VO.UserInfoVO;
+import com.example.motive_app.network.vo.FamilyInfoVO;
+import com.example.motive_app.network.vo.UserInfoVO;
 import com.example.motive_app.service.alarm.JobSchedulerStart;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -31,7 +32,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     private HttpRequestService httpRequestService;
 
@@ -40,22 +41,24 @@ public class LoginActivity extends AppCompatActivity{
     private String dialogContent;
     String loginId;
     String loginPwd;
-    boolean memberLogin=false;
-    boolean familyLogin=false;
+    boolean memberLogin = false;
+    boolean familyLogin = false;
     Retrofit retrofit;
 
     Intent foregroundServiceIntent;
 
-    String medalVideo="N";
+    String medalVideo = "N";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this,R.layout.activity_login);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+
+        binding.progressBar.hide();
 
         Intent intent = getIntent(); /*데이터 수신*/
-        if(intent.getExtras()!=null) {
+        if (intent.getExtras() != null) {
             medalVideo = intent.getExtras().getString("medalVideo");
         }
 
@@ -72,10 +75,11 @@ public class LoginActivity extends AppCompatActivity{
 
 
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        loginId = auto.getString("saveId",null);
-        loginPwd = auto.getString("savePwd",null);
+        loginId = auto.getString("saveId", null);
+        loginPwd = auto.getString("savePwd", null);
 
-        if(loginId !=null && loginPwd != null) {
+        if (loginId != null && loginPwd != null) {
+            binding.progressBar.show();
             binding.loginId.setText(loginId);
             binding.loginPassword.setText(loginPwd);
             binding.loginBtn.callOnClick();
@@ -83,30 +87,32 @@ public class LoginActivity extends AppCompatActivity{
     }
 
 
-
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(v==binding.registerBtn){
+
+            if (v == binding.registerBtn) {
                 startActivity(new Intent(getApplicationContext(), TypeChoiceActivity.class));
 
                 overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
                 finish();
-            }else if(v==binding.loginBtn){
-                LoginRequest loginRequest = new LoginRequest(binding.loginId.getText().toString(),binding.loginPassword.getText().toString());
+            } else if (v == binding.loginBtn) {
+                binding.progressBar.show();
+                Log.e("progressBar", "progressBar");
+                LoginRequest loginRequest = new LoginRequest(binding.loginId.getText().toString(), binding.loginPassword.getText().toString());
                 httpRequestService.loginRequest(loginRequest).enqueue(new Callback<JsonObject>() {
                     @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        if(response.body()!=null) {
+                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (response.body() != null) {
                             Log.d("userResponse", response.body().get("result").toString());
-                            if(!response.body().get("result").toString().replace("\"","").equals("error")) {
+                            if (!response.body().get("result").toString().contains("error")) {
                                 memberLogin = true;
                                 Login(response);
-                            }else{
+                            } else {
                                 FamilyLoginRequest familyLoginRequest = new FamilyLoginRequest(binding.loginId.getText().toString(), binding.loginPassword.getText().toString());
                                 httpRequestService.familyLoginRequest(familyLoginRequest).enqueue(new Callback<JsonObject>() {
                                     @Override
-                                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                                         if (response.body() != null) {
                                             familyLogin = true;
                                             Log.d("familyResponse", response.body().get("result").toString());
@@ -115,7 +121,7 @@ public class LoginActivity extends AppCompatActivity{
                                     }
 
                                     @Override
-                                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
                                     }
                                 });
                             }
@@ -123,11 +129,12 @@ public class LoginActivity extends AppCompatActivity{
                     }
 
                     @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) { }
+                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+                    }
                 });
 
 
-            }else if(v==binding.findText){
+            } else if (v == binding.findText) {
                 startActivity(new Intent(getApplicationContext(), LoginHelpActivity.class));
 
                 overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
@@ -136,72 +143,77 @@ public class LoginActivity extends AppCompatActivity{
         }
     };
 
-    public void Login(Response<JsonObject> okResponse){
+    public void Login(Response<JsonObject> okResponse) {
+        if (!binding.progressBar.isShown()) {
+            binding.progressBar.show();
+        }
         assert okResponse.body() != null;
-        String result = okResponse.body().get("result").toString().replace("\"","");
-        Log.d("result"," "+ result);
-        if (result.equals("ok")) {
-            SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-            //auto의 loginId와 loginPwd에 값을 저장해 줍니다.
-            SharedPreferences.Editor autoLogin = auto.edit();
-            autoLogin.putString("saveId", binding.loginId.getText().toString());
-            autoLogin.putString("savePwd", binding.loginPassword.getText().toString());
-            autoLogin.apply();
+        String result = okResponse.body().get("result").toString().replace("\"", "");
+        Log.e("result", " " + result);
+        switch (result) {
+            case "ok":
+                SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+                //auto의 loginId와 loginPwd에 값을 저장해 줍니다.
+                SharedPreferences.Editor autoLogin = auto.edit();
+                autoLogin.putString("saveId", binding.loginId.getText().toString());
+                autoLogin.putString("savePwd", binding.loginPassword.getText().toString());
+                autoLogin.apply();
 
-            Intent intent;
-            Gson gson = new Gson();
-            if(memberLogin) {
-                JobSchedulerStart.start(this);
-                UserInfoVO userInfoVO = gson.fromJson(okResponse.body().get("userInfoVO").toString(), UserInfoVO.class);
-                Log.d("userInfoVO", userInfoVO.getId());
-                Log.d("medalVideo",medalVideo);
-                if(medalVideo.equals("N")) {
-                    intent = new Intent(getApplicationContext(), MemberMainActivity.class);
-                    intent.putExtra("userInfoVO", userInfoVO);
-                    intent.putExtra("type", "users");
-                    intent.putExtra("medalVideo", medalVideo);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                    finish();
-                }else if(medalVideo.equals("Y")){
-                    intent = new Intent(getApplicationContext(), MemberMainActivity.class);
-                    intent.putExtra("userInfoVO", userInfoVO);
-                    intent.putExtra("type", "users");
-                    intent.putExtra("medalVideo", medalVideo);
+                Intent intent;
+                Gson gson = new Gson();
+                if (memberLogin) {
+                    JobSchedulerStart.start(this);
+                    UserInfoVO userInfoVO = gson.fromJson(okResponse.body().get("userInfoVO").toString(), UserInfoVO.class);
+                    Log.d("userInfoVO", userInfoVO.getId());
+                    Log.d("medalVideo", medalVideo + "");
+                    Log.d("medalVideo", userInfoVO.getRegistrationDate() + "");
+
+                        intent = new Intent(getApplicationContext(), MemberMainActivity.class);
+                        intent.putExtra("userInfoVO", userInfoVO);
+                        intent.putExtra("type", "users");
+                        intent.putExtra("medalVideo", medalVideo);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                        finish();
+
+                } else if (familyLogin) {
+                    JobSchedulerStart.start(this);
+                    FamilyInfoVO familyInfoVO = gson.fromJson(okResponse.body().get("familyInfoVO").toString(), FamilyInfoVO.class);
+                    Log.d("familyVo", familyInfoVO.getId());
+                    intent = new Intent(getApplicationContext(), FamilyMainActivity.class);
+                    intent.putExtra("familyInfoVO", familyInfoVO);
+                    intent.putExtra("type", "family");
                     startActivity(intent);
                     overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
                     finish();
                 }
-            }else if(familyLogin){
-                JobSchedulerStart.start(this);
-                FamilyInfoVO familyInfoVO = gson.fromJson(okResponse.body().get("familyInfoVO").toString(), FamilyInfoVO.class);
-                Log.d("familyVo",familyInfoVO.getId());
-                intent = new Intent(getApplicationContext(), FamilyMainActivity.class);
-                intent.putExtra("familyInfoVO", familyInfoVO);
-                intent.putExtra("type","family");
-                startActivity(intent);
-                overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                finish();
-            }
-        } else if (result.equals("error")) {
-            dialogContent = "가입하지 않은 아이디이거나,\n잘못된 비밀번호 입니다.";
-            Dialog();
-        } else if (result.equals("withdrawal")) {
-            dialogContent = "탈퇴한 아이디입니다.";
-            Dialog();
+                break;
+            case "error":
+                binding.progressBar.hide();
+                dialogContent = "가입하지 않은 아이디이거나,\n잘못된 비밀번호 입니다.";
+                Dialog();
+                break;
+            case "withdrawal":
+                binding.progressBar.hide();
+                dialogContent = "탈퇴한 아이디입니다.";
+                Dialog();
+                break;
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(binding.progressBar.isShown()) {
+            binding.progressBar.hide();
+        }
         if (null != foregroundServiceIntent) {
             stopService(foregroundServiceIntent);
             foregroundServiceIntent = null;
         }
     }
 
-    public void Dialog(){
+    public void Dialog() {
         dialog = new CustomDialog(LoginActivity.this,
                 dialogContent,// 내용
                 OkListener); // 왼쪽 버튼 이벤트
@@ -212,6 +224,7 @@ public class LoginActivity extends AppCompatActivity{
         dialog.getWindow().setGravity(Gravity.CENTER);
         dialog.show();
     }
+
     //다이얼로그 클릭이벤트
     private View.OnClickListener OkListener = new View.OnClickListener() {
         public void onClick(View v) {

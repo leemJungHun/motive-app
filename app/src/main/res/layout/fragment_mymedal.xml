@@ -2,50 +2,337 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <ScrollView
+            android:id="@+id/medalMapScrollView"
+            android:overScrollMode="never"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/motive_leaderboard_img"
+                    android:scaleType="fitXY"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
-        <View
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/height_6"
-            android:background="@drawable/blue_shadows"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tabBar" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/tabBar"
+            android:id="@+id/medalResultLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/height_64"
-            android:background="#2699fb"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/setting_menu"
-                tools:ignore="ContentDescription"
-                android:layout_width="@dimen/icon_32"
-                android:layout_height="@dimen/icon_32"
-                android:layout_marginEnd="@dimen/margin_32"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="0dp"
+            android:background="@drawable/radius_background"
+            app:layout_constraintDimensionRatio="3:1">
+            <TextView
+                android:id="@+id/myNameTxtView"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/motive_icon_settings" />
+                android:textSize="@dimen/font_24sp"
+                android:textColor="#666666"
+                tools:text="홍길동"
+                android:textStyle="normal"
+                android:includeFontPadding="false"
+                android:layout_marginStart="@dimen/margin_32"
+                android:layout_marginTop="@dimen/margin_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <TextView
-                android:layout_width="@dimen/width_320"
-                android:layout_height="@dimen/height_32"
-                android:gravity="center"
-                android:text="@string/my_medal"
-                android:textColor="#FFFFFFFF"
-                android:textSize="@dimen/font_20sp"
+                android:id="@+id/myGoalTxtView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="@dimen/font_24sp"
+                android:textColor="#4BAA24"
+                tools:text="달성률 70%"
+                android:textStyle="normal"
+                android:includeFontPadding="false"
+                android:layout_marginEnd="@dimen/margin_32"
+                android:layout_marginTop="@dimen/margin_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:id="@+id/bar_gray"
+                android:background="@drawable/rounded_gray"
+                app:layout_constraintTop_toBottomOf="@id/myNameTxtView"
+                android:layout_marginTop="@dimen/icon_8"
+                android:layout_marginStart="@dimen/margin_12"
+                android:layout_marginEnd="@dimen/margin_12"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_24"/>
+
+            <View
+                android:id="@+id/bar_green"
+                android:background="@drawable/rounded_green"
+                app:layout_constraintStart_toStartOf="@id/bar_gray"
+                app:layout_constraintTop_toTopOf="@id/bar_gray"
+                app:layout_constraintBottom_toBottomOf="@id/bar_gray"
+                android:layout_width="100dp"
+                android:layout_height="@dimen/height_24"/>
+
+            <ImageView
+                android:id="@+id/goldImgView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/bar_gray"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="@dimen/icon_8"
+                android:layout_marginBottom="@dimen/margin_16"
+                android:layout_marginStart="@dimen/margin_32"
+                android:src="@drawable/motive_img_007_medal_g"
+                android:adjustViewBounds="true"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:id="@+id/goldCntTxtView"
+                app:layout_constraintTop_toTopOf="@id/goldImgView"
+                app:layout_constraintBottom_toBottomOf="@id/goldImgView"
+                app:layout_constraintStart_toEndOf="@id/goldImgView"
+                android:layout_marginStart="@dimen/icon_8"
+                android:paddingStart="@dimen/margin_8"
+                android:paddingEnd="@dimen/margin_8"
+                tools:text="0"
+                android:textStyle="bold"
+                android:textSize="@dimen/font_20sp"
+                android:textColor="#666666"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/silverImgView"
+                app:layout_constraintTop_toTopOf="@id/goldImgView"
+                app:layout_constraintBottom_toBottomOf="@id/goldImgView"
+                app:layout_constraintStart_toEndOf="@id/goldCntTxtView"
+                app:layout_constraintTop_toBottomOf="@id/bar_gray"
+                android:layout_marginStart="@dimen/margin_16"
+                android:src="@drawable/motive_img_007_medal_s"
+                android:adjustViewBounds="true"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:id="@+id/silverCntTxtView"
+                app:layout_constraintTop_toTopOf="@id/silverImgView"
+                app:layout_constraintBottom_toBottomOf="@id/silverImgView"
+                app:layout_constraintStart_toEndOf="@id/silverImgView"
+                android:layout_marginStart="@dimen/icon_8"
+                android:paddingStart="@dimen/margin_8"
+                android:paddingEnd="@dimen/margin_8"
+                tools:text="0"
+                android:textStyle="bold"
+                android:textSize="@dimen/font_20sp"
+                android:textColor="#666666"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/blackImgView"
+                app:layout_constraintTop_toTopOf="@id/goldImgView"
+                app:layout_constraintBottom_toBottomOf="@id/goldImgView"
+                app:layout_constraintStart_toEndOf="@id/silverCntTxtView"
+                app:layout_constraintTop_toBottomOf="@id/bar_gray"
+                android:layout_marginStart="@dimen/margin_16"
+                android:src="@drawable/motive_img_007_medal_b"
+                android:adjustViewBounds="true"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:id="@+id/blackCntTxtView"
+                app:layout_constraintTop_toTopOf="@id/blackImgView"
+                app:layout_constraintBottom_toBottomOf="@id/blackImgView"
+                app:layout_constraintStart_toEndOf="@id/blackImgView"
+                android:layout_marginStart="@dimen/icon_8"
+                android:paddingStart="@dimen/margin_8"
+                android:paddingEnd="@dimen/margin_8"
+                tools:text="0"
+                android:textStyle="bold"
+                android:textSize="@dimen/font_20sp"
+                android:textColor="#666666"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/totalImgView"
+                app:layout_constraintTop_toTopOf="@id/goldImgView"
+                app:layout_constraintBottom_toBottomOf="@id/goldImgView"
+                app:layout_constraintStart_toEndOf="@id/blackCntTxtView"
+                app:layout_constraintTop_toBottomOf="@id/bar_gray"
+                android:layout_marginStart="@dimen/margin_16"
+                android:src="@drawable/motive_img_008"
+                android:adjustViewBounds="true"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:id="@+id/totalCntTxtView"
+                app:layout_constraintTop_toTopOf="@id/blackImgView"
+                app:layout_constraintBottom_toBottomOf="@id/blackImgView"
+                app:layout_constraintStart_toEndOf="@id/totalImgView"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="@dimen/icon_8"
+                android:layout_marginEnd="@dimen/margin_16"
+                tools:text="0"
+                android:textSize="@dimen/font_20sp"
+                android:textColor="#ff8800"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            app:layout_constraintBottom_toTopOf="parent"
+            android:id="@+id/simpleMedalResultLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/radius_background"
+            app:layout_constraintDimensionRatio="9:1">
+
+            <View
+                android:layout_marginTop="1dp"
+                android:id="@+id/achieveView"
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="@drawable/rounded_green_background"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:id="@+id/simpleMyNameTxtView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="@dimen/font_20sp"
+                android:textColor="#666666"
+                tools:text="홍길동"
+                android:textStyle="normal"
+                android:includeFontPadding="false"
+                android:layout_marginStart="@dimen/margin_32"
+                android:layout_marginTop="@dimen/margin_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <ImageView
+                android:id="@+id/simpleGoldImgView"
+                app:layout_constraintStart_toEndOf="@id/simpleMyNameTxtView"
+                app:layout_constraintTop_toTopOf="@id/simpleMyNameTxtView"
+                app:layout_constraintBottom_toBottomOf="@id/simpleMyNameTxtView"
+                android:layout_marginStart="@dimen/margin_16"
+                android:src="@drawable/motive_img_007_medal_g"
+                android:adjustViewBounds="true"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:id="@+id/simpleGoldCntTxtView"
+                app:layout_constraintTop_toTopOf="@id/simpleGoldImgView"
+                app:layout_constraintBottom_toBottomOf="@id/simpleGoldImgView"
+                app:layout_constraintStart_toEndOf="@id/simpleGoldImgView"
+                android:layout_marginStart="@dimen/icon_8"
+                android:paddingStart="@dimen/margin_8"
+                android:paddingEnd="@dimen/margin_8"
+                tools:text="0"
+                android:textStyle="bold"
+                android:textSize="@dimen/font_20sp"
+                android:textColor="#666666"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/simpleSilverImgView"
+                app:layout_constraintTop_toTopOf="@id/simpleMyNameTxtView"
+                app:layout_constraintBottom_toBottomOf="@id/simpleGoldImgView"
+                app:layout_constraintStart_toEndOf="@id/simpleGoldCntTxtView"
+                android:layout_marginStart="@dimen/margin_16"
+                android:src="@drawable/motive_img_007_medal_s"
+                android:adjustViewBounds="true"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:id="@+id/simpleSilverCntTxtView"
+                app:layout_constraintTop_toTopOf="@id/simpleSilverImgView"
+                app:layout_constraintBottom_toBottomOf="@id/simpleSilverImgView"
+                app:layout_constraintStart_toEndOf="@id/simpleSilverImgView"
+                android:layout_marginStart="@dimen/icon_8"
+                android:paddingStart="@dimen/margin_8"
+                android:paddingEnd="@dimen/margin_8"
+                tools:text="0"
+                android:textStyle="bold"
+                android:textSize="@dimen/font_20sp"
+                android:textColor="#666666"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/simpleBlackImgView"
+                app:layout_constraintTop_toTopOf="@id/simpleMyNameTxtView"
+                app:layout_constraintBottom_toBottomOf="@id/simpleGoldImgView"
+                app:layout_constraintStart_toEndOf="@id/simpleSilverCntTxtView"
+                app:layout_constraintTop_toBottomOf="@id/bar_gray"
+                android:layout_marginStart="@dimen/margin_16"
+                android:src="@drawable/motive_img_007_medal_b"
+                android:adjustViewBounds="true"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:id="@+id/simpleBlackCntTxtView"
+                app:layout_constraintTop_toTopOf="@id/simpleBlackImgView"
+                app:layout_constraintBottom_toBottomOf="@id/simpleBlackImgView"
+                app:layout_constraintStart_toEndOf="@id/simpleBlackImgView"
+                android:layout_marginStart="@dimen/icon_8"
+                android:paddingStart="@dimen/margin_8"
+                android:paddingEnd="@dimen/margin_8"
+                tools:text="0"
+                android:textStyle="bold"
+                android:textSize="@dimen/font_20sp"
+                android:textColor="#666666"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <ImageView
+                android:id="@+id/simpleTotalImgView"
+                app:layout_constraintTop_toTopOf="@id/simpleMyNameTxtView"
+                app:layout_constraintBottom_toBottomOf="@id/simpleGoldImgView"
+                app:layout_constraintStart_toEndOf="@id/simpleBlackCntTxtView"
+                app:layout_constraintTop_toBottomOf="@id/bar_gray"
+                android:layout_marginStart="@dimen/margin_16"
+                android:src="@drawable/motive_img_008"
+                android:adjustViewBounds="true"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"/>
+
+            <TextView
+                android:id="@+id/simpleTotalCntTxtView"
+                app:layout_constraintTop_toTopOf="@id/simpleBlackImgView"
+                app:layout_constraintBottom_toBottomOf="@id/simpleBlackImgView"
+                app:layout_constraintStart_toEndOf="@id/simpleTotalImgView"
+                android:layout_marginStart="@dimen/icon_8"
+                android:layout_marginEnd="@dimen/margin_16"
+                tools:text="0"
+                android:textSize="@dimen/font_20sp"
+                android:textColor="#ff8800"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.motive_app.R;
@@ -27,15 +28,11 @@ public class MyTeacherRecyclerAdapter extends RecyclerView.Adapter<MyTeacherRecy
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
+    @NonNull
     public MyTeacherRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext() ;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
-
-        assert inflater != null;
-        View view = inflater.inflate(R.layout.item_myteacher, parent, false) ;
-        MyTeacherRecyclerAdapter.ViewHolder vh = new MyTeacherRecyclerAdapter.ViewHolder(view) ;
-
-        return vh ;
+        View view = LayoutInflater.from(context).inflate(R.layout.item_myteacher, parent, false) ;
+        return new MyTeacherRecyclerAdapter.ViewHolder(view) ;
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.

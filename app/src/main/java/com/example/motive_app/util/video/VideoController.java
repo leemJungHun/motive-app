@@ -126,7 +126,7 @@ public class VideoController {
 
         @Override
         public void run() {
-            VideoController.getInstance().convertVideo(videoPath, destPath, null,0, null);
+            VideoController.getInstance().convertVideo(videoPath, destPath, null, 0, null);
         }
     }
 
@@ -155,6 +155,7 @@ public class VideoController {
 
     /**
      * Background conversion for queueing tasks
+     *
      * @param path source file to compress
      * @param dest destination directory to put result
      */
@@ -245,13 +246,14 @@ public class VideoController {
 
     /**
      * Perform the actual video compression. Processes the frames and does the magic
-     * @param sourcePath the source uri for the file as per
+     *
+     * @param sourcePath      the source uri for the file as per
      * @param destinationPath the destination directory where compressed video is eventually saved
      * @return
      */
     @TargetApi(16)
-    public boolean  convertVideo(final String sourcePath, String destinationPath, String playTime, int quality, CompressProgressListener listener) {
-        this.path=sourcePath;
+    public boolean convertVideo(final String sourcePath, String destinationPath, String playTime, int quality, CompressProgressListener listener) {
+        this.path = sourcePath;
 
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(path);
@@ -285,16 +287,16 @@ public class VideoController {
                 bitrate = resultWidth * resultHeight * 10;
                 break;
             case COMPRESS_QUALITY_LOW:
-                if(originalWidth>originalHeight) {
+                if (originalWidth > originalHeight) {
                     resultWidth = 1280;
                     resultHeight = 720;
-                }else{
+                } else {
                     resultWidth = 720;
                     resultHeight = 1280;
                 }
-                bitrate = 10*1024*1024/Integer.parseInt(playTime)*8;
-                Log.d("bitrate"," "+ bitrate);
-                Log.d("playTime"," "+playTime);
+                bitrate = 10 * 1024 * 1024 / Integer.parseInt(playTime) * 8;
+                Log.d("bitrate", " " + bitrate);
+                Log.d("playTime", " " + playTime);
                 break;
         }
 
@@ -722,7 +724,7 @@ public class VideoController {
         }
         didWriteData(true, error);
 
-        cachedFile=cacheFile;
+        cachedFile = cacheFile;
 
        /* File fdelete = inputFile;
         if (fdelete.exists()) {
@@ -734,9 +736,9 @@ public class VideoController {
         }*/
 
         //inputFile.delete();
-        Log.e("ViratPath",path+"");
-        Log.e("ViratPath",cacheFile.getPath()+"");
-        Log.e("ViratPath",inputFile.getPath()+"");
+        Log.e("ViratPath", path + "");
+        Log.e("ViratPath", cacheFile.getPath() + "");
+        Log.e("ViratPath", inputFile.getPath() + "");
 
 
        /* Log.e("ViratPath",path+"");
@@ -774,16 +776,12 @@ public class VideoController {
         return true;
     }
 
-    public static void copyFile(File src, File dst) throws IOException
-    {
+    public static void copyFile(File src, File dst) throws IOException {
         FileChannel inChannel = new FileInputStream(src).getChannel();
         FileChannel outChannel = new FileOutputStream(dst).getChannel();
-        try
-        {
+        try {
             inChannel.transferTo(1, inChannel.size(), outChannel);
-        }
-        finally
-        {
+        } finally {
             if (inChannel != null)
                 inChannel.close();
             if (outChannel != null)

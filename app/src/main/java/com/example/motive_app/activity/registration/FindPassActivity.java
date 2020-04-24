@@ -18,7 +18,7 @@ import com.example.motive_app.activity.LoginActivity;
 import com.example.motive_app.databinding.ActivityFindPassBinding;
 import com.example.motive_app.dialog.CustomDialog;
 import com.example.motive_app.network.HttpRequestService;
-import com.example.motive_app.network.DTO.SearchPswdRequest;
+import com.example.motive_app.network.dto.SearchPswdRequest;
 import com.google.gson.JsonObject;
 
 import java.util.Objects;

@@ -6,4 +6,24 @@
     <color name="text_black">#202020</color>
     <color name="text_gray">#b3b3b3</color>
     <color name="light_blue">#2699fb</color>
+
+
+    <color name="blue">#2699FB</color>
+    <color name="dark_blue">#1D429A</color>
+    <color name="red">#FF5656</color>
+    <color name="orange">#FFA200</color>
+    <color name="dark_black">#202020</color>
+    <color name="black">#414141</color>
+    <color name="deep_gray">#666666</color>
+    <color name="gary">#808080</color>
+    <color name="light_gray">#B3B3B3</color>
+
+
+
+
+    <color name="sunday">#EF2E20</color>
+    <color name="saturday">#0E4BE6</color>>
+    <color name="other_day">#414141</color>
+
+    <color name="text_disable_color">#9F9F9F</color>
 </resources>

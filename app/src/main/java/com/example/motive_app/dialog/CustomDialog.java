@@ -34,7 +34,7 @@ public class CustomDialog extends Dialog {
 
         setContentView(R.layout.custom_dialog);
 
-        mContentView = (TextView) findViewById(R.id.dialog_content);
+        mContentView =  findViewById(R.id.dialog_content);
         mOkButton = (Button) findViewById(R.id.dialog_Ok);
         //mRightButton = (Button) findViewById(R.id.dialog_btn2);
 

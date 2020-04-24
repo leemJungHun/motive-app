@@ -1,59 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFFFF"
-        >
+        android:background="#FFFFFFFF">
+
         <ImageView
             android:id="@+id/brain_img"
             android:layout_width="@dimen/width_224"
             android:layout_height="@dimen/height_224"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/margin_112"
             android:src="@drawable/login_brain_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/login_id_view"
             android:layout_width="@dimen/width_416"
             android:layout_height="@dimen/height_64"
-            app:layout_constraintTop_toBottomOf="@id/brain_img"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/margin_48"
             android:background="@drawable/login_text_border_line"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/brain_img">
 
 
             <ImageView
                 android:layout_width="@dimen/icon_32"
                 android:layout_height="@dimen/icon_32"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="@dimen/margin_36"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="@dimen/margin_36"
-                app:srcCompat="@drawable/login_id_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/motive_icon_profile"
                 tools:ignore="ContentDescription" />
 
             <EditText
                 android:id="@+id/login_id"
                 android:layout_width="@dimen/width_256"
-                android:layout_height="@dimen/height_32"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:hint="@string/id_input"
-                android:textSize="@dimen/font_20sp"
+                android:layout_height="match_parent"
                 android:background="@null"
+                android:hint="@string/id_input"
+                android:importantForAutofill="no"
                 android:inputType="text"
-                android:importantForAutofill="no" />
+                android:textSize="@dimen/font_20sp"
+                android:padding="@dimen/margin_16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -62,37 +64,37 @@
             android:id="@+id/login_pass_view"
             android:layout_width="@dimen/width_416"
             android:layout_height="@dimen/height_64"
-            app:layout_constraintTop_toBottomOf="@id/login_id_view"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/margin_16"
             android:background="@drawable/login_text_border_line"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/login_id_view">
 
 
             <ImageView
                 android:layout_width="@dimen/icon_32"
                 android:layout_height="@dimen/icon_32"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="@dimen/margin_36"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="@dimen/margin_36"
-                app:srcCompat="@drawable/login_pass_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/motive_icon_lock"
                 tools:ignore="ContentDescription" />
 
             <EditText
                 android:id="@+id/login_password"
                 android:layout_width="@dimen/width_256"
-                android:layout_height="@dimen/height_32"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:hint="@string/pass_input"
-                android:textSize="@dimen/font_20sp"
+                android:layout_height="match_parent"
                 android:background="@null"
+                android:hint="@string/pass_input"
                 android:importantForAutofill="no"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textSize="@dimen/font_20sp"
+                android:padding="@dimen/margin_16"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -115,27 +117,40 @@
         <TextView
             android:id="@+id/findText"
             android:layout_width="@dimen/width_256"
-            android:layout_height="@dimen/height_28"
-            app:layout_constraintTop_toBottomOf="@id/login_btn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/margin_48"
-            android:textSize="@dimen/font_17sp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_36"
             android:gravity="center"
-            android:text="@string/find_id_or_pass"/>
+            android:text="@string/find_id_or_pass"
+            android:textSize="@dimen/font_17sp"
+            android:padding="@dimen/margin_8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/login_btn" />
 
         <TextView
             android:id="@+id/register_btn"
             android:layout_width="@dimen/width_256"
-            android:layout_height="@dimen/height_32"
-            app:layout_constraintTop_toBottomOf="@id/findText"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/register"
+            android:textColor="#FF2699fb"
+            android:textSize="@dimen/font_20sp"
+            android:textStyle="bold"
+            android:padding="@dimen/margin_8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/findText" />
+
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progressBar"
+            android:translationZ="2dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textSize="@dimen/font_20sp"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:text="@string/register"
-            android:textColor="#FF2699fb"/>
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="200dp"
+            android:layout_height="200dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,11 +1,13 @@
 package com.example.motive_app.adapter;
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,15 +22,17 @@ import com.bumptech.glide.Glide;
 import com.example.motive_app.R;
 import com.example.motive_app.activity.MemberMainActivity;
 import com.example.motive_app.data.VideoListItem;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
 public class PlayVideoRecyclerAdapter extends RecyclerView.Adapter<PlayVideoRecyclerAdapter.ViewHolder> {
-    private ArrayList<VideoListItem> mData = null ;
+    private ArrayList<VideoListItem> mData;
     private MemberMainActivity activity;
     private FirebaseStorage fs = FirebaseStorage.getInstance();
     private StorageReference videoRef;
@@ -37,37 +41,34 @@ public class PlayVideoRecyclerAdapter extends RecyclerView.Adapter<PlayVideoRecy
 
     // 생성자에서 데이터 리스트 객체를 전달받음.
     public PlayVideoRecyclerAdapter(ArrayList<VideoListItem> list, MemberMainActivity activity, Context context) {
-        mData = list ;
-        this.activity = activity ;
-        this.context =context;
+        mData = list;
+        this.activity = activity;
+        this.context = context;
     }
+
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
     @Override
+    @NonNull
     public PlayVideoRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext() ;
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) ;
-
-        assert inflater != null;
-        View view = inflater.inflate(R.layout.item_play_video, parent, false) ;
-        PlayVideoRecyclerAdapter.ViewHolder vh = new PlayVideoRecyclerAdapter.ViewHolder(view) ;
-
-        return vh ;
+        Context context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.item_play_video, parent, false);
+        return new PlayVideoRecyclerAdapter.ViewHolder(view);
     }
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시.
     @Override
-    public void onBindViewHolder(PlayVideoRecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PlayVideoRecyclerAdapter.ViewHolder holder, int position) {
 
-        VideoListItem item = mData.get(position) ;
+        VideoListItem item = mData.get(position);
 
         FirebaseStorage fs = FirebaseStorage.getInstance();
 
-        if(!item.getThumbnailUrl().equals("")){
-            StorageReference  thumbnail= fs.getReference().child(item.getThumbnailUrl());
-            Log.d("thumbnail",thumbnail.toString());
+        if (!item.getThumbnailUrl().equals("")) {
+            StorageReference thumbnail = fs.getReference().child(item.getThumbnailUrl());
+            Log.d("thumbnail", thumbnail.toString());
             Glide.with(activity)
                     .load(thumbnail)
-                    .into(holder.videoThumbnail);
+                    .thumbnail(0.5f).into(holder.videoThumbnail);
         }
 
         String nameStr = item.getRegisterName() + "(" + item.getRegisterRelationship() + ")";
@@ -75,14 +76,15 @@ public class PlayVideoRecyclerAdapter extends RecyclerView.Adapter<PlayVideoRecy
         holder.uploadeTitle.setText(item.getFileName());
         holder.uploadeTime.setText(item.getRegistrationDate());
         holder.uploaderImg.setBackground(new ShapeDrawable(new OvalShape()));
-        if(Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             holder.uploaderImg.setClipToOutline(true);
         }
-        if(item.getRegisterProfile() != null){
+        if (item.getRegisterProfile() != null) {
             StorageReference imagesRef = fs.getReference().child(item.getRegisterProfile());
-            Log.d("imagesRef",imagesRef.toString());
+            Log.d("imagesRef", imagesRef.toString());
             Glide.with(activity)
                     .load(imagesRef)
+                    .thumbnail(0.5f)
                     .into(holder.uploaderImg);
         }
     }
@@ -90,9 +92,12 @@ public class PlayVideoRecyclerAdapter extends RecyclerView.Adapter<PlayVideoRecy
     // getItemCount() - 전체 데이터 갯수 리턴.
     @Override
     public int getItemCount() {
-        return mData.size() ;
+        return mData.size();
     }
 
+    public VideoListItem selectedVideoInfo(int pos) {
+        return mData.get(pos);
+    }
     public void updateData(ArrayList<VideoListItem> videoListItems) {
         mData.clear();
         mData.addAll(videoListItems);
@@ -109,7 +114,7 @@ public class PlayVideoRecyclerAdapter extends RecyclerView.Adapter<PlayVideoRecy
         TextView uploadeTitle;
 
         ViewHolder(View itemView) {
-            super(itemView) ;
+            super(itemView);
 
             // 뷰 객체에 대한 참조. (hold strong reference)
             videoThumbnail = itemView.findViewById(R.id.video_main);
@@ -119,33 +124,31 @@ public class PlayVideoRecyclerAdapter extends RecyclerView.Adapter<PlayVideoRecy
             uploadeTime = itemView.findViewById(R.id.upload_time);
             uploadeTitle = itemView.findViewById(R.id.upload_title);
 
-            startBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showProgress("동영상 재생 준비 중");
-                    videoRef = fs.getReference().child(mData.get(getAdapterPosition()).getFileUrl());
-                    videoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            // Got the download URL for 'users/me/profile.png'
-                            hideProgress();
-                            Log.d("Success",uri.toString());
-                            activity.playVideo(uri.toString()," ");
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // Handle any errors
-                            hideProgress();
-                            Log.d("onFailure",exception.toString());
-                        }
-                    });
-                }
-            });
+/*            startBtn.setOnClickListener(view -> {
+                showProgress("동영상 재생 준비 중");
+                videoRef = fs.getReference().child(mData.get(getAdapterPosition()).getFileUrl());
+                videoRef.getDownloadUrl().addOnCompleteListener(task -> {
+                    if(task.isComplete()) {
+                        Log.e("task.isComplete()", task.isComplete() + "");
+                        Log.e("task.isComplete()", task.isSuccessful() + "");
+                    }
+                });
+
+                videoRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    // Got the download URL for 'users/me/profile.png'
+                    hideProgress();
+                    Log.d("Success", uri.toString());
+                    activity.playVideo(uri.toString(), " ");
+                }).addOnFailureListener(exception -> {
+                    // Handle any errors
+                    hideProgress();
+                    Log.d("onFailure", exception.toString());
+                });
+            });*/
         }
 
-        public void showProgress(String msg) {
-            if( pd == null ) {                  // 객체를 1회만 생성한다.
+        private void showProgress(String msg) {
+            if (pd == null) {                  // 객체를 1회만 생성한다.
                 pd = new ProgressDialog(context);  // 생성한다.
                 pd.setCancelable(false);        // 백키로 닫는 기능을 제거한다.
             }
@@ -155,8 +158,8 @@ public class PlayVideoRecyclerAdapter extends RecyclerView.Adapter<PlayVideoRecy
         }
 
         // 프로그레스 다이얼로그 숨기기
-        public void hideProgress(){
-            if( pd != null && pd.isShowing() ) { // 닫는다 : 객체가 존재하고, 보일때만
+        private void hideProgress() {
+            if (pd != null && pd.isShowing()) { // 닫는다 : 객체가 존재하고, 보일때만
                 pd.dismiss();
             }
         }

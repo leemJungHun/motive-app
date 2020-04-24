@@ -17,9 +17,9 @@ import com.example.motive_app.data.FamilyFindItem;
 import com.example.motive_app.databinding.ActivityFindFamilyBinding;
 import com.example.motive_app.dialog.CustomDialog;
 import com.example.motive_app.dialog.CustomDialog_v4;
-import com.example.motive_app.network.DTO.UserPhoneRequest;
+import com.example.motive_app.network.dto.UserPhoneRequest;
 import com.example.motive_app.network.HttpRequestService;
-import com.example.motive_app.network.VO.MemberInfoVO;
+import com.example.motive_app.network.vo.MemberInfoVO;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
