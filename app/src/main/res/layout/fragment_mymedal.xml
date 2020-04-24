@@ -69,7 +69,7 @@
                 android:layout_height="@dimen/height_24"/>
 
             <View
-                android:id="@+id/bar_green"
+                android:id="@+id/achieve_bar_green"
                 android:background="@drawable/rounded_green"
                 app:layout_constraintStart_toStartOf="@id/bar_gray"
                 app:layout_constraintTop_toTopOf="@id/bar_gray"

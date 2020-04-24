@@ -16,6 +16,7 @@ public class UserInfoVO implements Serializable {
     private String groupCode;
     private String alarmTime;
     private String registrationDate;
+    private String startDate;
 
 
     public UserInfoVO(String id, String name, String pswd, String phone, String birth, String email, String organizationCode, String profileImageUrl) {
@@ -69,6 +70,22 @@ public class UserInfoVO implements Serializable {
         this.registrationDate = registrationDate;
     }
 
+    public UserInfoVO(String id, String name, String pswd, String phone, String birth, String email, String organizationCode, String withDrawalYn, String profileImageUrl, String groupCode, String alarmTime, String registrationDate, String startDate) {
+        this.id = id;
+        this.name = name;
+        this.pswd = pswd;
+        this.phone = phone;
+        this.birth = birth;
+        this.email = email;
+        this.organizationCode = organizationCode;
+        this.withDrawalYn = withDrawalYn;
+        this.profileImageUrl = profileImageUrl;
+        this.groupCode = groupCode;
+        this.alarmTime = alarmTime;
+        this.registrationDate = registrationDate;
+        this.startDate = startDate;
+    }
+
     public String getId() {
         return id;
     }
@@ -115,5 +132,9 @@ public class UserInfoVO implements Serializable {
 
     public String getAlarmTime() {
         return alarmTime;
+    }
+
+    public String getStartDate() {
+        return startDate;
     }
 }

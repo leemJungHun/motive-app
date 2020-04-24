@@ -5,6 +5,7 @@ import com.example.motive_app.network.dto.FamilyLoginRequest;
 import com.example.motive_app.network.dto.FamilyRegistrationRequest;
 import com.example.motive_app.network.dto.FamilyWithDrawalRequest;
 import com.example.motive_app.network.dto.FindInstitutionRequest;
+import com.example.motive_app.network.dto.GetAllMedalInfoRequest;
 import com.example.motive_app.network.dto.GetParentsInfoRequest;
 import com.example.motive_app.network.dto.GetUserAlarmRequest;
 import com.example.motive_app.network.dto.GetUserScheduleRequest;
@@ -215,4 +216,14 @@ public interface HttpRequestService {
      */
     @POST("/alarm/getUserAlarm")
     Call<JsonObject> getUserAlarmRequest(@Body GetUserAlarmRequest getUserAlarmRequest);
+
+
+    //all medal info
+    /**
+     *
+     * @param getAllMedalInfoRequest 유저아이디, 그룹코드
+     * @return 유저 메달정보
+     */
+    @POST("/members/getMedalInfo")
+    Call<JsonObject> getAllMedalInfoRequest(@Body GetAllMedalInfoRequest getAllMedalInfoRequest);
 }

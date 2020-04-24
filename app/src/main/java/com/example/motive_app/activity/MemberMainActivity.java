@@ -92,6 +92,7 @@ public class MemberMainActivity extends AppCompatActivity {
                 Log.d("getPhone", vo.getPhone());
                 Log.d("getGroupCode", vo.getGroupCode());
                 Log.d("getRegistrationDate", vo.getRegistrationDate() + "");
+                Log.d("getStartDate", vo.getStartDate() + "");
                 if (vo.getProfileImageUrl() != null) {
                     Log.d("getImageUrl", vo.getProfileImageUrl());
                 }
@@ -364,5 +365,4 @@ public class MemberMainActivity extends AppCompatActivity {
         binding.memberToolbar.setVisibility(visible ? View.GONE : View.VISIBLE);
         binding.bottomNav.setVisibility(visible ? View.GONE : View.VISIBLE);
     }
-
 }
