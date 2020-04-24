@@ -21,7 +21,7 @@ import com.example.motive_app.databinding.ActivityPlayVideoBinding;
 import com.example.motive_app.network.vo.UserInfoVO;
 import com.example.motive_app.util.VideoControllerView;
 
-public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControl  {
+public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, VideoControllerView.MediaPlayerControl {
     ActivityPlayVideoBinding binding;
     UserInfoVO vo;
     String fileUrl;
@@ -29,7 +29,7 @@ public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolde
     String videoIdx;
     SurfaceHolder surfaceHolder;
     MediaPlayer mediaPlayer;
-    boolean onController=false;
+    boolean onController = false;
 
     private Thread timeThread = null;
     private Boolean isRunning = true;
@@ -71,7 +71,6 @@ public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolde
         }
 
 
-
     }
 
     @Override
@@ -80,11 +79,12 @@ public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolde
         super.onBackPressed();
     }
 
-    @Override public boolean onTouchEvent(MotionEvent event) {
-        if(event.getAction()==MotionEvent.ACTION_DOWN) {
-            Log.d("isplaying",isPlaying()+" ");
-            Log.d("duration",getDuration()+" ");
-            Log.d("getCurrentPosition",getCurrentPosition()+" ");
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            Log.d("isplaying", isPlaying() + " ");
+            Log.d("duration", getDuration() + " ");
+            Log.d("getCurrentPosition", getCurrentPosition() + " ");
 
             if (!onController) {
                 mcontroller.show();
@@ -147,16 +147,19 @@ public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolde
         timeThread = new Thread(new timeThread());
         timeThread.start();
     }
+
     // End MediaPlayer.OnPreparedListener
     // Implement VideoMediaController.MediaPlayerControl
     @Override
     public boolean canPause() {
         return true;
     }
+
     @Override
     public boolean canSeekBackward() {
         return true;
     }
+
     @Override
     public boolean canSeekForward() {
         return true;
@@ -202,6 +205,7 @@ public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolde
     public void seekTo(int i) {
         mediaPlayer.seekTo(i);
     }
+
     @Override
     public void start() {
         mediaPlayer.start();
@@ -212,17 +216,17 @@ public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolde
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            int mSec = msg.arg1*10;
-            if(getDuration()<=mSec&& !isPlaying()&&getCurrentPosition()>=getDuration()) {
+            int mSec = msg.arg1 * 10;
+            if (getDuration() <= mSec && !isPlaying()) {
                 timeThread.interrupt();
-                if(medalVideo.equals("Y")){
+                if (medalVideo.equals("Y")) {
                     Intent intent;
                     intent = new Intent(getApplicationContext(), MedalSelectActivity.class);
 
                     intent.putExtra("userInfoVO", vo);
                     intent.putExtra("fileUrl", fileUrl);
-                    intent.putExtra("medalVideo",medalVideo);
-                    intent.putExtra("videoIdx",videoIdx);
+                    intent.putExtra("medalVideo", medalVideo);
+                    intent.putExtra("videoIdx", videoIdx);
                     startActivity(intent);
 
                     overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
@@ -249,7 +253,7 @@ public class PlayVideoActivity extends AppCompatActivity implements SurfaceHolde
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                        runOnUiThread(new Runnable(){
+                        runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
 

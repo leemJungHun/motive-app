@@ -89,6 +89,10 @@ public class NotificationJobFireBaseService extends JobService {
 
 
         if(alarmTimeMillis!=null) {
+            Calendar nowCal = Calendar.getInstance();
+            Log.d("nowDayOfWeek",nowCal.get(Calendar.DAY_OF_WEEK)+" ");
+            Log.d("nowHour",nowCal.get(Calendar.HOUR_OF_DAY)+" ");
+            Log.d("nowMinute",nowCal.get(Calendar.MINUTE)+" ");
             Log.d("alarmTimeMillis", " "+alarmTimeMillis);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 assert manager != null;
@@ -131,7 +135,7 @@ public class NotificationJobFireBaseService extends JobService {
         Calendar alarmCal = Calendar.getInstance();
 
         alarmCal.set(Calendar.DAY_OF_WEEK, getDayOfWeek);
-        alarmCal.set(Calendar.HOUR, getHour);
+        alarmCal.set(Calendar.HOUR_OF_DAY, getHour);
         alarmCal.set(Calendar.MINUTE, getMinute);
 
         if(nowCal.getTimeInMillis()<alarmCal.getTimeInMillis()){
