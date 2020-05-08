@@ -28,7 +28,7 @@ import retrofit2.http.POST;
 
 public interface HttpRequestService {
 
-    String URL = "http://192.168.0.28:8080";
+    String URL = "http://175.125.21.68:8811";
 
     //common
     /**

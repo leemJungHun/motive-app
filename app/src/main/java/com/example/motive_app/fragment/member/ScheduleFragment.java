@@ -38,6 +38,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -85,7 +86,7 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
     @Nullable
     @Override
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
-        if(enter && nextAnim == R.anim.pull_in_right || enter && nextAnim == R.anim.pull_in_left) {
+        if (enter && nextAnim == R.anim.pull_in_right || enter && nextAnim == R.anim.pull_in_left) {
             Animation anim = AnimationUtils.loadAnimation(activity, nextAnim);
             anim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
@@ -188,7 +189,7 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
     private RecyclerView.OnItemTouchListener itemTouchListener = new RecyclerView.OnItemTouchListener() {
         @Override
         public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-            if(MotionEvent.ACTION_UP == e.getAction()) {
+            if (MotionEvent.ACTION_UP == e.getAction()) {
                 View child = rv.findChildViewUnder(e.getX(), e.getY());
                 if (child != null) {
                     int pos = rv.getChildAdapterPosition(child);
@@ -276,12 +277,12 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
 
         boolean isFuture = !(nowCal.get(Calendar.MONTH) >= month);
 
-        Log.e("aaa", firstCal.get(Calendar.DAY_OF_WEEK) +"");
+        Log.e("aaa", firstCal.get(Calendar.DAY_OF_WEEK) + "");
 
         for (int i = 1; i < lastDay + 1 + (7 - lastDayNum); i++) {
             if (i < firstCal.get(Calendar.DAY_OF_WEEK) && dayStart) {
                 mItem.add(new CalendarItem(String.valueOf(beforeLastDay - beforeLastDayNum + i), false, false, false, false, false, false));
-            } else if(i > lastDay) {
+            } else if (i > lastDay) {
                 mItem.add(new CalendarItem(String.valueOf(i - lastDay), false, false, false, false, false, false));
             } else {
                 if (dayStart) {
@@ -335,6 +336,7 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
             cal.set(Calendar.DATE, 1);
             firstCal.add(Calendar.MONTH, +1);
         }
+        medalIndex = 0;
         setCalendarView();
 
     }
@@ -351,7 +353,6 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
         binding.scheduleContentText.setText(isFuture ? "센터 방문" : "센터 방문 완료");
         binding.scheduleContentView.setVisibility(onView ? View.VISIBLE : View.GONE);
     }
-
 
 
     @Override

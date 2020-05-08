@@ -1,5 +1,6 @@
 package com.example.motive_app.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -66,6 +67,7 @@ public class MemberMainActivity extends AppCompatActivity {
     public String fileUrl;
     public String videoIdx;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +131,7 @@ public class MemberMainActivity extends AppCompatActivity {
     public void onIconClick(View view) {
         switch (view.getId()) {
             case R.id.leftIconImageView:
+                check = 0;
                 binding.rightIconImageView.setVisibility(View.VISIBLE);
                 binding.leftIconImageView.setVisibility(View.GONE);
                 binding.currentFragmentNameTextView.setText(getString(R.string.my_medal));
@@ -262,7 +265,7 @@ public class MemberMainActivity extends AppCompatActivity {
                 return;
             }
             backPressedTime = System.currentTimeMillis();
-            Snackbar.make(binding.bottomNav, "한번 더 뒤로가기를 누르시면 앱을 종료합니다.", Toast.LENGTH_SHORT).show();
+            Snackbar.make(binding.bottomNav, "한번 더 뒤로가기를 누르시면 앱을 종료합니다.", Snackbar.LENGTH_SHORT).show();
 
         } else if (binding.cheerUpVideoView.getVisibility() == View.VISIBLE) {
             if (videoPlayer != null) {

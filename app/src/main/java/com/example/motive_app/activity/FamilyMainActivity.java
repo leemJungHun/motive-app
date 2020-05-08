@@ -1,11 +1,11 @@
 package com.example.motive_app.activity;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -26,20 +25,13 @@ import com.example.motive_app.fragment.family.FamilyInfoFragment;
 import com.example.motive_app.fragment.family.MyFamilyFragment;
 import com.example.motive_app.fragment.family.MyFamilyScheduleFragment;
 import com.example.motive_app.fragment.family.VideoUploadFragment;
-import com.example.motive_app.fragment.member.MyInfoFragment;
-import com.example.motive_app.fragment.member.MyMedalFragment;
-import com.example.motive_app.fragment.member.PlayVideoFragment;
-import com.example.motive_app.fragment.member.ScheduleFragment;
-import com.example.motive_app.network.dto.RegistrationTokenRequest;
 import com.example.motive_app.network.HttpRequestService;
+import com.example.motive_app.network.dto.RegistrationTokenRequest;
 import com.example.motive_app.network.vo.FamilyInfoVO;
 import com.example.motive_app.service.alarm.JobSchedulerStart;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.JsonObject;
 
 import java.util.Objects;
@@ -62,6 +54,7 @@ public class FamilyMainActivity extends AppCompatActivity {
     Bundle args;
     String type;
 
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -216,9 +209,12 @@ public class FamilyMainActivity extends AppCompatActivity {
 
         startActivity(intent);
 
-        overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
     }
 
+    @SuppressLint("NewApi")
     public void exampleVideoOpen() {
         Intent intent;
         intent = new Intent(getApplicationContext(), ExampleVideoListActivity.class);
@@ -228,6 +224,7 @@ public class FamilyMainActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
     }
 
+    @SuppressLint("NewApi")
     public void logOut(String toastText) {
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = auto.edit();
@@ -259,7 +256,7 @@ public class FamilyMainActivity extends AppCompatActivity {
                 return;
             }
             backPressedTime = System.currentTimeMillis();
-            Snackbar.make(binding.bottomNav, "한번 더 뒤로가기를 누르시면 앱을 종료합니다.", Toast.LENGTH_SHORT).show();
+            Snackbar.make(binding.bottomNav, "한번 더 뒤로가기를 누르시면 앱을 종료합니다.", Snackbar.LENGTH_SHORT).show();
 
         } else {
             check = 0;

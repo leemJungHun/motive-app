@@ -8,27 +8,34 @@
         <ScrollView
             android:id="@+id/medalMapScrollView"
             android:overScrollMode="never"
+            app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
+
                 <ImageView
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:src="@drawable/motive_leaderboard_img"
-                    android:scaleType="fitXY"
+                    android:id="@+id/mapImage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/motive_leaderboard_img"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_editor_absoluteX="0dp" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/medalResultLayout"
+<androidx.constraintlayout.widget.ConstraintLayout
+android:id="@+id/medalResultLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
             android:background="@drawable/radius_background"
+
             app:layout_constraintDimensionRatio="3:1">
             <TextView
                 android:id="@+id/myNameTxtView"
@@ -280,7 +287,6 @@
                 app:layout_constraintTop_toTopOf="@id/simpleMyNameTxtView"
                 app:layout_constraintBottom_toBottomOf="@id/simpleGoldImgView"
                 app:layout_constraintStart_toEndOf="@id/simpleSilverCntTxtView"
-                app:layout_constraintTop_toBottomOf="@id/bar_gray"
                 android:layout_marginStart="@dimen/margin_16"
                 android:src="@drawable/motive_img_007_medal_b"
                 android:adjustViewBounds="true"
@@ -308,7 +314,6 @@
                 app:layout_constraintTop_toTopOf="@id/simpleMyNameTxtView"
                 app:layout_constraintBottom_toBottomOf="@id/simpleGoldImgView"
                 app:layout_constraintStart_toEndOf="@id/simpleBlackCntTxtView"
-                app:layout_constraintTop_toBottomOf="@id/bar_gray"
                 android:layout_marginStart="@dimen/margin_16"
                 android:src="@drawable/motive_img_008"
                 android:adjustViewBounds="true"

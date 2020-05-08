@@ -297,6 +297,7 @@ public class PlayVideoFragment extends Fragment {
             activity.mediaController = new MediaController(activity);
             activity.videoPlayer.setDisplay(activity.videoHolder);
             activity.mediaController.setAnchorView(activity.binding.cheerUpVideoView);
+
             try {
                 activity.videoPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 activity.videoPlayer.setDataSource(videoUri);
@@ -317,7 +318,7 @@ public class PlayVideoFragment extends Fragment {
                 });
 
                 activity.videoPlayer.setOnCompletionListener(complete -> {
-                    activity.videoHolder.removeCallback(callback);
+                    //activity.videoHolder.removeCallback(callback);
                     activity.videoPlayer.stop();
                     activity.videoPlayer.release();
                     activity.videoPlayer = null;

@@ -1,45 +1,35 @@
 package com.example.motive_app.fragment.member;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.BoringLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.motive_app.R;
 import com.example.motive_app.activity.MemberMainActivity;
-import com.example.motive_app.adapter.PlayVideoRecyclerAdapter;
-import com.example.motive_app.data.VideoListItem;
 import com.example.motive_app.databinding.FragmentMymedalBinding;
 import com.example.motive_app.network.HttpRequestService;
 import com.example.motive_app.network.dto.GetAllMedalInfoRequest;
-import com.example.motive_app.network.dto.UserIdRequest;
 import com.example.motive_app.network.vo.MedalInfoVO;
 import com.example.motive_app.network.vo.UserInfoVO;
-import com.example.motive_app.network.vo.VideoListVO;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -81,6 +71,7 @@ public class MyMedalFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -97,24 +88,32 @@ public class MyMedalFragment extends Fragment {
         binding.myNameTxtView.setText(vo.getName());
         binding.simpleMyNameTxtView.setText(vo.getName());
 
-
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mScreenWidth = metrics.widthPixels;
+
+
 
         binding.medalMapScrollView.setOnScrollChangeListener((v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
 
             mScrollViewHeight = binding.medalResultLayout.getHeight();
-            if(scrollY <= 900) {
+            if (scrollY <= 900) {
                 //show achieve card
+                if (binding.medalResultLayout.getVisibility() == View.GONE) {
+                    binding.medalResultLayout.setVisibility(View.VISIBLE);
+                }
                 binding.medalResultLayout.setY(0 - (mScrollViewHeight * (scrollY / 900.0f)));
+                Log.d("getY", binding.medalResultLayout.getY() + " ");
                 binding.simpleMedalResultLayout.setY(-binding.simpleMedalResultLayout.getHeight());
             } else {
-                if(scrollY < 1500) {
+                if (scrollY < 1500) {
                     mNewScroll = scrollY - 900;
                 } else {
                     mNewScroll = 600;
                 }
                 binding.simpleMedalResultLayout.setY(-binding.simpleMedalResultLayout.getHeight() + binding.simpleMedalResultLayout.getHeight() * (mNewScroll / (600.0f)));
+                if (binding.medalResultLayout.getVisibility() == View.VISIBLE) {
+                    binding.medalResultLayout.setVisibility(View.GONE);
+                }
             }
 
         });
@@ -132,64 +131,71 @@ public class MyMedalFragment extends Fragment {
         request.setUserId(vo.getId());
         request.setGroupCode(vo.getGroupCode());
 
+        if(!vo.getGroupCode().equals("null")) {
+            httpRequestService.getAllMedalInfoRequest(request).enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                    if (response.body() != null) {
+                        String result = response.body().get("result").toString();
+                        if (!result.equals("null")) {
+                            Gson gson = new Gson();
+                            JsonObject jsonObject = response.body();
+                            JsonArray jsonArray = jsonObject.getAsJsonArray("result");
 
-        httpRequestService.getAllMedalInfoRequest(request).enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.body() != null) {
-                    String result = response.body().get("result").toString();
-                    if (!result.equals("null")) {
-                        Gson gson = new Gson();
-                        JsonObject jsonObject = response.body();
-                        JsonArray jsonArray = jsonObject.getAsJsonArray("result");
 
-
-                        for (int index = 0; index < jsonArray.size(); index++) {
-                            if(index < currentCnt) {
-                                final MedalInfoVO medalInfoVO = gson.fromJson(jsonArray.get(index).toString(), MedalInfoVO.class);
-                                if (medalInfoVO.getGoldMedalCnt() == 1) {
-                                    goldMedalCnt++;
-                                    totalPoint += 100;
-                                }
-                                else if (medalInfoVO.getSilverMedalCnt() == 1) {
-                                    silverMedalCnt++;
-                                    totalPoint += 100;
-                                }
-                                else {
-                                    blackMedalCnt++;
-                                    totalPoint -= 50;
+                            for (int index = 0; index < jsonArray.size(); index++) {
+                                if (index <= currentCnt) {
+                                    final MedalInfoVO medalInfoVO = gson.fromJson(jsonArray.get(index).toString(), MedalInfoVO.class);
+                                    if (medalInfoVO.getGoldMedalCnt() == 1) {
+                                        goldMedalCnt++;
+                                        totalPoint += 100;
+                                    } else if (medalInfoVO.getSilverMedalCnt() == 1) {
+                                        silverMedalCnt++;
+                                        totalPoint += 100;
+                                    } else {
+                                        blackMedalCnt++;
+                                        totalPoint -= 50;
+                                    }
                                 }
                             }
+
+                            binding.goldCntTxtView.setText(String.valueOf(goldMedalCnt));
+                            binding.silverCntTxtView.setText(String.valueOf(silverMedalCnt));
+                            binding.blackCntTxtView.setText(String.valueOf(blackMedalCnt));
+                            binding.totalCntTxtView.setText(totalPoint + "만냥");
+                            double achievePercentage = ((double) currentCnt / jsonArray.size()) * 100.0;
+                            achievePercentage = Double.parseDouble(String.format(Locale.KOREAN, "%.1f", achievePercentage));
+
+                            binding.myGoalTxtView.setText("달성률 " + achievePercentage + "%");
+
+                            binding.achieveView.getLayoutParams().width = (int) (mScreenWidth * (achievePercentage / 100));
+                            int barWidth = binding.barGray.getWidth();
+                            binding.achieveBarGreen.getLayoutParams().width = (int) (barWidth * (achievePercentage / 100));
+
+                            binding.simpleGoldCntTxtView.setText(String.valueOf(goldMedalCnt));
+                            binding.simpleSilverCntTxtView.setText(String.valueOf(silverMedalCnt));
+                            binding.simpleBlackCntTxtView.setText(String.valueOf(blackMedalCnt));
+                            binding.simpleTotalCntTxtView.setText(totalPoint + "만냥");
+
+                            Log.e(TAG, "medal info \n gold = " + goldMedalCnt + " \n silver = " + silverMedalCnt + "\n black = " + blackMedalCnt + "\n totalPoint = " + totalPoint);
                         }
-
-                        binding.goldCntTxtView.setText(String.valueOf(goldMedalCnt));
-                        binding.silverCntTxtView.setText(String.valueOf(silverMedalCnt));
-                        binding.blackCntTxtView.setText(String.valueOf(blackMedalCnt));
-                        binding.totalCntTxtView.setText(totalPoint + "만냥");
-                        double achievePercentage = ((double) currentCnt / jsonArray.size()) * 100.0;
-                        achievePercentage = Double.parseDouble(String.format(Locale.KOREAN, "%.1f", achievePercentage));
-
-                        binding.myGoalTxtView.setText("달성률 " + achievePercentage + "%");
-
-                        binding.achieveView.getLayoutParams().width = (int) (mScreenWidth * (achievePercentage / 100));
-                        int barWidth = binding.barGray.getWidth();
-                        binding.achieveBarGreen.getLayoutParams().width = (int) (barWidth *(achievePercentage / 100));
-
-                        binding.simpleGoldCntTxtView.setText(String.valueOf(goldMedalCnt));
-                        binding.simpleSilverCntTxtView.setText(String.valueOf(silverMedalCnt));
-                        binding.simpleBlackCntTxtView.setText(String.valueOf(blackMedalCnt));
-                        binding.simpleTotalCntTxtView.setText(totalPoint + "만냥");
-
-                        Log.e(TAG, "medal info \n gold = " + goldMedalCnt + " \n silver = " + silverMedalCnt + "\n black = " + blackMedalCnt + "\n totalPoint = " + totalPoint);
                     }
                 }
-            }
 
+                @Override
+                public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+
+                }
+            });
+        }
+
+
+        /*binding.medalMapScrollView.post(new Runnable() {
             @Override
-            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-
+            public void run() {
+                ObjectAnimator.ofInt(binding.medalMapScrollView, "scrollY", binding.mapImage.getBottom()/6).setDuration(2000).start();
             }
-        });
+        });*/
 
 
         return binding.getRoot();
@@ -205,7 +211,7 @@ public class MyMedalFragment extends Fragment {
                 Bundle args = new Bundle();
                 args.putSerializable("userInfoVO", vo);
                 activity.nowFragment = new MyInfoFragment();
-                activity.nowFragment.setArguments(args);
+                activity.nowFragment.setArguments(arg s);
                 ((MemberMainActivity) Objects.requireNonNull(getActivity())).setStartFragment();
             }
         }

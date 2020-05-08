@@ -23,12 +23,11 @@
                     android:id="@+id/explainText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_32"
                     android:layout_marginTop="@dimen/height_96"
                     android:textColor="#666666"
                     android:textSize="@dimen/font_32sp"
                     android:text="@string/rest_data_input"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/ok_register_btn"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:targetApi="p"/>
 
@@ -36,13 +35,12 @@
                     android:id="@+id/name"
                     android:layout_width="@dimen/width_240"
                     android:layout_height="@dimen/height_24"
-                    android:layout_marginStart="@dimen/margin_32"
                     android:layout_marginTop="@dimen/margin_48"
                     android:lineHeight="@dimen/font_24sp"
                     android:text="@string/name"
                     android:textColor="#414141"
                     android:textSize="@dimen/font_16sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/ok_register_btn"
                     app:layout_constraintTop_toBottomOf="@id/explainText"
                     tools:ignore="UnusedAttribute" />
 
@@ -99,13 +97,12 @@
                     android:id="@+id/id"
                     android:layout_width="@dimen/width_240"
                     android:layout_height="@dimen/height_24"
-                    android:layout_marginStart="@dimen/margin_32"
                     android:layout_marginTop="@dimen/margin_16"
                     android:lineHeight="@dimen/font_24sp"
                     android:text="@string/id"
                     android:textColor="#414141"
                     android:textSize="@dimen/font_16sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/ok_register_btn"
                     app:layout_constraintTop_toBottomOf="@id/register_name_view"
                     tools:ignore="UnusedAttribute" />
 
@@ -161,13 +158,12 @@
                     android:id="@+id/pass"
                     android:layout_width="@dimen/width_240"
                     android:layout_height="@dimen/height_24"
-                    android:layout_marginStart="@dimen/margin_32"
                     android:layout_marginTop="@dimen/margin_16"
                     android:lineHeight="@dimen/font_24sp"
                     android:text="@string/password"
                     android:textColor="#414141"
                     android:textSize="@dimen/font_16sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/ok_register_btn"
                     app:layout_constraintTop_toBottomOf="@id/register_id_view"
                     tools:ignore="UnusedAttribute" />
 
@@ -225,13 +221,12 @@
                     android:id="@+id/passCheck"
                     android:layout_width="@dimen/width_240"
                     android:layout_height="@dimen/height_24"
-                    android:layout_marginStart="@dimen/margin_32"
                     android:layout_marginTop="@dimen/margin_16"
                     android:lineHeight="@dimen/font_24sp"
                     android:text="@string/password_check"
                     android:textColor="#414141"
                     android:textSize="@dimen/font_16sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/ok_register_btn"
                     app:layout_constraintTop_toBottomOf="@id/register_pass_view"
                     tools:ignore="UnusedAttribute" />
 
@@ -288,13 +283,12 @@
                     android:id="@+id/phoneNum"
                     android:layout_width="@dimen/width_240"
                     android:layout_height="@dimen/height_24"
-                    android:layout_marginStart="@dimen/margin_32"
                     android:layout_marginTop="@dimen/margin_16"
                     android:lineHeight="@dimen/font_24sp"
                     android:text="@string/tel_num"
                     android:textColor="#414141"
                     android:textSize="@dimen/font_16sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/ok_register_btn"
                     app:layout_constraintTop_toBottomOf="@id/register_passCheck_view"
                     tools:ignore="UnusedAttribute" />
 
@@ -351,13 +345,12 @@
                     android:id="@+id/birth"
                     android:layout_width="@dimen/width_240"
                     android:layout_height="@dimen/height_24"
-                    android:layout_marginStart="@dimen/margin_32"
                     android:layout_marginTop="@dimen/margin_16"
                     android:lineHeight="@dimen/font_24sp"
                     android:text="@string/data_of_birth"
                     android:textColor="#414141"
                     android:textSize="@dimen/font_16sp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/ok_register_btn"
                     app:layout_constraintTop_toBottomOf="@id/register_phoneNum_view"
                     tools:ignore="UnusedAttribute" />
 
@@ -422,13 +415,6 @@
                     android:layout_marginBottom="@dimen/margin_32"
                     >
 
-                    <CheckBox
-                        android:id="@+id/register_checkBox"
-                        android:layout_width="@dimen/icon_32"
-                        android:layout_height="@dimen/icon_32"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"/>
-
                     <TextView
                         android:id="@+id/terms_of_use"
                         android:layout_width="wrap_content"
@@ -440,6 +426,13 @@
                         app:layout_constraintBottom_toBottomOf="@id/register_checkBox"
                         app:layout_constraintStart_toEndOf="@id/register_checkBox"
                         app:layout_constraintTop_toTopOf="@id/register_checkBox" />
+
+                    <CheckBox
+                        android:id="@+id/register_checkBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/icon_32"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <Button
