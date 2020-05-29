@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/medalText"
+        android:layout_width="@dimen/icon_128"
+        android:layout_height="@dimen/icon_128"
+        android:text=""
+        android:textSize="@dimen/font_43sp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/text_black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/medal_text_back_white"
+        />
+
+    <ImageView
+        android:id="@+id/medalImg"
+        android:layout_width="@dimen/icon_64"
+        android:layout_height="@dimen/icon_128"
+        app:layout_constraintTop_toTopOf="@id/medalText"
+        app:layout_constraintBottom_toBottomOf="@id/medalText"
+        app:layout_constraintEnd_toStartOf="@id/medalText"
+        app:layout_constraintStart_toStartOf="@id/medalText"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

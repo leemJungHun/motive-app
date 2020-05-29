@@ -14,6 +14,8 @@ import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
 import com.google.gson.JsonObject;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Calendar;
 
 import retrofit2.Call;
@@ -47,7 +49,7 @@ public class NotificationJobFireBaseService extends JobService {
             getUserAlarmRequest.setId(loginId);
             httpRequestService.getUserAlarmRequest(getUserAlarmRequest).enqueue(new Callback<JsonObject>() {
                 @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                public void onResponse(@NotNull Call<JsonObject> call, @NotNull Response<JsonObject> response) {
                     if (response.body() != null) {
                         String newAlarmTime = response.body().get("alarmTime").toString().replace("\"", "");
                         if(!newAlarmTime.equals("null") && !newAlarmTime.equals("NULL")) {
@@ -61,7 +63,7 @@ public class NotificationJobFireBaseService extends JobService {
                     }
                 }
                 @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
+                public void onFailure(@NotNull Call<JsonObject> call, @NotNull Throwable t) {
 
                 }
             });

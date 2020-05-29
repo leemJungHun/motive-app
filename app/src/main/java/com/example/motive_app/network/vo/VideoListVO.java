@@ -1,7 +1,7 @@
 package com.example.motive_app.network.vo;
 
 public class VideoListVO {
-    private int idx;
+    private Integer idx;
     private String userId;
     private String fileName;
     private String fileUrl;
@@ -14,13 +14,7 @@ public class VideoListVO {
     private String profileImageUrl;
     private String thumbnailUrl;
 
-    public int getIdx() {
-        return idx;
-    }
 
-    public void setIdx(int idx) {
-        this.idx = idx;
-    }
 
     public String getUserId() {
         return userId;
@@ -108,5 +102,13 @@ public class VideoListVO {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public Integer getIdx() {
+        return idx;
+    }
+
+    public void setIdx(Integer idx) {
+        this.idx = idx;
     }
 }

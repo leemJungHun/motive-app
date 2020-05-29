@@ -162,7 +162,12 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent;
                 Gson gson = new Gson();
                 if (memberLogin) {
-                    JobSchedulerStart.start(this);
+                    try {
+                        JobSchedulerStart.start(this);
+                    }catch (Exception ignored){
+                        JobSchedulerStart.stop(this);
+                        JobSchedulerStart.start(this);
+                    }
                     UserInfoVO userInfoVO = gson.fromJson(okResponse.body().get("userInfoVO").toString(), UserInfoVO.class);
                     Log.d("userInfoVO", userInfoVO.getId());
                     Log.d("medalVideo", medalVideo + "");

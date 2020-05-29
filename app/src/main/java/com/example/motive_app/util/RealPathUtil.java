@@ -25,13 +25,9 @@ import java.io.OutputStream;
 public class RealPathUtil {
     public static String getRealPath(Context context, Uri uri) {
         String realPath;
-        // SDK < API11
-        if (Build.VERSION.SDK_INT < 11) {
-            realPath = RealPathUtil.getRealPathFromURI_BelowAPI11(context, uri);
-        }
 
         // SDK >= 11 && SDK < 19
-        else if (Build.VERSION.SDK_INT < 19) {
+        if (Build.VERSION.SDK_INT < 19) {
             realPath = RealPathUtil.getRealPathFromURI_API11to18(context, uri);
         }
 

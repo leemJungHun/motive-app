@@ -5,14 +5,14 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/calendar_view"
         android:background="@android:color/white"
+        android:layout_margin="0.1dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <View
-            android:layout_margin="4dp"
             android:id="@+id/tv_back"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="@id/tv_date"
             app:layout_constraintEnd_toEndOf="@id/tv_date"
             app:layout_constraintBottom_toBottomOf="@id/tv_date"
@@ -36,13 +36,15 @@
 
         <View
             android:id="@+id/schedule"
-            android:layout_width="@dimen/icon_8"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/icon_8"
             app:layout_constraintStart_toStartOf="@id/tv_date"
             app:layout_constraintEnd_toEndOf="@id/tv_date"
             app:layout_constraintBottom_toBottomOf="@id/tv_date"
             app:layout_constraintTop_toTopOf="@id/tv_date"
-            android:layout_marginTop="@dimen/margin_24"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:layout_marginTop="@dimen/margin_32"
             android:background="@drawable/schedule_point"
             android:visibility="invisible" />
 

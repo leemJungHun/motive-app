@@ -30,7 +30,7 @@
 
     <CheckBox
         android:id="@+id/family_select"
-        android:layout_width="@dimen/margin_32"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/height_32"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

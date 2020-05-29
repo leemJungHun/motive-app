@@ -227,6 +227,6 @@
             android:layout_height="@dimen/height_6"
             android:background="@drawable/blue_shadows"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tabBar" />
+            app:layout_constraintTop_toTopOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

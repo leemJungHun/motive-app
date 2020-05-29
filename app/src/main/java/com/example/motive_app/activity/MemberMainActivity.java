@@ -30,15 +30,17 @@ import com.example.motive_app.fragment.member.MyInfoFragment;
 import com.example.motive_app.fragment.member.MyMedalFragment;
 import com.example.motive_app.fragment.member.PlayVideoFragment;
 import com.example.motive_app.fragment.member.ScheduleFragment;
-import com.example.motive_app.network.dto.RegistrationTokenRequest;
 import com.example.motive_app.network.HttpRequestService;
+import com.example.motive_app.network.dto.GroupCodeRequest;
+import com.example.motive_app.network.dto.RegistrationTokenRequest;
+import com.example.motive_app.network.vo.GroupInfoVO;
 import com.example.motive_app.network.vo.UserInfoVO;
 import com.example.motive_app.service.alarm.JobSchedulerStart;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,6 +68,8 @@ public class MemberMainActivity extends AppCompatActivity {
     boolean isFull = false;
     public String fileUrl;
     public String videoIdx;
+    private String subTitle;
+    private HttpRequestService httpRequestService;
 
     @SuppressLint("ResourceType")
     @Override
@@ -92,7 +96,9 @@ public class MemberMainActivity extends AppCompatActivity {
                 Log.d("getOrganizationCode", vo.getOrganizationCode());
                 Log.d("getBirth", vo.getBirth());
                 Log.d("getPhone", vo.getPhone());
-                Log.d("getGroupCode", vo.getGroupCode());
+                if(vo.getGroupCode()!=null) {
+                    Log.d("getGroupCode", vo.getGroupCode());
+                }
                 Log.d("getRegistrationDate", vo.getRegistrationDate() + "");
                 Log.d("getStartDate", vo.getStartDate() + "");
                 if (vo.getProfileImageUrl() != null) {
@@ -203,6 +209,8 @@ public class MemberMainActivity extends AppCompatActivity {
             transaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left, R.anim.pull_in_right, R.anim.push_out_left);
         } else if (preCheck > check) {
             transaction.setCustomAnimations(R.anim.pull_in_left, R.anim.push_out_right, R.anim.pull_in_left, R.anim.push_out_right);
+        } else if(check==0){
+            transaction.setCustomAnimations(R.anim.pull_in_left, R.anim.push_out_right, R.anim.pull_in_left, R.anim.push_out_right);
         }
 
         transaction
@@ -303,7 +311,7 @@ public class MemberMainActivity extends AppCompatActivity {
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
 
-                    HttpRequestService httpRequestService = retrofit.create(HttpRequestService.class);
+                    httpRequestService = retrofit.create(HttpRequestService.class);
 
                     RegistrationTokenRequest request = new RegistrationTokenRequest();
                     request.setToken(token);
@@ -324,6 +332,7 @@ public class MemberMainActivity extends AppCompatActivity {
                 });
     }
 
+    @SuppressLint("SourceLockedOrientationActivity")
     public void setFullScreen(boolean full, boolean isSelectMedal) {
         isFull = full;
 
@@ -348,17 +357,44 @@ public class MemberMainActivity extends AppCompatActivity {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             if(isSelectMedal) {
-                Intent intent = new Intent(getApplicationContext(), MedalSelectActivity.class);
+                GroupCodeRequest groupCodeRequest = new GroupCodeRequest();
+                groupCodeRequest.setGroupCode(vo.getGroupCode());
+                httpRequestService.getGroupInfoRequest(groupCodeRequest).enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                        if (response.body() != null) {
+                            Gson gson = new Gson();
+                            GroupInfoVO groupInfoVO = gson.fromJson(response.body().get("groupInfo").toString(), GroupInfoVO.class);
+                            Log.d("groupInfo getName" , groupInfoVO.getName());
+                            Log.d("groupInfo getStartDate" , groupInfoVO.getStartDate());
+                            Log.d("groupInfo getWeekCount" , groupInfoVO.getWeekCount());
+                            if(groupInfoVO.getSubtitle()!=null&&!groupInfoVO.getSubtitle().equals("")) {
+                                Log.d("groupInfo getSubtitle", groupInfoVO.getSubtitle());
+                                subTitle = groupInfoVO.getSubtitle();
+                            }else{
+                                subTitle = "";
+                            }
 
-                intent.putExtra("userInfoVO", vo);
-                intent.putExtra("fileUrl", fileUrl);
-                intent.putExtra("medalVideo",medalVideo);
-                intent.putExtra("videoIdx",videoIdx);
-                startActivity(intent);
+                            Intent intent = new Intent(getApplicationContext(), MedalSelectActivity.class);
 
-                overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                            intent.putExtra("userInfoVO", vo);
+                            intent.putExtra("fileUrl", fileUrl);
+                            intent.putExtra("medalVideo",medalVideo);
+                            intent.putExtra("videoIdx",videoIdx);
+                            intent.putExtra("subTitle",subTitle);
+                            startActivity(intent);
 
-                finish();
+                            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+
+                    }
+                });
             }
         }
     }

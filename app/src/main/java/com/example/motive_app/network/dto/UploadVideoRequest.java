@@ -1,7 +1,9 @@
 package com.example.motive_app.network.dto;
 
+import java.util.ArrayList;
+
 public class UploadVideoRequest {
-    private String userId;
+    private ArrayList<UserIdRequest> userIds;
     private String fileName;
     private String fileUrl;
     private String fileSize;
@@ -10,9 +12,6 @@ public class UploadVideoRequest {
     private String registerRelationship;
     private String thumbnailUrl;
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
@@ -40,5 +39,9 @@ public class UploadVideoRequest {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public void setUserIds(ArrayList<UserIdRequest> userIds) {
+        this.userIds = userIds;
     }
 }

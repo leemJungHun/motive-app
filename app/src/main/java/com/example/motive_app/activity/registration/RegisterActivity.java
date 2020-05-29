@@ -129,7 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         //입력 설정
-        setInputLimit(Objects.requireNonNull(binding.registerNameTextInputLayout.getEditText()), "^[ㄱ-ㅣ가-힣a-zA-Z]*$");
+        setInputLimit(Objects.requireNonNull(binding.registerNameTextInputLayout.getEditText()), "^[ㄱ-ㅣ가-힣a-zA-Z|\u318D\u119E\u11A2\u2022\u2025a\u00B7\uFE55]*$");
         setInputLimit(Objects.requireNonNull(binding.registerIdTextInputLayout.getEditText()), "^[a-zA-Z0-9_]*$");
 
         //에딧 텍스트 별 에러메세지 추가
@@ -154,9 +154,16 @@ public class RegisterActivity extends AppCompatActivity {
             if (v == binding.backArrow) {
 
                 intent = new Intent(getApplicationContext(), EmailCheckActivity.class);
+                if (type.equals("users")) {
+                    intent.putExtra("code", code);
+                } else if (type.equals("family")) {
+                    intent.putParcelableArrayListExtra("familyList", familyList);
+                }
+                intent.putExtra("type", type);
+                intent.putExtra("email", email);
                 startActivity(intent);
 
-                overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right);
                 finish();
             }else if(v==binding.registerCheckBox){
                 success[6] = binding.registerCheckBox.isChecked();
@@ -377,7 +384,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         success[1] = false;
                                     } else {
                                         Log.e("length", "1");
-                                        if (idErrorText.getText().toString().matches("^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{4,16}$")) {
+                                        if (idErrorText.getText().toString().matches("^[a-zA-Z0-9]{4,16}$")) {
                                             Log.e("length", "2");
                                             inputLayout.setErrorEnabled(false);
                                             editTextView.setBackgroundResource(R.drawable.text_border_succes);
@@ -734,5 +741,22 @@ public class RegisterActivity extends AppCompatActivity {
             dialog.dismiss();
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        Intent intent;
+        intent = new Intent(getApplicationContext(), EmailCheckActivity.class);
+        if (type.equals("users")) {
+            intent.putExtra("code", code);
+        } else if (type.equals("family")) {
+            intent.putParcelableArrayListExtra("familyList", familyList);
+        }
+        intent.putExtra("type", type);
+        intent.putExtra("email", email);
+        startActivity(intent);
+
+        overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right);
+        finish();
+    }
 
 }

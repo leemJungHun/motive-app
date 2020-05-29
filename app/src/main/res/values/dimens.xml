@@ -19,6 +19,7 @@
     <dimen name="width_96">64dp</dimen>
     <dimen name="width_48">32dp</dimen>
     <dimen name="width_32">21.3dp</dimen>
+    <dimen name="width_24">16dp</dimen>
 
     <!--height-->
     <dimen name="height_448">298.7dp</dimen>
@@ -36,6 +37,8 @@
     <dimen name="height_6">4dp</dimen>
 
     <!--font-->
+    <dimen name="font_43sp">28.6sp</dimen>
+    <dimen name="font_36sp">24sp</dimen>
     <dimen name="font_32sp">21.3sp</dimen>
     <dimen name="font_28sp">18.7sp</dimen>
     <dimen name="font_24sp">16sp</dimen>
@@ -62,14 +65,22 @@
 
     <!--icon-->
     <dimen name="icon_128">85.3dp</dimen>
+    <dimen name="icon_120">80dp</dimen>
+    <dimen name="icon_96">64dp</dimen>
     <dimen name="icon_64">42.7dp</dimen>
     <dimen name="icon_48">32dp</dimen>
     <dimen name="icon_32">21.3dp</dimen>
     <dimen name="icon_24">16dp</dimen>
     <dimen name="icon_8">5.3dp</dimen>
     <dimen name="icon_2">1.3dp</dimen>
+    <dimen name="medal_icon">114.3dp</dimen>
+
+
+
 
     <!--radius-->
     <dimen name="radius_7">4.5dp</dimen>
+
+    <dimen name="shadow">1.5dp</dimen>
 
 </resources>

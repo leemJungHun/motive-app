@@ -27,18 +27,23 @@ import com.example.motive_app.activity.MemberMainActivity;
 import com.example.motive_app.adapter.PlayVideoRecyclerAdapter;
 import com.example.motive_app.data.VideoListItem;
 import com.example.motive_app.databinding.FragmentPlayVideoBinding;
-import com.example.motive_app.network.dto.UserIdRequest;
 import com.example.motive_app.network.HttpRequestService;
+import com.example.motive_app.network.dto.UserIdRequest;
 import com.example.motive_app.network.vo.UserInfoVO;
 import com.example.motive_app.network.vo.VideoListVO;
+import com.example.motive_app.util.MyComparator;
 import com.example.motive_app.util.video.VideoPlayerControl;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -112,9 +117,13 @@ public class PlayVideoFragment extends Fragment {
                                     JsonObject jsonObject = response.body();
                                     JsonArray jsonArray = jsonObject.getAsJsonArray("result");
 
+                                    Type listType = new TypeToken<List<VideoListVO>>() {}.getType();
+                                    List<VideoListVO> myList = new Gson().fromJson(jsonArray, listType);
 
-                                    for (int index = 0; index < jsonArray.size(); index++) {
-                                        final VideoListVO videoListVO = gson.fromJson(jsonArray.get(index).toString(), VideoListVO.class);
+                                    Collections.sort(myList, new MyComparator());
+
+                                    for (int index = 0; index < myList.size(); index++) {
+                                        final VideoListVO videoListVO = myList.get(index);
                                         if (index == 0 && medalVideo.equals("Y")) {
                                             showProgress("동영상 재생 준비 중");
                                             videoRef = fs.getReference().child(videoListVO.getFileUrl());

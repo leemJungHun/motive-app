@@ -9,6 +9,7 @@ import com.example.motive_app.network.dto.GetAllMedalInfoRequest;
 import com.example.motive_app.network.dto.GetParentsInfoRequest;
 import com.example.motive_app.network.dto.GetUserAlarmRequest;
 import com.example.motive_app.network.dto.GetUserScheduleRequest;
+import com.example.motive_app.network.dto.GroupCodeRequest;
 import com.example.motive_app.network.dto.LoginRequest;
 import com.example.motive_app.network.dto.PutMedalSelectResultRequest;
 import com.example.motive_app.network.dto.PutProfileImageRequest;
@@ -70,6 +71,14 @@ public interface HttpRequestService {
      */
     @POST("/common/putProfileImage")
     Call<JsonObject> putProfileImageRequest(@Body PutProfileImageRequest putProfileImageRequest);
+
+    /**
+     *
+     * @param groupCodeRequest 그룹코드
+     * @return 그룹 정보 및 환자 정보
+     */
+    @POST("/common/getGroupInfo")
+    Call<JsonObject> getGroupInfoRequest(@Body GroupCodeRequest groupCodeRequest);
 
 
 

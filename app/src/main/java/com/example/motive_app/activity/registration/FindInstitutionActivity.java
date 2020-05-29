@@ -140,6 +140,7 @@ public class FindInstitutionActivity extends AppCompatActivity {
 
 
                     InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    assert imm != null;
                     imm.hideSoftInputFromWindow(binding.institutionSearchText.getWindowToken(), 0);
 
 

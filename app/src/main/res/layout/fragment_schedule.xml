@@ -183,6 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_8"
                 android:overScrollMode="never"
+                android:background="@color/white"
                 app:layout_constraintEnd_toEndOf="@id/sat_text"
                 app:layout_constraintStart_toStartOf="@id/sun_text"
                 app:layout_constraintTop_toBottomOf="@id/boundary">

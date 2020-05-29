@@ -15,19 +15,15 @@ import androidx.databinding.DataBindingUtil;
 
 import com.example.motive_app.R;
 import com.example.motive_app.databinding.ActivityMedalSelectBinding;
-import com.example.motive_app.network.dto.GetUserScheduleRequest;
-import com.example.motive_app.network.dto.PutMedalSelectResultRequest;
-import com.example.motive_app.network.dto.UserPhoneRequest;
 import com.example.motive_app.network.HttpRequestService;
-import com.example.motive_app.network.vo.GroupScheduleVO;
-import com.example.motive_app.network.vo.MemberInfoVO;
+import com.example.motive_app.network.dto.PutMedalSelectResultRequest;
 import com.example.motive_app.network.vo.UserInfoVO;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.lang.reflect.Member;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,26 +39,35 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
     UserInfoVO vo;
     String medalVideo;
     String videoIdx;
-    private Calendar cal = Calendar.getInstance();
-    private Calendar preCal = Calendar.getInstance();
-    private Calendar nextCal = Calendar.getInstance();
-    private String preAttendDate;
     int goldMedalCnt = 0;
     int silverMedalCnt = 0;
     AnimationDrawable effectAnim;
     AnimationDrawable effectAnim2;
-    private MemberInfoVO memberInfoVO;
     private HttpRequestService httpRequestService;
-    private int weekSortCnt = 1;
-    private int nowSort = 1;
+    private int nowSort = 0;
     String groupCode;
+    private String subTitle;
 
+
+    private final String TAG = MedalSelectActivity.class.getSimpleName();
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
+
+    public MedalSelectActivity() {
+    }
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_medal_select);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(HttpRequestService.URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        httpRequestService = retrofit.create(HttpRequestService.class);
 
         Intent intent = getIntent(); /*데이터 수신*/
         if (intent.getExtras() != null) {
@@ -71,6 +76,7 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
 
             medalVideo = intent.getExtras().getString("medalVideo");
             videoIdx = intent.getExtras().getString("videoIdx");
+            subTitle = intent.getExtras().getString("subTitle");
 
             if (vo != null) {
                 Log.d("getName", vo.getName());
@@ -79,6 +85,8 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
                 Log.d("getOrganizationCode", vo.getOrganizationCode());
                 Log.d("getBirth", vo.getBirth());
                 Log.d("getPhone", vo.getPhone());
+                Log.d("getGroupCode", vo.getGroupCode());
+                groupCode = vo.getGroupCode();
                 if (vo.getProfileImageUrl() != null) {
                     Log.d("getImageUrl", vo.getProfileImageUrl());
                 }
@@ -86,7 +94,6 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
 
         }
 
-        getWeekSort();
 
         effectAnim = (AnimationDrawable) binding.goldEffect.getBackground();
 
@@ -106,94 +113,45 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
         binding.goldMedal.setOnClickListener(this);
         binding.silverMedal.setOnClickListener(this);
         binding.selectOkBtn.setOnClickListener(this);
+
+        try {
+            nowSort = currentWeekCount(vo.getStartDate());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        if(nowSort==1){
+            goldMedalCnt = 1;
+            binding.selectOkBtn.setEnabled(true);
+            binding.selectOkBtn.performClick();
+        }
+
     }
 
-    private void getWeekSort() {
-        //retrofit
-        //통신
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(HttpRequestService.URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+    private int currentWeekCount(String start) throws Exception {
+        Calendar calendar = Calendar.getInstance();
+        String[] starts = start.split("-");
+        calendar.set(Integer.parseInt(starts[0]), Integer.parseInt(starts[1]) - 1, Integer.parseInt(starts[2]));
+        int startDayNum = calendar.get(Calendar.DAY_OF_WEEK);
+        Log.e(TAG, "startDayNum = " + startDayNum);
 
-        httpRequestService = retrofit.create(HttpRequestService.class);
+        Date endDate = new Date();
 
-        UserPhoneRequest userPhoneRequest = new UserPhoneRequest();
-        userPhoneRequest.setUserPhone(vo.getPhone());
+        String today = simpleDateFormat.format(endDate);
+        String[] todays = today.split("-");
+        calendar.set(Integer.parseInt(todays[0]), Integer.parseInt(todays[1]) - 1, Integer.parseInt(todays[2]));
+        int todayNum = calendar.get(Calendar.DAY_OF_WEEK);
+        Log.e(TAG, "todayNum = " + todayNum);
 
-        httpRequestService.userPhoneRequest(userPhoneRequest).enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                if (response.body() != null) {
-                    Gson gson = new Gson();
-                    memberInfoVO = gson.fromJson(response.body().get("memberInfoVO").toString(), MemberInfoVO.class);
-                    Log.d("getGroupCode", " " + memberInfoVO.getGroupCode());
-                    if (memberInfoVO.getGroupCode() != null) {
-                        GetUserScheduleRequest getUserScheduleRequest = new GetUserScheduleRequest(vo.getId(), memberInfoVO.getGroupCode());
-                        groupCode = memberInfoVO.getGroupCode();
-                        httpRequestService.getUserScheduleRequest(getUserScheduleRequest).enqueue(new Callback<JsonObject>() {
-                            @Override
-                            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
-                                if (response.body() != null) {
-                                    Gson gson = new Gson();
-                                    JsonObject res = response.body();
-                                    Log.e("medalinfo", res.toString());
-                                    JsonObject jsonObject = res.getAsJsonObject("result");
-                                    JsonArray jsonArray = jsonObject.getAsJsonArray("schedule");
-                                    JsonArray medalArray = jsonObject.getAsJsonArray("medalInfo");
+        Date startDate = simpleDateFormat.parse(start);
+        long diff = endDate.getTime() - startDate.getTime();
+        int diffDays = (int) (diff / (24 * 60 * 60 * 1000));
+        diffDays = ((diffDays - todayNum + startDayNum) / 7) + 1;
+        Log.e(TAG, "diff days = " + diffDays);
 
-                                    for (int index = jsonArray.size() - 1; 0 <= index; index--) {
-                                        GroupScheduleVO groupScheduleVO = gson.fromJson(jsonArray.get(index).toString(), GroupScheduleVO.class);
-                                        if (groupScheduleVO.getBreakAway().equals("n") || groupScheduleVO.getBreakAway().equals("N")) {
-                                            Log.d("groupVO.getWeekSort", " " + groupScheduleVO.getWeekSort());
-                                            if (weekSortCnt == Integer.parseInt(groupScheduleVO.getWeekSort())) {
-                                                String attendDate = groupScheduleVO.getAttendDate().substring(0, 10);
-                                                Log.d("weekSortCnt", " " + weekSortCnt);
-                                                if (weekSortCnt == 1) {
-                                                    preAttendDate = attendDate;
-                                                } else {
-                                                    String[] attendDates = attendDate.split("-");
-                                                    String[] preAttendDates = preAttendDate.split("-");
-                                                    preCal.set(Calendar.YEAR, Integer.parseInt(preAttendDates[0]));
-                                                    preCal.set(Calendar.MONTH, Integer.parseInt(preAttendDates[1]) - 1);
-                                                    preCal.set(Calendar.DATE, Integer.parseInt(preAttendDates[2]));
-                                                    nextCal.set(Calendar.YEAR, Integer.parseInt(attendDates[0]));
-                                                    nextCal.set(Calendar.MONTH, Integer.parseInt(attendDates[1]) - 1);
-                                                    nextCal.set(Calendar.DATE, Integer.parseInt(attendDates[2]));
-                                                    Log.d("preCal.getTimeInMillis", " " + preCal.getTimeInMillis());
-                                                    Log.d("cal.getTimeInMillis", " " + cal.getTimeInMillis());
-                                                    Log.d("nextCal.getTimeInMillis", " " + nextCal.getTimeInMillis());
-                                                    if (preCal.getTimeInMillis() < cal.getTimeInMillis() && cal.getTimeInMillis() < nextCal.getTimeInMillis()) {
-                                                        nowSort = weekSortCnt;
-                                                    }
-                                                    preAttendDate = attendDate;
-                                                }
-                                                weekSortCnt++;
-                                            }
-                                        }
-                                    }
-
-                                    Log.d("nowSort", " " + nowSort);
-
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-
-                            }
-                        });
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
-
-            }
-        });
+        return diffDays;
     }
-
 
     @Override
     public void onClick(View v) {
@@ -242,9 +200,11 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
                         switch (result) {
                             case "ok":
                                 // 메달 선택 성공 후 MemberMainActivity 로 돌아가야함.
-                                Intent intent = new Intent(MedalSelectActivity.this, MemberMainActivity.class);
+                                Intent intent = new Intent(MedalSelectActivity.this, CheeringMessageActivity.class);
                                 intent.putExtra("medalVideo", "N");
                                 intent.putExtra("userInfoVO", vo);
+                                intent.putExtra("whatMedal",goldMedalCnt);
+                                intent.putExtra("subTitle",subTitle);
                                 startActivity(intent);
                                 finish();
                                 break;

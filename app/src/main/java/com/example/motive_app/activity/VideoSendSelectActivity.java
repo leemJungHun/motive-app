@@ -8,9 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -31,9 +29,10 @@ import com.example.motive_app.data.MyFamilyItem;
 import com.example.motive_app.databinding.ActivityVideoSelectBinding;
 import com.example.motive_app.dialog.CustomDialog;
 import com.example.motive_app.dialog.CustomDialog_v5;
+import com.example.motive_app.network.HttpRequestService;
 import com.example.motive_app.network.dto.GetParentsInfoRequest;
 import com.example.motive_app.network.dto.UploadVideoRequest;
-import com.example.motive_app.network.HttpRequestService;
+import com.example.motive_app.network.dto.UserIdRequest;
 import com.example.motive_app.network.vo.FamilyInfoVO;
 import com.example.motive_app.network.vo.MyFamilyListVO;
 import com.example.motive_app.network.vo.SelectFamilyVo;
@@ -80,6 +79,7 @@ public class VideoSendSelectActivity extends AppCompatActivity implements View.O
     private long startTime, endTime;
 
     //dialog
+
     private CustomDialog_v5 dialog_v5;
     CustomDialog dialog;
     private String dialogContent;
@@ -179,13 +179,13 @@ public class VideoSendSelectActivity extends AppCompatActivity implements View.O
         binding.backArrow.setOnClickListener(this);
         binding.okSendBtn.setOnClickListener(this);
 
-        if (Build.VERSION.SDK_INT < 29) {
-            outputDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/motive_app";
-        } else {
-            File f = getExternalFilesDir("/motive_app");
-            assert f != null;
-            outputDir = f.getAbsolutePath();
-        }
+
+        File fe = getExternalFilesDir("/motive_app");
+        assert fe != null;
+        outputDir = fe.getAbsolutePath();
+
+        Log.d("outputDirSDK29", outputDir);
+
         setPermissions();
         Log.d("Fragment", "VideoUploadFragment");
     }
@@ -330,7 +330,11 @@ public class VideoSendSelectActivity extends AppCompatActivity implements View.O
                                     Log.d("setRegisterName", vo.getName());
                                     Log.d("setRegisterRelationship", selectFamilyVo.getSelectRelation());
                                     Log.d("setThumbnailUrl", "thumbnails/" + thumbnailName);
-                                    request.setUserId(selectFamilyVo.getSelectId());
+                                    ArrayList<UserIdRequest> userIds = new ArrayList<>();
+                                    UserIdRequest userIdRequest = new UserIdRequest();
+                                    userIdRequest.setUserId(selectFamilyVo.getSelectId());
+                                    userIds.add(userIdRequest);
+                                    request.setUserIds(userIds);
                                     request.setFileName(title);
                                     request.setFileUrl("videos/" + filename);
                                     request.setFileSize(Integer.toString((int)FileSize));
@@ -341,7 +345,7 @@ public class VideoSendSelectActivity extends AppCompatActivity implements View.O
                                     httpRequestService.uploadVideoRequest(request).enqueue(new Callback<JsonObject>() {
                                         @Override
                                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                            Log.d("response","onResponse" + response);
+                                            Log.d("response","onResponse" + response.message());
                                             if(response.body()!=null){
                                                 Log.d("response.body"," "+response.body().get("result").toString());
                                                 dialogContent = "영상이 전송되었습니다.";
