@@ -1,6 +1,8 @@
 package com.example.motive_app.activity;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,15 +19,16 @@ import com.example.motive_app.activity.registration.LoginHelpActivity;
 import com.example.motive_app.activity.registration.TypeChoiceActivity;
 import com.example.motive_app.databinding.ActivityLoginBinding;
 import com.example.motive_app.dialog.CustomDialog;
+import com.example.motive_app.network.HttpRequestService;
 import com.example.motive_app.network.dto.FamilyLoginRequest;
 import com.example.motive_app.network.dto.LoginRequest;
-import com.example.motive_app.network.HttpRequestService;
 import com.example.motive_app.network.vo.FamilyInfoVO;
 import com.example.motive_app.network.vo.UserInfoVO;
 import com.example.motive_app.service.alarm.JobSchedulerStart;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,7 +63,16 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = getIntent(); /*데이터 수신*/
         if (intent.getExtras() != null) {
             medalVideo = intent.getExtras().getString("medalVideo");
+            if(medalVideo!=null&&medalVideo.equals("Y")) {
+                SharedPreferences videoYN = getSharedPreferences("videoYN", Activity.MODE_PRIVATE);
+                //auto의 loginId와 loginPwd에 값을 저장해 줍니다.
+                SharedPreferences.Editor medalVideoValue = videoYN.edit();
+                medalVideoValue.putString("videoValue", medalVideo);
+                medalVideoValue.apply();
+            }
         }
+
+
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(HttpRequestService.URL)
@@ -77,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         loginId = auto.getString("saveId", null);
         loginPwd = auto.getString("savePwd", null);
-
+        removeNotification();
         if (loginId != null && loginPwd != null) {
             binding.progressBar.show();
             binding.loginId.setText(loginId);
@@ -164,22 +176,28 @@ public class LoginActivity extends AppCompatActivity {
                 if (memberLogin) {
                     try {
                         JobSchedulerStart.start(this);
-                    }catch (Exception ignored){
+                    } catch (Exception ignored) {
                         JobSchedulerStart.stop(this);
                         JobSchedulerStart.start(this);
                     }
+
+                    SharedPreferences videoYN = getSharedPreferences("videoYN", Activity.MODE_PRIVATE);
+                    if(videoYN.getString("videoValue", null)!=null) {
+                        medalVideo = videoYN.getString("videoValue", null);
+                    }
+                    Log.d("videoValue",videoYN.getString("videoValue", null) +" ");
                     UserInfoVO userInfoVO = gson.fromJson(okResponse.body().get("userInfoVO").toString(), UserInfoVO.class);
                     Log.d("userInfoVO", userInfoVO.getId());
                     Log.d("medalVideo", medalVideo + "");
                     Log.d("medalVideo", userInfoVO.getRegistrationDate() + "");
 
-                        intent = new Intent(getApplicationContext(), MemberMainActivity.class);
-                        intent.putExtra("userInfoVO", userInfoVO);
-                        intent.putExtra("type", "users");
-                        intent.putExtra("medalVideo", medalVideo);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                        finish();
+                    intent = new Intent(getApplicationContext(), MemberMainActivity.class);
+                    intent.putExtra("userInfoVO", userInfoVO);
+                    intent.putExtra("type", "users");
+                    intent.putExtra("medalVideo", medalVideo);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                    finish();
 
                 } else if (familyLogin) {
                     JobSchedulerStart.start(this);
@@ -209,7 +227,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(binding.progressBar.isShown()) {
+        if (binding.progressBar.isShown()) {
             binding.progressBar.hide();
         }
         if (null != foregroundServiceIntent) {
@@ -236,4 +254,17 @@ public class LoginActivity extends AppCompatActivity {
             dialog.dismiss();
         }
     };
+
+    public void removeNotification() {
+        SharedPreferences pushCount = getSharedPreferences("pushCount", Activity.MODE_PRIVATE);
+        //auto의 loginId와 loginPwd에 값을 저장해 줍니다.
+        SharedPreferences.Editor pushCountValue = pushCount.edit();
+        pushCountValue.putString("setMessageCount", "0");
+        pushCountValue.apply();
+        NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+        //하위 버전에서 동작하라고...??, 아직 하위버전은 테스트 해보지 못함.
+        ShortcutBadger.removeCount(this);
+        assert notificationManager != null;
+        notificationManager.cancel(9999);
+    }
 }

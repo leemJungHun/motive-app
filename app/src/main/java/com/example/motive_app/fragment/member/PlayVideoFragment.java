@@ -29,6 +29,8 @@ import com.example.motive_app.data.VideoListItem;
 import com.example.motive_app.databinding.FragmentPlayVideoBinding;
 import com.example.motive_app.network.HttpRequestService;
 import com.example.motive_app.network.dto.UserIdRequest;
+import com.example.motive_app.network.dto.UserPhoneRequest;
+import com.example.motive_app.network.vo.MemberInfoVO;
 import com.example.motive_app.network.vo.UserInfoVO;
 import com.example.motive_app.network.vo.VideoListVO;
 import com.example.motive_app.util.MyComparator;
@@ -39,6 +41,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -57,6 +61,7 @@ public class PlayVideoFragment extends Fragment {
     private ArrayList<VideoListItem> mItem = new ArrayList<>();
 
     private UserInfoVO vo;
+    private MemberInfoVO memberInfoVO;
     private FirebaseStorage fs = FirebaseStorage.getInstance();
     private StorageReference videoRef;
     private ProgressDialog pd;
@@ -106,6 +111,25 @@ public class PlayVideoFragment extends Fragment {
                     UserIdRequest request = new UserIdRequest();
                     request.setUserId(vo.getId());
 
+                    UserPhoneRequest userPhoneRequest = new UserPhoneRequest();
+                    userPhoneRequest.setUserPhone(vo.getId());
+
+                    httpRequestService.userPhoneRequest(userPhoneRequest).enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(@NotNull Call<JsonObject> call, @NotNull Response<JsonObject> response) {
+                            if (response.body() != null) {
+                                if (!response.body().get("memberInfoVO").toString().equals("null")) {
+                                    Gson gson = new Gson();
+                                    memberInfoVO = gson.fromJson(response.body().get("memberInfoVO").toString(), MemberInfoVO.class);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NotNull Call<JsonObject> call, @NotNull Throwable t) {
+
+                        }
+                    });
 
                     httpRequestService.getVideoListRequest(request).enqueue(new Callback<JsonObject>() {
                         @Override
@@ -113,14 +137,37 @@ public class PlayVideoFragment extends Fragment {
                             if (response.body() != null) {
                                 String result = response.body().get("result").toString();
                                 if (!result.equals("null")) {
-                                    Gson gson = new Gson();
                                     JsonObject jsonObject = response.body();
                                     JsonArray jsonArray = jsonObject.getAsJsonArray("result");
 
-                                    Type listType = new TypeToken<List<VideoListVO>>() {}.getType();
+                                    Type listType = new TypeToken<List<VideoListVO>>() {
+                                    }.getType();
                                     List<VideoListVO> myList = new Gson().fromJson(jsonArray, listType);
 
                                     Collections.sort(myList, new MyComparator());
+
+                                    /*if(myList.size()==0){
+                                        showProgress("동영상 재생 준비 중");
+                                        videoRef = fs.getReference().child(videoListVO.getFileUrl());
+                                        videoRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                            // Got the download URL for 'users/me/profile.png'
+                                            hideProgress();
+                                            Log.d("Success", uri.toString());
+                                            // 메달을 선택 해야하는 경우 비디오 보고 후에 메달 선택 페이지로 넘어가야함.
+                                            isSelectMedal = true;
+                                            activity.fileUrl = videoListVO.getFileUrl();
+                                            activity.videoIdx = String.valueOf(videoListVO.getIdx());
+                                            videoUri = uri.toString();
+                                            activity.playVideoVisibility(true);
+                                            activity.videoHolder.addCallback(callback);
+
+                                            //activity.playVideo(uri.toString(), Integer.toString(videoListVO.getIdx()));
+                                        }).addOnFailureListener(exception -> {
+                                            // Handle any errors
+                                            hideProgress();
+                                            Log.d("onFailure", exception.toString());
+                                        });
+                                    }*/
 
                                     for (int index = 0; index < myList.size(); index++) {
                                         final VideoListVO videoListVO = myList.get(index);
@@ -139,6 +186,7 @@ public class PlayVideoFragment extends Fragment {
                                                 activity.playVideoVisibility(true);
                                                 activity.videoHolder.addCallback(callback);
 
+
                                                 //activity.playVideo(uri.toString(), Integer.toString(videoListVO.getIdx()));
                                             }).addOnFailureListener(exception -> {
                                                 // Handle any errors
@@ -148,6 +196,7 @@ public class PlayVideoFragment extends Fragment {
                                         }
                                         Log.d("videoIdx" + index, " " + videoListVO.getIdx());
                                         Log.d("getFileUrl" + index, " " + videoListVO.getFileUrl());
+                                        Log.d("getThumbnailUrl" + index, " " + videoListVO.getThumbnailUrl());
                                         VideoListItem videoListItem = new VideoListItem();
                                         videoListItem.setFileName(videoListVO.getFileName());
                                         videoListItem.setFileUrl(videoListVO.getFileUrl());
@@ -159,6 +208,18 @@ public class PlayVideoFragment extends Fragment {
                                         if (videoListVO.getProfileImageUrl() != null) {
                                             videoListItem.setRegisterProfile(videoListVO.getProfileImageUrl());
                                         }
+                                        mItem.add(videoListItem);
+                                    }
+                                    for (int i = 0; i < 5; i++) {
+                                        VideoListItem videoListItem = new VideoListItem();
+                                        videoListItem.setFileName("디폴트 파일 텍스트");
+                                        videoListItem.setFileUrl("default/videos/default_" + i + ".mp4");
+                                        videoListItem.setRegisterId(" ");
+                                        videoListItem.setRegisterName(memberInfoVO.getOrganizationName());
+                                        videoListItem.setRegisterRelationship("기관");
+                                        videoListItem.setRegistrationDate(" ");
+                                        videoListItem.setThumbnailUrl("default/videos/default_" + i + ".mp4");
+                                        videoListItem.setRegisterProfile("images/superbrain_icon.jpg");
                                         mItem.add(videoListItem);
                                     }
                                     binding.loadingTxtView.setVisibility(View.INVISIBLE);
@@ -391,4 +452,6 @@ public class PlayVideoFragment extends Fragment {
         }
         activity.playVideoVisibility(true);
     };
+
+
 }

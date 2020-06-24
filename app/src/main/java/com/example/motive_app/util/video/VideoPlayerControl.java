@@ -28,7 +28,12 @@ public class VideoPlayerControl implements MediaController.MediaPlayerControl {
 
     @Override
     public int getCurrentPosition() {
-        return videoPlayer.getCurrentPosition();
+        try {
+            return videoPlayer.getCurrentPosition();
+        }catch (IllegalStateException e){
+            videoPlayer.reset();
+            return videoPlayer.getCurrentPosition();
+        }
     }
 
     @Override

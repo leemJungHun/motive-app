@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,22 +17,39 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.motive_app.R;
 import com.example.motive_app.activity.registration.FindFamilyActivity;
-import com.example.motive_app.data.FamilyItem;
 import com.example.motive_app.data.FamilyFindItem;
+import com.example.motive_app.data.FamilyItem;
+import com.example.motive_app.network.HttpRequestService;
+import com.example.motive_app.network.dto.RelationItem;
+import com.example.motive_app.network.dto.RemoveUserFamilyRelationRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.JsonObject;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class FamilyRecyclerAdapter extends RecyclerView.Adapter<FamilyRecyclerAdapter.ViewHolder> {
     private ArrayList<FamilyFindItem> mData = new ArrayList<>();
     private ArrayList<FamilyItem> familyList = new ArrayList<>();
+    private ArrayList<RelationItem> addFamilyList = new ArrayList<>();
     private FindFamilyActivity activity;
     private boolean duplicatedId = false;
+    private String familyId;
+    private HttpRequestService httpRequestService;
 
-    public FamilyRecyclerAdapter(FindFamilyActivity activity) {
+
+    public FamilyRecyclerAdapter(FindFamilyActivity activity,String familyId) {
         this.activity = activity;
+        this.familyId = familyId;
     }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴.
@@ -40,6 +58,14 @@ public class FamilyRecyclerAdapter extends RecyclerView.Adapter<FamilyRecyclerAd
     public FamilyRecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.item_family, parent, false);
+        //retrofit
+        //통신
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(HttpRequestService.URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        httpRequestService = retrofit.create(HttpRequestService.class);
 
         return new FamilyRecyclerAdapter.ViewHolder(view);
     }
@@ -82,8 +108,22 @@ public class FamilyRecyclerAdapter extends RecyclerView.Adapter<FamilyRecyclerAd
             mData.add(familyFindItem);
             FamilyItem familyData = new FamilyItem(familyFindItem.getUserId(), familyFindItem.getRelation());
             familyList.add(familyData);
+            RelationItem relationItem = new RelationItem();
+            relationItem.setUserId(familyFindItem.getUserId());
+            relationItem.setRelation(familyFindItem.getRelation());
+            addFamilyList.add(relationItem);
         }
         duplicatedId = false;
+    }
+
+    public ArrayList<RelationItem> getAddFamilyList(){
+        return addFamilyList;
+    }
+
+    public void setData(FamilyFindItem familyFindItem){
+        mData.add(familyFindItem);
+        FamilyItem familyData = new FamilyItem(familyFindItem.getUserId(), familyFindItem.getRelation());
+        familyList.add(familyData);
     }
 
     public void updateData(ArrayList<FamilyFindItem> familyFindItem) {
@@ -96,13 +136,13 @@ public class FamilyRecyclerAdapter extends RecyclerView.Adapter<FamilyRecyclerAd
         return familyList;
     }
 
-    public void deleteData(int position) {
+    private void deleteData(int position) {
         mData.remove(position);
         notifyDataSetChanged();
     }
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView familyImg;
         TextView familyName;
         ImageView closeImg;
@@ -115,13 +155,29 @@ public class FamilyRecyclerAdapter extends RecyclerView.Adapter<FamilyRecyclerAd
             familyName = itemView.findViewById(R.id.family_name);
             closeImg = itemView.findViewById(R.id.family_delete);
 
-            closeImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos = getAdapterPosition();
-                    deleteData(pos);
-                    ((FindFamilyActivity) Objects.requireNonNull(activity)).rvVisible();
-                }
+            closeImg.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                RemoveUserFamilyRelationRequest request = new RemoveUserFamilyRelationRequest();
+                request.setFamilyId(familyId);
+                request.setUserId(mData.get(pos).getUserId());
+                Log.d("familyId",familyId+" ");
+                Log.d("userId", mData.get(pos).getUserId()+" ");
+                httpRequestService.removeUserFamilyRelationRequest(request).enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(@NotNull Call<JsonObject> call, @NotNull Response<JsonObject> response) {
+                        if(response.body()!=null){
+                            Log.d("response.body",response.body().get("result")+" ");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<JsonObject> call, @NotNull Throwable t) {
+
+                    }
+                });
+
+                deleteData(pos);
+                Objects.requireNonNull(activity).rvVisible();
             });
         }
     }

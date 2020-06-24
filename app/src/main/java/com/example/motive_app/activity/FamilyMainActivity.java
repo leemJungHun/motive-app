@@ -2,10 +2,9 @@ package com.example.motive_app.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,20 +19,31 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.motive_app.R;
 import com.example.motive_app.activity.registration.ChangePassActivity;
+import com.example.motive_app.activity.registration.FindFamilyActivity;
+import com.example.motive_app.data.FamilyFindItem;
 import com.example.motive_app.databinding.ActivityFamilyMainBinding;
 import com.example.motive_app.fragment.family.FamilyInfoFragment;
 import com.example.motive_app.fragment.family.MyFamilyFragment;
 import com.example.motive_app.fragment.family.MyFamilyScheduleFragment;
 import com.example.motive_app.fragment.family.VideoUploadFragment;
 import com.example.motive_app.network.HttpRequestService;
+import com.example.motive_app.network.dto.GetParentsInfoRequest;
+import com.example.motive_app.network.dto.LogoutRequest;
 import com.example.motive_app.network.dto.RegistrationTokenRequest;
 import com.example.motive_app.network.vo.FamilyInfoVO;
+import com.example.motive_app.network.vo.MyFamilyListVO;
 import com.example.motive_app.service.alarm.JobSchedulerStart;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -53,12 +63,25 @@ public class FamilyMainActivity extends AppCompatActivity {
     public Fragment nowFragment;
     Bundle args;
     String type;
+    private HttpRequestService httpRequestService;
+    private String token;
+    private Context context = this;
+    private ArrayList<FamilyFindItem> familyItems = new ArrayList<>();
+    private boolean moveFragment = false;
 
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_family_main);
+
+        //기기 토큰 등록
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(HttpRequestService.URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        httpRequestService = retrofit.create(HttpRequestService.class);
 
         //데이터 전달
         Intent intent = getIntent(); /*데이터 수신*/
@@ -73,9 +96,43 @@ public class FamilyMainActivity extends AppCompatActivity {
             type = intent.getExtras().getString("type");
         }
 
+        GetParentsInfoRequest request = new GetParentsInfoRequest();
+        request.setFamilyId(vo.getId());
+
+
+        httpRequestService.getParentsInfoRequest(request).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.body() != null) {
+                    Gson gson = new Gson();
+                    JsonObject jsonObject = response.body();
+                    JsonArray jsonArray = jsonObject.getAsJsonArray("result");
+
+                    for (JsonElement element : jsonArray) {
+                        MyFamilyListVO myFamilyListVO = gson.fromJson(element, MyFamilyListVO.class);
+                        FamilyFindItem familyFindItem = new FamilyFindItem();
+                        familyFindItem.setUserId(myFamilyListVO.getId());
+                        familyFindItem.setRelation(myFamilyListVO.getRelation());
+                        if (myFamilyListVO.getProfileImageUrl()!=null) {
+                            familyFindItem.setImageUrl(myFamilyListVO.getProfileImageUrl());
+                        }else{
+                            familyFindItem.setImageUrl("");
+                        }
+                        familyFindItem.setName(myFamilyListVO.getName());
+                        familyItems.add(familyFindItem);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+
+            }
+        });
 
         binding.leftIconImageView.setOnClickListener(this::onIconClick);
         binding.rightIconImageView.setOnClickListener(this::onIconClick);
+        binding.addFamily.setOnClickListener(this::onIconClick);
 
         //토큰 등록
         getToken();
@@ -95,8 +152,10 @@ public class FamilyMainActivity extends AppCompatActivity {
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = item -> {
-        args = new Bundle();
-        args.putSerializable("familyInfoVO", vo);
+        if(!moveFragment) {
+            args = new Bundle();
+            args.putSerializable("familyInfoVO", vo);
+        }
         switch (item.getItemId()) {
             case R.id.myFamilyInfo:
                 check = 0;
@@ -122,6 +181,7 @@ public class FamilyMainActivity extends AppCompatActivity {
                 nowFragment.setArguments(args);
                 binding.currentFragmentNameTextView.setText(getString(R.string.my_schedule_info));
                 setStartFragment();
+                moveFragment=false;
                 return true;
             case R.id.myInfo:
                 check = 3;
@@ -157,6 +217,17 @@ public class FamilyMainActivity extends AppCompatActivity {
             }
             ((MyFamilyScheduleFragment) nowFragment).getUserSchedule();
         }
+        if (view.getId()==R.id.add_family){
+            Intent intent = new Intent(getApplicationContext(), FindFamilyActivity.class);
+            intent.putExtra("familyInfoVO", vo);
+            intent.putExtra("type", "family");
+            intent.putExtra("addFamily", "Y");
+            intent.putParcelableArrayListExtra("nowFamilyList",familyItems);
+            startActivity(intent);
+
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+            finish();
+        }
     }
 
     public void updateFamilyName(String familyName) {
@@ -177,10 +248,11 @@ public class FamilyMainActivity extends AppCompatActivity {
         preCheck = check;
     }
 
-    public void moveScheduleFregment(String myFamilyId) {
+    public void moveScheduleFragment(String myFamilyId) {
         check = 3;
         args.putSerializable("familyInfoVO", vo);
         args.putString("myFamilyId", myFamilyId);
+        moveFragment = true;
         nowFragment = new MyFamilyScheduleFragment();
         nowFragment.setArguments(args);
         binding.bottomNav.setSelectedItemId(R.id.myFamilyScheduleInfo);
@@ -209,9 +281,7 @@ public class FamilyMainActivity extends AppCompatActivity {
 
         startActivity(intent);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
-            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-        }
+        overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
     }
 
     @SuppressLint("NewApi")
@@ -226,25 +296,40 @@ public class FamilyMainActivity extends AppCompatActivity {
 
     @SuppressLint("NewApi")
     public void logOut(String toastText) {
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = auto.edit();
-        //editor.clear()는 auto에 들어있는 모든 정보를 기기에서 지웁니다.
-        editor.clear();
-        editor.apply();
+        LogoutRequest request = new LogoutRequest();
+        request.setId(vo.getId());
+        request.setToken(token);
+        httpRequestService.logOut(request).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NotNull Call<JsonObject> call, @NotNull Response<JsonObject> response) {
+                if(response.body()!=null){
+                    Log.d("logout", " " + response.body().get("result").toString());
+                    if(response.body().get("result").toString().replace("\"","").equals("ok")) {
+                        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = auto.edit();
+                        //editor.clear()는 auto에 들어있는 모든 정보를 기기에서 지웁니다.
+                        editor.clear();
+                        editor.apply();
 
-        JobSchedulerStart.stop(this);
+                        JobSchedulerStart.stop(context);
+                        Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
+                        Intent intent;
+                        intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right);
 
-        Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            }
 
-        Intent intent;
-        intent = new Intent(getApplicationContext(), LoginActivity.class);
+            @Override
+            public void onFailure(@NotNull Call<JsonObject> call, @NotNull Throwable t) {
 
-        startActivity(intent);
-
-        overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right);
-
-        finish();
+            }
+        });
     }
+
 
 
     @Override
@@ -267,18 +352,12 @@ public class FamilyMainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 1) {
-            // If request is cancelled, the result arrays are empty.
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // permission was granted, yay! Do the
-                // contacts-related task you need to do.
-            } else {
-                // permission denied, boo! Disable the
-                // functionality that depends on this permission.
-            }
-            //return;
-        }
+        // If request is cancelled, the result arrays are empty.
+        // permission was granted, yay! Do the
+        // contacts-related task you need to do.
+        // permission denied, boo! Disable the
+        // functionality that depends on this permission.
+        //return;
 
         // other 'case' lines to check for other
         // permissions this app might request.
@@ -292,17 +371,8 @@ public class FamilyMainActivity extends AppCompatActivity {
                         return;
                     }
 
-                    String token = Objects.requireNonNull(task.getResult()).getToken(); // 사용자가 입력한 저장할 데이터
+                    token = Objects.requireNonNull(task.getResult()).getToken(); // 사용자가 입력한 저장할 데이터
                     Log.d("token", " " + token);
-
-
-                    //기기 토큰 등록
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl(HttpRequestService.URL)
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-
-                    HttpRequestService httpRequestService = retrofit.create(HttpRequestService.class);
 
                     RegistrationTokenRequest request = new RegistrationTokenRequest();
                     request.setToken(token);

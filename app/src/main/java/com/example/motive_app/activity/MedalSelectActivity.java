@@ -1,6 +1,8 @@
 package com.example.motive_app.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -145,6 +147,7 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
         Log.e(TAG, "todayNum = " + todayNum);
 
         Date startDate = simpleDateFormat.parse(start);
+        assert startDate != null;
         long diff = endDate.getTime() - startDate.getTime();
         int diffDays = (int) (diff / (24 * 60 * 60 * 1000));
         diffDays = ((diffDays - todayNum + startDayNum) / 7) + 1;
@@ -199,7 +202,11 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
                         Log.d("putMedal-result", " " + result);
                         switch (result) {
                             case "ok":
-                                // 메달 선택 성공 후 MemberMainActivity 로 돌아가야함.
+                                SharedPreferences videoYN = getSharedPreferences("videoYN", Activity.MODE_PRIVATE);
+                                //auto의 loginId와 loginPwd에 값을 저장해 줍니다.
+                                SharedPreferences.Editor medalVideoValue = videoYN.edit();
+                                medalVideoValue.putString("videoValue", "N");
+                                medalVideoValue.apply();
                                 Intent intent = new Intent(MedalSelectActivity.this, CheeringMessageActivity.class);
                                 intent.putExtra("medalVideo", "N");
                                 intent.putExtra("userInfoVO", vo);

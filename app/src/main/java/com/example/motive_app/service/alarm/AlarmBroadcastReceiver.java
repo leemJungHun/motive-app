@@ -1,5 +1,7 @@
 package com.example.motive_app.service.alarm;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,7 +9,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.PowerManager;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -15,8 +19,12 @@ import androidx.core.app.NotificationCompat;
 import com.example.motive_app.R;
 import com.example.motive_app.activity.LoginActivity;
 
+import java.util.Objects;
+
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 public class AlarmBroadcastReceiver extends BroadcastReceiver {
-    private final static int NOTICATION_ID = 222;
+    int setMessageCount = 0;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -24,13 +32,32 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
         Intent gointent;
         gointent = new Intent(context, LoginActivity.class);
-        gointent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        gointent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         gointent.putExtra("medalVideo","Y");
 
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        assert pm != null;
+        @SuppressLint("InvalidWakeLockTag")
+        PowerManager.WakeLock wakeLock = pm.newWakeLock(
+                PowerManager.PARTIAL_WAKE_LOCK|PowerManager.ON_AFTER_RELEASE|PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+        wakeLock.acquire(3000);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, gointent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_CANCEL_CURRENT);
 
+        SharedPreferences pushCountGet = context.getSharedPreferences("pushCount", Activity.MODE_PRIVATE);
+        if(pushCountGet.getString("setMessageCount", null)!=null) {
+            setMessageCount = Integer.parseInt(Objects.requireNonNull(pushCountGet.getString("setMessageCount", null)));
+        }
+        setMessageCount++;
+
+        ShortcutBadger.applyCount(context,setMessageCount);
+
+        SharedPreferences pushCount = context.getSharedPreferences("pushCount", Activity.MODE_PRIVATE);
+        //auto의 loginId와 loginPwd에 값을 저장해 줍니다.
+        SharedPreferences.Editor pushCountValue = pushCount.edit();
+        pushCountValue.putString("setMessageCount", Integer.toString(setMessageCount));
+        pushCountValue.apply();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
@@ -39,14 +66,13 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
 
             NotificationManager notificationChannel = (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel channelMessage = new NotificationChannel(channel, channel_nm,
-                    android.app.NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager.IMPORTANCE_HIGH);
             channelMessage.setDescription("동기강화 앱 개인 및 그룹 push");
             channelMessage.enableLights(true);
             channelMessage.enableVibration(true);
-            channelMessage.setShowBadge(false);
+            channelMessage.setShowBadge(true);
+            channelMessage.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             channelMessage.setVibrationPattern(new long[]{100, 200, 100, 200});
-            assert notificationChannel != null;
-            notificationChannel.createNotificationChannel(channelMessage);
 
             NotificationCompat.Builder notificationBuilder =
                     new NotificationCompat.Builder(context, channel)
@@ -55,15 +81,18 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                             .setContentText("응원영상을 보시고 메달을 체크하세요!") //알람 내용
                             .setChannelId(channel)
                             .setAutoCancel(true)
-                            .setContentIntent(pendingIntent)
                             .setOngoing(true)
-                            .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+                            .setNumber(setMessageCount)
+                            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                            .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
+                            .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE | NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE)
+                            .setPriority(NotificationCompat.PRIORITY_MAX)
+                            .setContentIntent(pendingIntent);
 
-            NotificationManager notificationManager =
-                    (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            assert notificationChannel != null;
+            notificationChannel.createNotificationChannel(channelMessage);
 
-            assert notificationManager != null;
-            notificationManager.notify(9999, notificationBuilder.build());
+            notificationChannel.notify(9999, notificationBuilder.build());
 
         } else {
             NotificationCompat.Builder notificationBuilder =
@@ -72,9 +101,13 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
                             .setContentTitle("동기강화 앱")  //알람 제목
                             .setContentText("응원영상을 보시고 메달을 체크하세요!") //알람 내용
                             .setAutoCancel(true)
-                            .setContentIntent(pendingIntent)
                             .setOngoing(true)
-                            .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
+                            .setNumber(setMessageCount)
+                            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                            .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
+                            .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE | NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE)
+                            .setPriority(NotificationCompat.PRIORITY_MAX)
+                            .setContentIntent(pendingIntent);
 
             NotificationManager notificationManager =
                     (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

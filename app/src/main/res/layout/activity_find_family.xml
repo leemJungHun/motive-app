@@ -36,6 +36,7 @@
                 tools:ignore="ContentDescription" />
 
             <TextView
+                android:id="@+id/tabBar_text"
                 android:layout_width="@dimen/width_320"
                 android:layout_height="@dimen/height_32"
                 android:gravity="center"

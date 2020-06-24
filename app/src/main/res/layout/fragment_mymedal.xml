@@ -91,11 +91,45 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <ImageView
-                    android:id="@+id/fogImage"
+                    android:id="@+id/fogImage1"
+                    android:visibility="invisible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="fitXY"
                     android:src="@drawable/motive_leaderboard_img_01"
+                    app:layout_constraintBottom_toBottomOf="@id/myMedalLayout" />
+                <ImageView
+                    android:id="@+id/fogImage2"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/motive_leaderboard_img_02"
+                    app:layout_constraintBottom_toBottomOf="@id/myMedalLayout" />
+                <ImageView
+                    android:id="@+id/fogImage3"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/motive_leaderboard_img_03"
+                    app:layout_constraintBottom_toBottomOf="@id/myMedalLayout" />
+                <ImageView
+                    android:id="@+id/fogImage4"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/motive_leaderboard_img_04"
+                    app:layout_constraintBottom_toBottomOf="@id/myMedalLayout" />
+
+                <ImageView
+                    android:id="@+id/fogImage5"
+                    android:visibility="invisible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/motive_leaderboard_img_05"
                     app:layout_constraintBottom_toBottomOf="@id/myMedalLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

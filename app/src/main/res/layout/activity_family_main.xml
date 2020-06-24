@@ -49,6 +49,16 @@
                 app:srcCompat="@drawable/motive_icon_forwardarrow"
                 tools:ignore="ContentDescription" />
 
+            <ImageView
+                android:id="@+id/add_family"
+                android:layout_width="@dimen/icon_48"
+                android:layout_height="@dimen/icon_48"
+                android:layout_marginEnd="@dimen/margin_24"
+                android:scaleType="centerInside"
+                android:layout_gravity="end"
+                app:srcCompat="@drawable/motive_icon_add_wh"
+                tools:ignore="ContentDescription" />
+
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.constraintlayout.widget.ConstraintLayout

@@ -10,6 +10,7 @@
             android:layout_height="@dimen/width_320"
             android:layout_marginBottom="@dimen/margin_56"
             android:src="@drawable/motive_img_001"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/upload_video_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

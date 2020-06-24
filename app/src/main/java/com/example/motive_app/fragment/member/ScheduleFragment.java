@@ -263,21 +263,22 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
             }
         }
 
-        for (int i = 0; i < medalDates.size(); i++) {
-            String[] medalDate = medalDates.get(i).split("-");
-            Log.e("medalDate", medalDates.get(i));
-            if (Integer.parseInt(medalDate[0]) == year && Integer.parseInt(medalDate[1]) == (month + 1)) {
-                haveMedal.add(Integer.parseInt(medalDate[2]));
-                whatMedal.add(Integer.parseInt(medalDate[3]));
+        if (medalDates.size()!=0) {
+            for (int i = medalDates.size()-1; i >= 0; i--) {
+                String[] medalDate = medalDates.get(i).split("-");
+                Log.e("medalDate", medalDates.get(i));
+                if (Integer.parseInt(medalDate[0]) == year && Integer.parseInt(medalDate[1]) == (month + 1)) {
+                    Log.e("whatMedal", Integer.parseInt(medalDate[3]) + " ");
+                    haveMedal.add(Integer.parseInt(medalDate[2]));
+                    whatMedal.add(Integer.parseInt(medalDate[3]));
+                }
             }
         }
-
 
         Collections.sort(haveSchedule);
 
         boolean isFuture = !(nowCal.get(Calendar.MONTH) >= month);
 
-        Log.e("aaa", firstCal.get(Calendar.DAY_OF_WEEK) + "");
 
         for (int i = 1; i < lastDay + 1 + (7 - lastDayNum); i++) {
             if (i < firstCal.get(Calendar.DAY_OF_WEEK) && dayStart) {
@@ -306,6 +307,7 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
                 boolean hasSilver = false;
                 if (haveMedal.size() != 0) {
                     if (i == haveMedal.get(medalIndex)) {
+                        Log.e("haveMedal", haveMedal.get(medalIndex) + "");
                         hasGold = whatMedal.get(medalIndex) == 1;
                         hasSilver = whatMedal.get(medalIndex) == 0;
                         if (medalIndex < whatMedal.size() - 1) {
@@ -319,7 +321,7 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
                 mItem.add(new CalendarItem(String.valueOf(i), i == day, hasSchedule, hasGold, hasSilver, isFuture, true));
             }
         }
-
+        Log.e("medalIndex", medalIndex + "");
         adapter.updateData(mItem);
         adapter.notifyDataSetChanged();
     }

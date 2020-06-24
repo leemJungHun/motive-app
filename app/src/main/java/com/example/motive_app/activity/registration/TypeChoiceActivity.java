@@ -43,6 +43,7 @@ public class TypeChoiceActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
             } else if (v == binding.selectFamilyBtn) {
                 intent = new Intent(getApplicationContext(), FindFamilyActivity.class);
+                intent.putExtra("addFamily", "N");
                 startActivity(intent);
 
                 overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);

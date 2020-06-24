@@ -48,11 +48,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MyInfoFragment extends Fragment implements View.OnClickListener {
     private FragmentMyInfoBinding binding;
+
     //다이얼로그
     private String dialogContent;
+    private String preProfilePath;
+
     private CustomDialog_v2 dialog_v2;
     private CustomDialog_v3 dialog_v3;
-    private String preProfilePath;
 
     private HttpRequestService httpRequestService;
     private Uri filePath;
@@ -246,11 +248,11 @@ public class MyInfoFragment extends Fragment implements View.OnClickListener {
                                     if (preProfilePath != null) {
                                         FirebaseStorage fs = FirebaseStorage.getInstance();
                                         StorageReference deleteImage = fs.getReference().child(preProfilePath);
-                                        deleteImage.delete().addOnSuccessListener(aVoid ->  Log.d("이전 프로필 사진", "삭제"));
+                                        deleteImage.delete().addOnSuccessListener(aVoid -> Log.d("이전 프로필 사진", "삭제"));
                                     } else if (vo.getProfileImageUrl() != null) {
                                         FirebaseStorage fs = FirebaseStorage.getInstance();
                                         StorageReference deleteImage = fs.getReference().child(vo.getProfileImageUrl());
-                                        deleteImage.delete().addOnSuccessListener(aVoid ->  Log.d("이전 프로필 사진", "삭제"));
+                                        deleteImage.delete().addOnSuccessListener(aVoid -> Log.d("이전 프로필 사진", "삭제"));
                                     }
                                 }
                                 final SharedPreferences preProfile = activity.getSharedPreferences("preProfile", Activity.MODE_PRIVATE);
@@ -273,7 +275,7 @@ public class MyInfoFragment extends Fragment implements View.OnClickListener {
                     //진행중
                     .addOnProgressListener(taskSnapshot -> {
                         @SuppressWarnings("VisibleForTests")
-                        double progress = (double)((100 * taskSnapshot.getBytesTransferred())) / (taskSnapshot.getTotalByteCount());
+                        double progress = (double) ((100 * taskSnapshot.getBytesTransferred())) / (taskSnapshot.getTotalByteCount());
                         //dialog에 진행률을 퍼센트로 출력해 준다
                         progressDialog.setMessage("Uploaded " + ((int) progress) + "% ...");
                     });

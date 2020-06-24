@@ -1,5 +1,6 @@
 package com.example.motive_app.network;
 
+import com.example.motive_app.network.dto.AddRelationRequest;
 import com.example.motive_app.network.dto.EmailRequest;
 import com.example.motive_app.network.dto.FamilyLoginRequest;
 import com.example.motive_app.network.dto.FamilyRegistrationRequest;
@@ -11,10 +12,12 @@ import com.example.motive_app.network.dto.GetUserAlarmRequest;
 import com.example.motive_app.network.dto.GetUserScheduleRequest;
 import com.example.motive_app.network.dto.GroupCodeRequest;
 import com.example.motive_app.network.dto.LoginRequest;
+import com.example.motive_app.network.dto.LogoutRequest;
 import com.example.motive_app.network.dto.PutMedalSelectResultRequest;
 import com.example.motive_app.network.dto.PutProfileImageRequest;
 import com.example.motive_app.network.dto.RegistrationRequest;
 import com.example.motive_app.network.dto.RegistrationTokenRequest;
+import com.example.motive_app.network.dto.RemoveUserFamilyRelationRequest;
 import com.example.motive_app.network.dto.SearchPswdRequest;
 import com.example.motive_app.network.dto.UpdatePswdRequest;
 import com.example.motive_app.network.dto.UploadVideoRequest;
@@ -29,7 +32,8 @@ import retrofit2.http.POST;
 
 public interface HttpRequestService {
 
-    String URL = "http://175.125.21.68:8811";
+    String URL = "http://175.125.21.68:8811"; //서버
+    //String URL = "http://192.168.0.28:8080"; //로컬
 
     //common
     /**
@@ -80,6 +84,29 @@ public interface HttpRequestService {
     @POST("/common/getGroupInfo")
     Call<JsonObject> getGroupInfoRequest(@Body GroupCodeRequest groupCodeRequest);
 
+    /**
+     *
+     * @param logoutRequest 로그아웃 정보
+     * @return 로그아웃
+     */
+    @POST("/common/logout")
+    Call<JsonObject> logOut(@Body LogoutRequest logoutRequest);
+
+    /**
+     *
+     * @param addRelationRequest 추가 가족 정보
+     * @return 가족 추가
+     */
+    @POST("/common/addRelation")
+    Call<JsonObject> addRelationRequest(@Body AddRelationRequest addRelationRequest);
+
+    /**
+     *
+     * @param removeUserFamilyRelationRequest 삭제 가족 정보
+     * @return 가족 삭제
+     */
+    @POST("/common/removeUserFamilyRelation")
+    Call<JsonObject> removeUserFamilyRelationRequest(@Body RemoveUserFamilyRelationRequest removeUserFamilyRelationRequest);
 
 
 

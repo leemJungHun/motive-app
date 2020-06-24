@@ -26,13 +26,27 @@
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="1231231"
+            android:text=""
             android:textColor="#414141"
             android:textSize="@dimen/font_16sp"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <View
+            android:layout_margin="4dp"
+            android:id="@+id/medal_back"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@id/tv_date"
+            app:layout_constraintEnd_toEndOf="@id/tv_date"
+            app:layout_constraintBottom_toBottomOf="@id/tv_date"
+            app:layout_constraintTop_toTopOf="@id/tv_date"
+            android:background="@drawable/medal_gold_back"
+            android:visibility="gone" />
 
         <View
             android:id="@+id/schedule"
@@ -47,17 +61,5 @@
             android:layout_marginTop="@dimen/margin_32"
             android:background="@drawable/schedule_point"
             android:visibility="invisible" />
-
-        <View
-            android:layout_margin="4dp"
-            android:id="@+id/medal_back"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="@id/tv_date"
-            app:layout_constraintEnd_toEndOf="@id/tv_date"
-            app:layout_constraintBottom_toBottomOf="@id/tv_date"
-            app:layout_constraintTop_toTopOf="@id/tv_date"
-            android:background="@drawable/medal_gold_back"
-            android:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

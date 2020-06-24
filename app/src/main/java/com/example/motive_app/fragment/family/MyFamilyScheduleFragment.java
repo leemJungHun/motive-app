@@ -1,23 +1,18 @@
 package com.example.motive_app.fragment.family;
 
 import android.content.Context;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,13 +23,12 @@ import com.example.motive_app.adapter.DayItemDecoration;
 import com.example.motive_app.data.CalendarItem;
 import com.example.motive_app.databinding.FragmentMyFamilyScheduleBinding;
 import com.example.motive_app.fragment.RootScheduleFragment;
+import com.example.motive_app.network.HttpRequestService;
 import com.example.motive_app.network.dto.GetParentsInfoRequest;
 import com.example.motive_app.network.dto.GetUserScheduleRequest;
 import com.example.motive_app.network.dto.UserPhoneRequest;
-import com.example.motive_app.network.HttpRequestService;
 import com.example.motive_app.network.vo.FamilyInfoVO;
 import com.example.motive_app.network.vo.GroupScheduleVO;
-import com.example.motive_app.network.vo.MedalInfoVO;
 import com.example.motive_app.network.vo.MemberInfoVO;
 import com.example.motive_app.network.vo.MyFamilyListVO;
 import com.google.gson.Gson;
@@ -84,7 +78,9 @@ public class MyFamilyScheduleFragment extends RootScheduleFragment implements Vi
         super.setArguments(args);
         assert args != null;
         vo = (FamilyInfoVO) args.getSerializable("familyInfoVO");
+        assert vo != null;
         myFamilyId = args.getString("myFamilyId");
+        Log.d("myFamilyId",""+myFamilyId);
     }
 
     @Override
@@ -316,8 +312,10 @@ public class MyFamilyScheduleFragment extends RootScheduleFragment implements Vi
     }
 
     public void getUserSchedule() {
+        scheduleIndex = 0;
         attendDates = new ArrayList<>();
         String setName = "";
+        Log.d("myFamilyId",myFamilyId+" ");
         if (myFamilyId != null) {
             for (int i = 0; i < familyListVOS.size(); i++) {
                 if (familyListVOS.get(i).getId().equals(myFamilyId)) {

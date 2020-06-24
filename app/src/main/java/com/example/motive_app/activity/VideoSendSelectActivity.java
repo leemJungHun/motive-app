@@ -38,12 +38,8 @@ import com.example.motive_app.network.vo.MyFamilyListVO;
 import com.example.motive_app.network.vo.SelectFamilyVo;
 import com.example.motive_app.util.video.VideoCompress;
 import com.example.motive_app.util.video.VideoCompressUtil;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -137,7 +133,7 @@ public class VideoSendSelectActivity extends AppCompatActivity implements View.O
 
         httpRequestService.getParentsInfoRequest(request).enqueue(new Callback<JsonObject>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(@NotNull Call<JsonObject> call, @NotNull Response<JsonObject> response) {
                 if(response.body()!=null){
                     Gson gson = new Gson();
                     JsonObject jsonObject = response.body();
@@ -169,7 +165,7 @@ public class VideoSendSelectActivity extends AppCompatActivity implements View.O
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(@NotNull Call<JsonObject> call, @NotNull Throwable t) {
 
             }
         });
@@ -292,6 +288,7 @@ public class VideoSendSelectActivity extends AppCompatActivity implements View.O
                 Toast.makeText(getApplicationContext(), "권한 거절", Toast.LENGTH_SHORT).show();
             }
         }
+
     }
 
 
@@ -308,88 +305,73 @@ public class VideoSendSelectActivity extends AppCompatActivity implements View.O
             final StorageReference storageRef = storage.getReferenceFromUrl("gs://motive-app-3061c.appspot.com").child("videos/" + filename);
             storageRef.putFile(uploadUri)
                     //성공시
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            hideProgress();
-                            Bitmap thumbnailBitmap = ThumbnailUtils.createVideoThumbnail(filePath, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
-                            assert thumbnailBitmap != null;
-                            saveBitmapToJpeg(thumbnailBitmap,thumbnailName);
-                            //다이얼로그 띄우기
-                            final StorageReference storageRef2 = storage.getReferenceFromUrl("gs://motive-app-3061c.appspot.com").child("thumbnails/" + thumbnailName);
-                            storageRef2.putFile(thumbnailPath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    .addOnSuccessListener(taskSnapshot -> {
+                        hideProgress();
+                        showProgress("전송중..");
+                        Bitmap thumbnailBitmap = ThumbnailUtils.createVideoThumbnail(filePath, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND);
+                        assert thumbnailBitmap != null;
+                        saveBitmapToJpeg(thumbnailBitmap,thumbnailName);
+                        //다이얼로그 띄우기
+                        final StorageReference storageRef2 = storage.getReferenceFromUrl("gs://motive-app-3061c.appspot.com").child("thumbnails/" + thumbnailName);
+                        storageRef2.putFile(thumbnailPath).addOnSuccessListener(taskSnapshot1 -> {
+                            Log.d("썸네일 업로드","성공");
+                            UploadVideoRequest request = new UploadVideoRequest();
+                            Log.d("upload Id", selectFamilyVo.getSelectId());
+                            Log.d("setFileName", title);
+                            Log.d("setFileUrl", "videos/" + filename);
+                            Log.d("setFileSize", Integer.toString((int)FileSize));
+                            Log.d("setRegisterId", vo.getId());
+                            Log.d("setRegisterName", vo.getName());
+                            Log.d("setRegisterRelationship", selectFamilyVo.getSelectRelation());
+                            Log.d("setThumbnailUrl", "thumbnails/" + thumbnailName);
+                            ArrayList<UserIdRequest> userIds = new ArrayList<>();
+                            UserIdRequest userIdRequest = new UserIdRequest();
+                            userIdRequest.setUserId(selectFamilyVo.getSelectId());
+                            userIds.add(userIdRequest);
+                            request.setUserIds(userIds);
+                            request.setFileName(title);
+                            request.setFileUrl("videos/" + filename);
+                            request.setFileSize(Integer.toString((int)FileSize));
+                            request.setRegisterId(vo.getId());
+                            request.setRegisterName(vo.getName());
+                            request.setRegisterRelationship(selectFamilyVo.getSelectRelation());
+                            request.setThumbnailUrl("thumbnails/" + thumbnailName);
+                            httpRequestService.uploadVideoRequest(request).enqueue(new Callback<JsonObject>() {
                                 @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    Log.d("썸네일 업로드","성공");
-                                    UploadVideoRequest request = new UploadVideoRequest();
-                                    Log.d("upload Id", selectFamilyVo.getSelectId());
-                                    Log.d("setFileName", title);
-                                    Log.d("setFileUrl", "videos/" + filename);
-                                    Log.d("setFileSize", Integer.toString((int)FileSize));
-                                    Log.d("setRegisterId", vo.getId());
-                                    Log.d("setRegisterName", vo.getName());
-                                    Log.d("setRegisterRelationship", selectFamilyVo.getSelectRelation());
-                                    Log.d("setThumbnailUrl", "thumbnails/" + thumbnailName);
-                                    ArrayList<UserIdRequest> userIds = new ArrayList<>();
-                                    UserIdRequest userIdRequest = new UserIdRequest();
-                                    userIdRequest.setUserId(selectFamilyVo.getSelectId());
-                                    userIds.add(userIdRequest);
-                                    request.setUserIds(userIds);
-                                    request.setFileName(title);
-                                    request.setFileUrl("videos/" + filename);
-                                    request.setFileSize(Integer.toString((int)FileSize));
-                                    request.setRegisterId(vo.getId());
-                                    request.setRegisterName(vo.getName());
-                                    request.setRegisterRelationship(selectFamilyVo.getSelectRelation());
-                                    request.setThumbnailUrl("thumbnails/" + thumbnailName);
-                                    httpRequestService.uploadVideoRequest(request).enqueue(new Callback<JsonObject>() {
-                                        @Override
-                                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                            Log.d("response","onResponse" + response.message());
-                                            if(response.body()!=null){
-                                                Log.d("response.body"," "+response.body().get("result").toString());
-                                                dialogContent = "영상이 전송되었습니다.";
-                                                Dialog();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                                            Log.d("failed","onFailed" + t.getMessage());
-                                        }
-                                    });
+                                public void onResponse(@NotNull Call<JsonObject> call, @NotNull Response<JsonObject> response) {
+                                    Log.d("response","onResponse" + response.message());
+                                    if(response.body()!=null){
+                                        Log.d("response.body"," "+response.body().get("result").toString());
+                                        hideProgress();
+                                        dialogContent = "영상이 전송되었습니다.";
+                                        Dialog();
+                                    }
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.d("썸네일 업로드","실패" + e.getMessage());
-                                }
-                            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
 
+                                @Override
+                                public void onFailure(@NotNull Call<JsonObject> call, @NotNull Throwable t) {
+                                    Log.d("failed","onFailed" + t.getMessage());
+                                    hideProgress();
+                                    dialogContent = "영상 전송 실패";
+                                    Dialog();
                                 }
                             });
-                        }
+                        }).addOnFailureListener(e -> Log.d("썸네일 업로드","실패" + e.getMessage())).addOnProgressListener(taskSnapshot12 -> {
+
+                        });
                     })
                     //실패시
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            hideProgress();
-                            Toast.makeText(getApplicationContext(), "동영상 업로드 실패", Toast.LENGTH_SHORT).show();
-                            Log.d("failed", Objects.requireNonNull(e.getMessage()));
-                        }
+                    .addOnFailureListener(e -> {
+                        hideProgress();
+                        Toast.makeText(getApplicationContext(), "동영상 업로드 실패", Toast.LENGTH_SHORT).show();
+                        Log.d("failed", Objects.requireNonNull(e.getMessage()));
                     })
                     //진행중
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(@NotNull UploadTask.TaskSnapshot taskSnapshot) {
-                            @SuppressWarnings("VisibleForTests")
-                            double progress = (100 * taskSnapshot.getBytesTransferred()) /  taskSnapshot.getTotalByteCount();
-                            //dialog에 진행률을 퍼센트로 출력해 준다
-                            showProgress("Uploaded " + ((int) progress) + "% ...");
-                        }
+                    .addOnProgressListener(taskSnapshot -> {
+                        @SuppressWarnings("VisibleForTests")
+                        double progress = (double)((100 * taskSnapshot.getBytesTransferred()) /  taskSnapshot.getTotalByteCount());
+                        //dialog에 진행률을 퍼센트로 출력해 준다
+                        showProgress("Uploaded " + ((int) progress) + "% ...");
                     });
         } else {
             Toast.makeText(getApplicationContext(), "파일을 먼저 선택하세요.", Toast.LENGTH_SHORT).show();

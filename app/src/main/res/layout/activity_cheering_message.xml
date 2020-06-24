@@ -14,7 +14,7 @@
             android:id="@+id/medal_select_Text"
             android:layout_width="@dimen/width_416"
             android:layout_height="wrap_content"
-            android:text="@string/cheering_message"
+            android:text="@string/cheering_message_g"
             android:textSize="@dimen/font_36sp"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"

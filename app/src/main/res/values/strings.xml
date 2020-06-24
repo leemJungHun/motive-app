@@ -26,11 +26,11 @@
     <string name="notification_channel_id">"notification_channel_id"</string>
     <string name="notification_channel_name">"notification_channel_name"</string>
 
-    <string name="id_input">아이디(환자:전화번호)</string>
+    <string name="id_input">아이디(회원:전화번호)</string>
     <string name="id_input2">아이디를 입력해주세요</string>
     <string name="name_input2">이름을 입력하세요</string>
     <string name="name_input">성함을 입력해주세요</string>
-    <string name="pass_input">패스워드(환자:생일 4자리)</string>
+    <string name="pass_input">패스워드(회원:생일 4자리)</string>
     <string name="email_input">이메일을 입력해주세요</string>
     <string name="forget_id">아이디를 잊어버렸습니다</string>
     <string name="type_select">회원 유형을\n선택해주세요</string>
@@ -70,7 +70,7 @@
     <string name="base_name">홍길동</string>
     <string name="institution">기관</string>
     <string name="member_relation">환자와의 관계</string>
-    <string name="input_relation">입력해주세요 ex)아버님, 어머님</string>
+    <string name="input_relation">입력해주세요 ex)아들, 딸, 손자, 손녀</string>
     <string name="input_family_phoneNum">가족의 전화 번호를\n입력해주세요</string>
     <string name="my_family">나의 가족</string>
     <string name="family_add_one">가족이 한명 이상 추가되어야 합니다. 번호를 입력하여 추가해주세요.</string>
@@ -82,6 +82,7 @@
 
     <string name="isFuture">isFuture</string>
     <string name="medal_select_text">지난 한 주 동안 열심히 하셨나요?\n열심히 하셨으면 금메달,\n노력이 좀더 필요하다면 은메달을\n선택해 주세요</string>
-    <string name="cheering_message">칭찬의 박수 짝.짝.짝\n이번 주도 힘내세요!</string>
+    <string name="cheering_message_g">칭찬의 박수 짝.짝.짝\n이번 주도 힘내세요!</string>
+    <string name="cheering_message_s">항상 응원합니다!</string>
 
 </resources>

@@ -21,7 +21,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class MyFamilyRecyclerAdapter extends RecyclerView.Adapter<MyFamilyRecyclerAdapter.ViewHolder> {
     private ArrayList<MyFamilyItem> mData = new ArrayList<>();
@@ -77,7 +76,7 @@ public class MyFamilyRecyclerAdapter extends RecyclerView.Adapter<MyFamilyRecycl
     }
 
     // 아이템 뷰를 저장하는 뷰홀더 클래스.
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView familyImg;
         TextView familyName;
         TextView familySchedule;
@@ -90,12 +89,7 @@ public class MyFamilyRecyclerAdapter extends RecyclerView.Adapter<MyFamilyRecycl
             familyImg = itemView.findViewById(R.id.family_img);
             familySchedule = itemView.findViewById(R.id.family_schedule);
 
-            familySchedule.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    activity.moveScheduleFregment(familySchedule.getTag().toString());
-                }
-            });
+            familySchedule.setOnClickListener(v -> activity.moveScheduleFragment(familySchedule.getTag().toString()));
         }
     }
 }

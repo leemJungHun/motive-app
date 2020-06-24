@@ -2,6 +2,7 @@ package com.example.motive_app.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -32,6 +33,7 @@ import com.example.motive_app.fragment.member.PlayVideoFragment;
 import com.example.motive_app.fragment.member.ScheduleFragment;
 import com.example.motive_app.network.HttpRequestService;
 import com.example.motive_app.network.dto.GroupCodeRequest;
+import com.example.motive_app.network.dto.LogoutRequest;
 import com.example.motive_app.network.dto.RegistrationTokenRequest;
 import com.example.motive_app.network.vo.GroupInfoVO;
 import com.example.motive_app.network.vo.UserInfoVO;
@@ -41,6 +43,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import org.jetbrains.annotations.NotNull;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,6 +74,8 @@ public class MemberMainActivity extends AppCompatActivity {
     public String videoIdx;
     private String subTitle;
     private HttpRequestService httpRequestService;
+    private String token;
+    private Context context = this;
 
     @SuppressLint("ResourceType")
     @Override
@@ -247,21 +253,42 @@ public class MemberMainActivity extends AppCompatActivity {
     }*/
 
     public void logOut(String toastText) {
-        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = auto.edit();
-        //editor.clear()는 auto에 들어있는 모든 정보를 기기에서 지웁니다.
-        editor.clear();
-        editor.apply();
+        LogoutRequest request = new LogoutRequest();
+        request.setId(vo.getId());
+        request.setToken(token);
+        httpRequestService.logOut(request).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NotNull Call<JsonObject> call, @NotNull Response<JsonObject> response) {
+                if(response.body()!=null){
+                    Log.d("logout", " " + response.body().get("result").toString());
+                    if(response.body().get("result").toString().replace("\"","").equals("ok")) {
+                        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = auto.edit();
+                        //editor.clear()는 auto에 들어있는 모든 정보를 기기에서 지웁니다.
+                        editor.clear();
+                        editor.apply();
+                        SharedPreferences videoYN = getSharedPreferences("videoYN", Activity.MODE_PRIVATE);
+                        SharedPreferences.Editor medalVideoValue = videoYN.edit();
+                        medalVideoValue.putString("videoValue", "N");
+                        medalVideoValue.apply();
 
+                        JobSchedulerStart.stop(context);
+                        Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
+                        Intent intent;
+                        intent = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right);
 
-        JobSchedulerStart.stop(this);
-        Toast.makeText(getApplicationContext(), toastText, Toast.LENGTH_SHORT).show();
-        Intent intent;
-        intent = new Intent(getApplicationContext(), LoginActivity.class);
-        startActivity(intent);
-        overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right);
+                        finish();
+                    }
+                }
+            }
 
-        finish();
+            @Override
+            public void onFailure(@NotNull Call<JsonObject> call, @NotNull Throwable t) {
+
+            }
+        });
     }
 
     @Override
@@ -301,7 +328,7 @@ public class MemberMainActivity extends AppCompatActivity {
                         return;
                     }
                     assert task.getResult() != null;
-                    String token = task.getResult().getToken(); // 사용자가 입력한 저장할 데이터
+                    token = task.getResult().getToken(); // 사용자가 입력한 저장할 데이터
                     Log.d("token", " " + token);
 
 
@@ -320,7 +347,7 @@ public class MemberMainActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
                             if (response.body() != null) {
-                                Log.d("result", " " + response.body().get("result").toString());
+                                Log.d("setToken", " " + response.body().get("result").toString());
                             }
                         }
 
@@ -352,7 +379,7 @@ public class MemberMainActivity extends AppCompatActivity {
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
             //int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-            params.height = ViewGroup.LayoutParams.MATCH_PARENT;;
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
 
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 

@@ -4,6 +4,7 @@ public class RelationItem {
     private String userId;
     private String relation;
 
+
     public void setUserId(String userId) {
         this.userId = userId;
     }

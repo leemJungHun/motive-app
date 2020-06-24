@@ -126,7 +126,7 @@
 
                 <EditText
                     android:id="@+id/find_family_relation"
-                    android:layout_width="@dimen/width_256"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/height_32"
                     android:layout_marginStart="@dimen/margin_16"
                     android:background="@null"

@@ -1,5 +1,6 @@
 package com.example.motive_app.fragment.family;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -22,24 +23,23 @@ import com.example.motive_app.databinding.FragmentUploadVideoBinding;
 import com.example.motive_app.dialog.CustomDialog;
 import com.example.motive_app.network.vo.FamilyInfoVO;
 import com.example.motive_app.util.RealPathUtil;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class VideoUploadFragment extends Fragment implements View.OnClickListener {
     private FragmentUploadVideoBinding binding;
 
-    private FamilyInfoVO vo;
     private static final int RESULT_OK = -1;
-    private String filePath;
-    private String size;
-    private float FileSize;
 
 
     private ProgressDialog pd;
 
     //dialog
-    CustomDialog dialog;
+    private CustomDialog dialog;
     private String dialogContent;
 
     private FamilyMainActivity activity;
@@ -49,7 +49,7 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
     public void setArguments(@Nullable Bundle args) {
         super.setArguments(args);
         assert args != null;
-        vo = (FamilyInfoVO) args.getSerializable("familyInfoVO");
+        FamilyInfoVO vo = (FamilyInfoVO) args.getSerializable("familyInfoVO");
     }
 
     @Override
@@ -73,10 +73,7 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (v == binding.uploadVideoBtn) {
-            Intent intent = new Intent();
-            intent.setType("video/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "동영상을 선택하세요."), 0);
+            showPermissionDialog();
         } else if (v == binding.exampleVideoBtn) {
             activity.exampleVideoOpen();
         }
@@ -91,12 +88,13 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
                 Log.d("data.getData", data.getData() + "");
 
                 Log.d("path", RealPathUtil.getRealPath(activity, data.getData()) + "");
-                filePath = RealPathUtil.getRealPath(activity, data.getData());
-                Log.d("filePath", filePath);
+                String filePath = RealPathUtil.getRealPath(activity, data.getData());
+                Log.d("filePath", filePath +" ");
                 File selectFIle = new File(filePath);
+                String size;
                 if (selectFIle.exists()) {
-                    FileSize = selectFIle.length() / (float) 1024 / 1024;
-                    size = FileSize + "MB";
+                    float fileSize = selectFIle.length() / (float) 1024 / 1024;
+                    size = fileSize + "MB";
                 } else {
                     size = "File not exist";
                 }
@@ -124,6 +122,29 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
         long hours = duration / 3600;
         long minutes = (duration - hours * 3600) / 60;
         return (int) duration;
+    }
+
+    private void showPermissionDialog(){
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Intent intent = new Intent();
+                intent.setType("video/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "동영상을 선택하세요."), 0);
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+            }
+        };
+
+        TedPermission.with(Objects.requireNonNull(getContext()))
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage("영상을 업로드 하시려면 권한이 필요합니다.").setDeniedMessage("권한이 없어 영상을\n업로드 할 수 없습니다.")
+                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .check();
     }
 
     //다이얼로그 클릭이벤트

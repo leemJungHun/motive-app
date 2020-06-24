@@ -4,6 +4,7 @@
     package="com.example.motive_app">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -14,17 +15,16 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/login_brain_icon"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/login_brain_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        android:largeHeap="true"
         tools:ignore="UnusedAttribute">
         <!-- android:usesCleartextTraffic="true" 를 해야 http:// 주소를 불러올 수 있음.-->
 
@@ -91,51 +91,55 @@
             android:name=".activity.registration.FindIdActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.registration.TeachIdActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.registration.FindPassActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.registration.ChangePassActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.registration.FindFamilyActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".activity.FamilyMainActivity"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-        <activity android:name=".activity.VideoSendSelectActivity"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.VideoSendSelectActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-        <activity android:name=".activity.PlayVideoActivity"
-            android:noHistory="true"
-            />
-        <activity android:name=".activity.MedalSelectActivity"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.PlayVideoActivity"
+            android:noHistory="true" />
+        <activity
+            android:name=".activity.MedalSelectActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
 
 
         </activity>
-        <activity android:name=".activity.ExampleVideoListActivity"
+        <activity
+            android:name=".activity.ExampleVideoListActivity"
             android:configChanges="orientation|screenSize"
             android:noHistory="true"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"/>
-        <activity android:name=".activity.CheeringMessageActivity"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".activity.CheeringMessageActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
@@ -156,6 +160,7 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
             </intent-filter>
         </service>
+
         <receiver
             android:name=".service.alarm.AlarmBroadcastReceiver"
             android:enabled="true"
