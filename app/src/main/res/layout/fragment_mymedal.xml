@@ -170,7 +170,7 @@
                 android:textStyle="normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="달성률 70%" />
+                tools:text="진행률 70%" />
 
             <View
                 android:id="@+id/bar_gray"

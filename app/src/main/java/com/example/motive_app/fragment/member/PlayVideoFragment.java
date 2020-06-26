@@ -46,6 +46,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -71,6 +72,7 @@ public class PlayVideoFragment extends Fragment {
     private MemberMainActivity activity;
     private String videoUri;
     private boolean isSelectMedal = false;
+    private boolean mNoUploadVideo = false;
 
 
     @Override
@@ -114,23 +116,6 @@ public class PlayVideoFragment extends Fragment {
                     UserPhoneRequest userPhoneRequest = new UserPhoneRequest();
                     userPhoneRequest.setUserPhone(vo.getId());
 
-                    httpRequestService.userPhoneRequest(userPhoneRequest).enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(@NotNull Call<JsonObject> call, @NotNull Response<JsonObject> response) {
-                            if (response.body() != null) {
-                                if (!response.body().get("memberInfoVO").toString().equals("null")) {
-                                    Gson gson = new Gson();
-                                    memberInfoVO = gson.fromJson(response.body().get("memberInfoVO").toString(), MemberInfoVO.class);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(@NotNull Call<JsonObject> call, @NotNull Throwable t) {
-
-                        }
-                    });
-
                     httpRequestService.getVideoListRequest(request).enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
@@ -169,9 +154,25 @@ public class PlayVideoFragment extends Fragment {
                                         });
                                     }*/
 
+                                    int videoIndex=0;
+
+                                    if(myList.size()!=0){
+                                        Calendar nowCal = Calendar.getInstance();
+                                        Calendar registerCal = Calendar.getInstance();
+                                        Log.d("RegisterDate",myList.get(0).getRegistrationDate());
+                                        String[] registerDate = myList.get(0).getRegistrationDate().split(" ");
+                                        String[] registerDates = registerDate[0].split("-");
+                                        registerCal.set(Calendar.DATE,Integer.parseInt(registerDates[2]));
+                                        if(nowCal.get(Calendar.YEAR)==Integer.parseInt(registerDates[0])&&(nowCal.get(Calendar.MONTH)+1)==Integer.parseInt(registerDates[1])){
+                                            if(nowCal.get(Calendar.DATE)-14>registerCal.get(Calendar.DATE)){
+                                                videoIndex = (int)(Math.random() * myList.size());
+                                            }
+                                        }
+                                    }
+
                                     for (int index = 0; index < myList.size(); index++) {
                                         final VideoListVO videoListVO = myList.get(index);
-                                        if (index == 0 && medalVideo.equals("Y")) {
+                                        if (index == videoIndex && medalVideo.equals("Y")) {
                                             showProgress("동영상 재생 준비 중");
                                             videoRef = fs.getReference().child(videoListVO.getFileUrl());
                                             videoRef.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -210,25 +211,66 @@ public class PlayVideoFragment extends Fragment {
                                         }
                                         mItem.add(videoListItem);
                                     }
-                                    for (int i = 0; i < 5; i++) {
-                                        VideoListItem videoListItem = new VideoListItem();
-                                        videoListItem.setFileName("디폴트 파일 텍스트");
-                                        videoListItem.setFileUrl("default/videos/default_" + i + ".mp4");
-                                        videoListItem.setRegisterId(" ");
-                                        videoListItem.setRegisterName(memberInfoVO.getOrganizationName());
-                                        videoListItem.setRegisterRelationship("기관");
-                                        videoListItem.setRegistrationDate(" ");
-                                        videoListItem.setThumbnailUrl("default/videos/default_" + i + ".mp4");
-                                        videoListItem.setRegisterProfile("images/superbrain_icon.jpg");
-                                        mItem.add(videoListItem);
-                                    }
-                                    binding.loadingTxtView.setVisibility(View.INVISIBLE);
-                                    adapter = new PlayVideoRecyclerAdapter(mItem, (MemberMainActivity) getActivity(), getContext());
-                                    binding.rvVideoList.setAdapter(adapter);
-                                    binding.rvVideoList.setLayoutManager(new LinearLayoutManager(getContext()));
-                                    adapter.notifyDataSetChanged();
                                 }
+                            }else{
+                                mNoUploadVideo = true;
                             }
+                            httpRequestService.userPhoneRequest(userPhoneRequest).enqueue(new Callback<JsonObject>() {
+                                @Override
+                                public void onResponse(@NotNull Call<JsonObject> call, @NotNull Response<JsonObject> response) {
+                                    if (response.body() != null) {
+                                        if (!response.body().get("memberInfoVO").toString().equals("null")) {
+                                            Gson gson = new Gson();
+                                            memberInfoVO = gson.fromJson(response.body().get("memberInfoVO").toString(), MemberInfoVO.class);
+                                            for (int i = 0; i < 5; i++) {
+                                                VideoListItem videoListItem = new VideoListItem();
+                                                if(mNoUploadVideo){
+                                                    showProgress("동영상 재생 준비 중");
+                                                    int randomIdx = (int)(Math.random()*4)+1;
+                                                    String startFileUrl = "default/videos/default_" + randomIdx + ".mp4";
+                                                    videoRef = fs.getReference().child(startFileUrl);
+                                                    videoRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                                        // Got the download URL for 'users/me/profile.png'
+                                                        hideProgress();
+                                                        Log.d("Success", uri.toString());
+                                                        // 메달을 선택 해야하는 경우 비디오 보고 후에 메달 선택 페이지로 넘어가야함.
+                                                        isSelectMedal = true;
+                                                        activity.fileUrl = startFileUrl;
+                                                        activity.videoIdx = String.valueOf(randomIdx);
+                                                        videoUri = uri.toString();
+                                                        activity.playVideoVisibility(true);
+                                                        activity.videoHolder.addCallback(callback);
+                                                        //activity.playVideo(uri.toString(), Integer.toString(videoListVO.getIdx()));
+                                                    }).addOnFailureListener(exception -> {
+                                                        // Handle any errors
+                                                        hideProgress();
+                                                        Log.d("onFailure", exception.toString());
+                                                    });
+                                                }
+                                                videoListItem.setFileName("디폴트 파일 텍스트");
+                                                videoListItem.setFileUrl("default/videos/default_" + i + ".mp4");
+                                                videoListItem.setRegisterId(" ");
+                                                videoListItem.setRegisterName(memberInfoVO.getOrganizationName());
+                                                videoListItem.setRegisterRelationship("기관");
+                                                videoListItem.setRegistrationDate(" ");
+                                                videoListItem.setThumbnailUrl("default/videos/default_" + i + ".mp4");
+                                                videoListItem.setRegisterProfile("images/superbrain_icon.jpg");
+                                                mItem.add(videoListItem);
+                                            }
+                                            binding.loadingTxtView.setVisibility(View.INVISIBLE);
+                                            adapter = new PlayVideoRecyclerAdapter(mItem, (MemberMainActivity) getActivity(), getContext());
+                                            binding.rvVideoList.setAdapter(adapter);
+                                            binding.rvVideoList.setLayoutManager(new LinearLayoutManager(getContext()));
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NotNull Call<JsonObject> call, @NotNull Throwable t) {
+
+                                }
+                            });
                         }
 
                         @Override

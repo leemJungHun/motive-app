@@ -1,12 +1,10 @@
 package com.example.motive_app.activity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -29,8 +27,6 @@ import com.example.motive_app.adapter.ExampleVideoRecyclerAdapter;
 import com.example.motive_app.data.VideoListItem;
 import com.example.motive_app.databinding.ActivityExampleVideoBinding;
 import com.example.motive_app.util.video.VideoPlayerControl;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -61,56 +57,69 @@ public class ExampleVideoListActivity extends AppCompatActivity implements View.
         binding.backArrow.setOnClickListener(this);
 
         //가족
-        VideoListItem exampleFamilyItem = new VideoListItem();
-        exampleFamilyItem.setFileName("가족");
-        exampleFamilyItem.setFileUrl("example/videos/family.mp4");
-        exampleFamilyItem.setRegisterId("예시");
-        exampleFamilyItem.setRegisterName("동기강화 앱");
-        exampleFamilyItem.setRegisterRelationship("가족");
-        exampleFamilyItem.setRegistrationDate("");
-        exampleFamilyItem.setThumbnailUrl("example/thumbnails/family_snapshot.jpg");
-        exampleFamilyItem.setRegisterProfile("예시");
+        VideoListItem exampleItem1 = new VideoListItem();
+        exampleItem1.setFileName("예시 영상");
+        exampleItem1.setFileUrl("default/videos/default_0.mp4");
+        exampleItem1.setRegisterId("예시");
+        exampleItem1.setRegisterName("동기강화 앱");
+        exampleItem1.setRegisterRelationship("예시 영상");
+        exampleItem1.setRegistrationDate("");
+        exampleItem1.setThumbnailUrl("default/thumbnails/default_0.jpg");
+        exampleItem1.setRegisterProfile("예시");
 
-        mItem.add(exampleFamilyItem);
+        mItem.add(exampleItem1);
 
         //남자어린이
-        VideoListItem exampleBoyItem = new VideoListItem();
-        exampleBoyItem.setFileName("남자어린이");
-        exampleBoyItem.setFileUrl("example/videos/boy.mp4");
-        exampleBoyItem.setRegisterId("예시");
-        exampleBoyItem.setRegisterName("동기강화 앱");
-        exampleBoyItem.setRegisterRelationship("남자어린이");
-        exampleBoyItem.setRegistrationDate("");
-        exampleBoyItem.setThumbnailUrl("example/thumbnails/boy_snapshot.jpg");
-        exampleBoyItem.setRegisterProfile("예시");
+        VideoListItem exampleItem2 = new VideoListItem();
+        exampleItem2.setFileName("예시 영상");
+        exampleItem2.setFileUrl("default/videos/default_1.mp4");
+        exampleItem2.setRegisterId("예시");
+        exampleItem2.setRegisterName("동기강화 앱");
+        exampleItem2.setRegisterRelationship("예시 영상");
+        exampleItem2.setRegistrationDate("");
+        exampleItem2.setThumbnailUrl("default/thumbnails/default_1.jpg");
+        exampleItem2.setRegisterProfile("예시");
 
-        mItem.add(exampleBoyItem);
+        mItem.add(exampleItem2);
 
         //여자어린이
-        VideoListItem exampleLittleGirlItem = new VideoListItem();
-        exampleLittleGirlItem.setFileName("여자어린이");
-        exampleLittleGirlItem.setFileUrl("example/videos/little_girl.mp4");
-        exampleLittleGirlItem.setRegisterId("예시");
-        exampleLittleGirlItem.setRegisterName("동기강화 앱");
-        exampleLittleGirlItem.setRegisterRelationship("여자어린이");
-        exampleLittleGirlItem.setRegistrationDate("");
-        exampleLittleGirlItem.setThumbnailUrl("example/thumbnails/little_girl_snapshot.jpg");
-        exampleLittleGirlItem.setRegisterProfile("예시");
+        VideoListItem exampleItem3 = new VideoListItem();
+        exampleItem3.setFileName("예시 영상");
+        exampleItem3.setFileUrl("default/videos/default_2.mp4");
+        exampleItem3.setRegisterId("예시");
+        exampleItem3.setRegisterName("동기강화 앱");
+        exampleItem3.setRegisterRelationship("예시 영상");
+        exampleItem3.setRegistrationDate("");
+        exampleItem3.setThumbnailUrl("default/thumbnails/default_2.jpg");
+        exampleItem3.setRegisterProfile("예시");
 
-        mItem.add(exampleLittleGirlItem);
+        mItem.add(exampleItem3);
 
         //성인여성
-        VideoListItem exampleFemaleItem = new VideoListItem();
-        exampleFemaleItem.setFileName("성인여성");
-        exampleFemaleItem.setFileUrl("example/videos/female.mp4");
-        exampleFemaleItem.setRegisterId("예시");
-        exampleFemaleItem.setRegisterName("동기강화 앱");
-        exampleFemaleItem.setRegisterRelationship("성인여성");
-        exampleFemaleItem.setRegistrationDate("");
-        exampleFemaleItem.setThumbnailUrl("example/thumbnails/female_snapshot.jpg");
-        exampleFemaleItem.setRegisterProfile("예시");
+        VideoListItem exampleItem4 = new VideoListItem();
+        exampleItem4.setFileName("예시 영상");
+        exampleItem4.setFileUrl("default/videos/default_3.mp4");
+        exampleItem4.setRegisterId("예시");
+        exampleItem4.setRegisterName("동기강화 앱");
+        exampleItem4.setRegisterRelationship("예시 영상");
+        exampleItem4.setRegistrationDate("");
+        exampleItem4.setThumbnailUrl("default/thumbnails/default_3.jpg");
+        exampleItem4.setRegisterProfile("예시");
 
-        mItem.add(exampleFemaleItem);
+        mItem.add(exampleItem4);
+
+        //성인여성
+        VideoListItem exampleItem5 = new VideoListItem();
+        exampleItem5.setFileName("예시 영상");
+        exampleItem5.setFileUrl("default/videos/default_4.mp4");
+        exampleItem5.setRegisterId("예시");
+        exampleItem5.setRegisterName("동기강화 앱");
+        exampleItem5.setRegisterRelationship("예시 영상");
+        exampleItem5.setRegistrationDate("");
+        exampleItem5.setThumbnailUrl("default/thumbnails/default_4.jpg");
+        exampleItem5.setRegisterProfile("예시");
+
+        mItem.add(exampleItem5);
 
         mVideoHolder = binding.exampleVideoView.getHolder();
         binding.exampleVideoView.setOnClickListener(null);
@@ -139,24 +148,18 @@ public class ExampleVideoListActivity extends AppCompatActivity implements View.
                         VideoListItem selectedItem = adapter.selectedVideoInfo(pos);
                         videoRef = fs.getReference().child(selectedItem.getFileUrl());
 
-                        videoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                // Got the download URL for 'users/me/profile.png'
-                                //hideProgress();
-                                Log.d("Success", uri.toString());
-                                mVideoUri = uri.toString();
-                                binding.exampleVideoView.setVisibility(View.VISIBLE);
-                                mVideoHolder.addCallback(callback);
-                                //playVideo(uri.toString(), " ");
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle any errors
-                                hideProgress();
-                                Log.d("onFailure", exception.toString());
-                            }
+                        videoRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            // Got the download URL for 'users/me/profile.png'
+                            //hideProgress();
+                            Log.d("Success", uri.toString());
+                            mVideoUri = uri.toString();
+                            binding.exampleVideoView.setVisibility(View.VISIBLE);
+                            mVideoHolder.addCallback(callback);
+                            //playVideo(uri.toString(), " ");
+                        }).addOnFailureListener(exception -> {
+                            // Handle any errors
+                            hideProgress();
+                            Log.d("onFailure", exception.toString());
                         });
                     }
                 }
@@ -186,16 +189,6 @@ public class ExampleVideoListActivity extends AppCompatActivity implements View.
         }
     };
 
-    public void playVideo(String fileUrl, String videoIdx) {
-        Intent intent;
-        intent = new Intent(getApplicationContext(), PlayVideoActivity.class);
-
-        intent.putExtra("fileUrl", fileUrl);
-        startActivity(intent);
-
-        overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-    }
-
     @Override
     public void onBackPressed() {
         if (binding.exampleVideoView.getVisibility() == View.VISIBLE) {
@@ -220,6 +213,7 @@ public class ExampleVideoListActivity extends AppCompatActivity implements View.
             overridePendingTransition(R.anim.pull_in_left, R.anim.push_out_right);
         }
     }
+    @SuppressLint("SourceLockedOrientationActivity")
     public void setFullScreen(boolean full) {
 
         ViewGroup.LayoutParams params = binding.exampleVideoView.getLayoutParams();
@@ -236,7 +230,7 @@ public class ExampleVideoListActivity extends AppCompatActivity implements View.
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
             //int height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-            params.height = ViewGroup.LayoutParams.MATCH_PARENT;;
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
 
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }

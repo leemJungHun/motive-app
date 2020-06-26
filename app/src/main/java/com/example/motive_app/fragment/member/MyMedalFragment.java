@@ -232,7 +232,7 @@ public class MyMedalFragment extends Fragment {
                             double achievePercentage = ((double) (currentCnt-medalCheck) / jsonArray.size()) * 100.0;
                             achievePercentage = Double.parseDouble(String.format(Locale.KOREAN, "%.1f", achievePercentage));
 
-                            String myGoal = "달성률 " + achievePercentage + "%";
+                            String myGoal = "진행률 " + achievePercentage + "%";
                             binding.myGoalTxtView.setText(myGoal);
 
                             binding.achieveView.getLayoutParams().width = (int) (mScreenWidth * (achievePercentage / 100));
