@@ -183,6 +183,7 @@
                 app:layout_constraintTop_toBottomOf="@id/myNameTxtView" />
 
             <View
+                android:visibility="gone"
                 android:id="@+id/achieve_bar_green"
                 android:layout_width="100dp"
                 android:layout_height="@dimen/height_24"
@@ -315,6 +316,7 @@
             app:layout_constraintDimensionRatio="9:1">
 
             <View
+                android:visibility="gone"
                 android:id="@+id/achieveView"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

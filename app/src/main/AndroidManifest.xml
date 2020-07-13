@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.motive_app">
+    package="kr.rowan.motive_app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
@@ -17,7 +17,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/login_brain_icon"
+        android:icon="@drawable/motive_app_logo"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
@@ -36,7 +36,7 @@
             android:value="false" />
 
         <activity
-            android:name=".activity.MemberMainActivity"
+            android:name="kr.rowan.motive_app.activity.MemberMainActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
@@ -44,31 +44,31 @@
         </activity>
 
         <activity
-            android:name=".activity.registration.LoginHelpActivity"
+            android:name="kr.rowan.motive_app.activity.registration.LoginHelpActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".activity.registration.TypeChoiceActivity"
+            android:name="kr.rowan.motive_app.activity.registration.TypeChoiceActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".activity.registration.FindInstitutionActivity"
+            android:name="kr.rowan.motive_app.activity.registration.FindInstitutionActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".activity.registration.EmailCheckActivity"
+            android:name="kr.rowan.motive_app.activity.registration.EmailCheckActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
         <activity
-            android:name=".activity.registration.RegisterActivity"
+            android:name="kr.rowan.motive_app.activity.registration.RegisterActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
@@ -76,7 +76,7 @@
         </activity>
 
         <activity
-            android:name=".activity.LoginActivity"
+            android:name="kr.rowan.motive_app.activity.LoginActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
@@ -88,44 +88,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.registration.FindIdActivity"
+            android:name="kr.rowan.motive_app.activity.registration.FindIdActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".activity.registration.TeachIdActivity"
+            android:name="kr.rowan.motive_app.activity.registration.TeachIdActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".activity.registration.FindPassActivity"
+            android:name="kr.rowan.motive_app.activity.registration.FindPassActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".activity.registration.ChangePassActivity"
+            android:name="kr.rowan.motive_app.activity.registration.ChangePassActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".activity.registration.FindFamilyActivity"
+            android:name="kr.rowan.motive_app.activity.registration.FindFamilyActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".activity.FamilyMainActivity"
+            android:name="kr.rowan.motive_app.activity.FamilyMainActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".activity.VideoSendSelectActivity"
+            android:name="kr.rowan.motive_app.activity.VideoSendSelectActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".activity.PlayVideoActivity"
+            android:name="kr.rowan.motive_app.activity.PlayVideoActivity"
             android:noHistory="true" />
         <activity
-            android:name=".activity.MedalSelectActivity"
+            android:name="kr.rowan.motive_app.activity.MedalSelectActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
@@ -133,26 +133,28 @@
 
         </activity>
         <activity
-            android:name=".activity.ExampleVideoListActivity"
+            android:name="kr.rowan.motive_app.activity.ExampleVideoListActivity"
             android:configChanges="orientation|screenSize"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".activity.CheeringMessageActivity"
+            android:name="kr.rowan.motive_app.activity.CheeringMessageActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
+        <activity android:name=".activity.PopupActivity" android:theme="@android:style/Theme.Dialog"/>
+
         <service
-            android:name=".service.notification.MyFireBaseMessagingService"
+            android:name="kr.rowan.motive_app.service.notification.MyFireBaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".service.alarm.NotificationJobFireBaseService"
+            android:name="kr.rowan.motive_app.service.alarm.NotificationJobFireBaseService"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedService">
@@ -162,7 +164,7 @@
         </service>
 
         <receiver
-            android:name=".service.alarm.AlarmBroadcastReceiver"
+            android:name="kr.rowan.motive_app.service.alarm.AlarmBroadcastReceiver"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedReceiver" />
