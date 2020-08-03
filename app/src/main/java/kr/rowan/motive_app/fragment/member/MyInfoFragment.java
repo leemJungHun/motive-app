@@ -122,6 +122,7 @@ public class MyInfoFragment extends Fragment implements View.OnClickListener {
         binding.TextPass.setOnClickListener(this);
         binding.explainTextLogout.setOnClickListener(this);
         binding.explainTextWithdrawal.setOnClickListener(this);
+        binding.openLicence.setOnClickListener(this);
         //binding.photoChange.setOnClickListener(this);
         //binding.photoChangeIcon.setOnClickListener(this);
 
@@ -145,7 +146,10 @@ public class MyInfoFragment extends Fragment implements View.OnClickListener {
             Dialog_v2();
         } else if (v == binding.explainTextWithdrawal) {
             Dialog_v3();
-        } /*else if (v == binding.photoChange || v == binding.photoChangeIcon) {
+        }else if(v == binding.openLicence){
+            activity.openSourceFragment();
+        }
+        /*else if (v == binding.photoChange || v == binding.photoChangeIcon) {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);

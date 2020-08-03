@@ -73,6 +73,66 @@
             android:visibility="gone"
             />
 
+        <ImageView
+            android:id="@+id/guide_arrow1"
+            android:layout_width="@dimen/icon_96"
+            android:layout_height="@dimen/icon_96"
+            app:srcCompat="@drawable/ic_baseline_arrow_upward_24"
+            app:layout_constraintTop_toBottomOf="@id/gold_medal"
+            app:layout_constraintStart_toStartOf="@id/gold_medal"
+            app:layout_constraintEnd_toEndOf="@id/gold_medal"
+            />
+
+        <ImageView
+            android:id="@+id/guide_arrow2"
+            android:layout_width="@dimen/icon_96"
+            android:layout_height="@dimen/icon_96"
+            app:srcCompat="@drawable/ic_baseline_arrow_upward_24"
+            app:layout_constraintTop_toBottomOf="@id/silver_medal"
+            app:layout_constraintStart_toStartOf="@id/silver_medal"
+            app:layout_constraintEnd_toEndOf="@id/silver_medal"
+            />
+
+        <TextView
+            android:id="@+id/guide_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/guide_text"
+            android:textSize="@dimen/font_32sp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/guide_arrow1"
+            app:layout_constraintStart_toStartOf="@id/guide_arrow1"
+            app:layout_constraintEnd_toEndOf="@id/guide_arrow2"
+            android:textColor="@color/dark_blue"
+            android:textStyle="bold"
+            tools:ignore="UnusedAttribute" />
+
+        <ImageView
+            android:id="@+id/guide_arrow3"
+            android:layout_width="@dimen/icon_96"
+            android:layout_height="@dimen/icon_96"
+            app:srcCompat="@drawable/ic_baseline_arrow_downward_24"
+            app:layout_constraintBottom_toTopOf="@id/select_ok_btn"
+            app:layout_constraintStart_toStartOf="@id/select_ok_btn"
+            app:layout_constraintEnd_toEndOf="@id/select_ok_btn"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/guide_Text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/guide_text2"
+            android:textSize="@dimen/font_32sp"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@id/guide_arrow3"
+            app:layout_constraintStart_toStartOf="@id/guide_arrow3"
+            app:layout_constraintEnd_toEndOf="@id/guide_arrow3"
+            android:textColor="@color/dark_blue"
+            android:textStyle="bold"
+            android:visibility="gone"
+            tools:ignore="UnusedAttribute" />
+
 
         <Button
             android:id="@+id/select_ok_btn"

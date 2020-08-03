@@ -42,6 +42,7 @@
     <dimen name="font_32sp">21.3sp</dimen>
     <dimen name="font_28sp">18.7sp</dimen>
     <dimen name="font_24sp">16sp</dimen>
+    <dimen name="font_21sp">14sp</dimen>
     <dimen name="font_20sp">13.3sp</dimen>
     <dimen name="font_17sp">11.5sp</dimen>
     <dimen name="font_16sp">10.7sp</dimen>

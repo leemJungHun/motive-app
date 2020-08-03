@@ -165,6 +165,11 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
             binding.silverMedal.startAnimation(downScale);
             binding.goldEffect.setVisibility(View.VISIBLE);
             binding.silverEffect.setVisibility(View.GONE);
+            binding.guideArrow1.setVisibility(View.GONE);
+            binding.guideArrow2.setVisibility(View.GONE);
+            binding.guideArrow3.setVisibility(View.VISIBLE);
+            binding.guideText.setVisibility(View.GONE);
+            binding.guideText2.setVisibility(View.VISIBLE);
             goldMedalCnt = 1;
             silverMedalCnt = 0;
             effectAnim.start();
@@ -176,6 +181,11 @@ public class MedalSelectActivity extends AppCompatActivity implements View.OnCli
             binding.goldMedal.startAnimation(downScale);
             binding.goldEffect.setVisibility(View.GONE);
             binding.silverEffect.setVisibility(View.VISIBLE);
+            binding.guideArrow1.setVisibility(View.GONE);
+            binding.guideArrow2.setVisibility(View.GONE);
+            binding.guideArrow3.setVisibility(View.VISIBLE);
+            binding.guideText.setVisibility(View.GONE);
+            binding.guideText2.setVisibility(View.VISIBLE);
             goldMedalCnt = 0;
             silverMedalCnt = 1;
             effectAnim2.start();

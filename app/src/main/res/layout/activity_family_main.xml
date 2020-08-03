@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@string/my_medal"
+                android:text="@string/my_family"
                 android:textColor="#FFFFFFFF"
                 android:textSize="@dimen/font_20sp"
                 android:layout_gravity="center"/>
@@ -55,6 +55,7 @@
                 android:layout_height="@dimen/icon_48"
                 android:layout_marginEnd="@dimen/margin_24"
                 android:scaleType="centerInside"
+                android:visibility="gone"
                 android:layout_gravity="end"
                 app:srcCompat="@drawable/motive_icon_add_wh"
                 tools:ignore="ContentDescription" />

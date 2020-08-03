@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_64"
+            android:layout_margin="@dimen/margin_8"
+            android:background="#000000"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_24"
+                android:text="@string/oss_notice_motive"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/font_28sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/openSourceText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_8"
+            app:layout_constraintTop_toBottomOf="@id/text">
+
+            <TextView
+                android:id="@+id/openSourceText1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:text="@string/open_source_text_1"
+                android:textColor="#808080"
+                android:textSize="@dimen/font_21sp"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/openSourceText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_8"
+                android:text="@string/open_source_text_2"
+                android:textColor="#808080"
+                android:textSize="@dimen/font_21sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/openSourceText1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/icon_2"
+            android:layout_margin="@dimen/margin_8"
+            android:background="#808080"
+            app:layout_constraintTop_toBottomOf="@id/openSourceText" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ossListView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/line"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/height_96"
+            android:layout_margin="@dimen/margin_8"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

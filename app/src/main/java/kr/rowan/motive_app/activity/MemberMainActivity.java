@@ -35,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import kr.rowan.motive_app.R;
 import kr.rowan.motive_app.activity.registration.ChangePassActivity;
 import kr.rowan.motive_app.databinding.ActivityMemberMainBinding;
+import kr.rowan.motive_app.fragment.OpenSourceLicenceFragment;
 import kr.rowan.motive_app.fragment.member.MyInfoFragment;
 import kr.rowan.motive_app.fragment.member.MyMedalFragment;
 import kr.rowan.motive_app.fragment.member.PlayVideoFragment;
@@ -102,7 +103,7 @@ public class MemberMainActivity extends AppCompatActivity {
                 Log.d("getOrganizationCode", vo.getOrganizationCode());
                 Log.d("getBirth", vo.getBirth());
                 Log.d("getPhone", vo.getPhone());
-                if(vo.getGroupCode()!=null) {
+                if (vo.getGroupCode() != null) {
                     Log.d("getGroupCode", vo.getGroupCode());
                 }
                 Log.d("getRegistrationDate", vo.getRegistrationDate() + "");
@@ -143,11 +144,19 @@ public class MemberMainActivity extends AppCompatActivity {
     public void onIconClick(View view) {
         switch (view.getId()) {
             case R.id.leftIconImageView:
-                check = 0;
-                binding.rightIconImageView.setVisibility(View.VISIBLE);
-                binding.leftIconImageView.setVisibility(View.GONE);
-                binding.currentFragmentNameTextView.setText(getString(R.string.my_medal));
-                nowFragment = new MyMedalFragment();
+                if (check == 3) {
+                    check = 0;
+                    binding.rightIconImageView.setVisibility(View.VISIBLE);
+                    binding.leftIconImageView.setVisibility(View.GONE);
+                    binding.currentFragmentNameTextView.setText(getString(R.string.my_medal));
+                    nowFragment = new MyMedalFragment();
+                }else if(check==4){
+                    check = 3;
+                    binding.currentFragmentNameTextView.setText(getString(R.string.openSource));
+                    binding.rightIconImageView.setVisibility(View.GONE);
+                    binding.leftIconImageView.setVisibility(View.VISIBLE);
+                    nowFragment = new MyInfoFragment();
+                }
                 nowFragment.setArguments(args);
                 setStartFragment();
                 break;
@@ -215,7 +224,7 @@ public class MemberMainActivity extends AppCompatActivity {
             transaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left, R.anim.pull_in_right, R.anim.push_out_left);
         } else if (preCheck > check) {
             transaction.setCustomAnimations(R.anim.pull_in_left, R.anim.push_out_right, R.anim.pull_in_left, R.anim.push_out_right);
-        } else if(check==0){
+        } else if (check == 0) {
             transaction.setCustomAnimations(R.anim.pull_in_left, R.anim.push_out_right, R.anim.pull_in_left, R.anim.push_out_right);
         }
 
@@ -226,6 +235,15 @@ public class MemberMainActivity extends AppCompatActivity {
         preCheck = check;
     }
 
+    public void openSourceFragment(){
+        check = 4;
+        binding.currentFragmentNameTextView.setText(getString(R.string.openSource));
+        binding.rightIconImageView.setVisibility(View.GONE);
+        binding.leftIconImageView.setVisibility(View.VISIBLE);
+        nowFragment = new OpenSourceLicenceFragment();
+        nowFragment.setArguments(args);
+        setStartFragment();
+    }
 
     public void changePassOpen() {
         Intent intent;
@@ -259,9 +277,9 @@ public class MemberMainActivity extends AppCompatActivity {
         httpRequestService.logOut(request).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NotNull Call<JsonObject> call, @NotNull Response<JsonObject> response) {
-                if(response.body()!=null){
+                if (response.body() != null) {
                     Log.d("logout", " " + response.body().get("result").toString());
-                    if(response.body().get("result").toString().replace("\"","").equals("ok")) {
+                    if (response.body().get("result").toString().replace("\"", "").equals("ok")) {
                         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = auto.edit();
                         //editor.clear()는 auto에 들어있는 모든 정보를 기기에서 지웁니다.
@@ -383,7 +401,7 @@ public class MemberMainActivity extends AppCompatActivity {
 
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-            if(isSelectMedal) {
+            if (isSelectMedal) {
                 GroupCodeRequest groupCodeRequest = new GroupCodeRequest();
                 groupCodeRequest.setGroupCode(vo.getGroupCode());
                 httpRequestService.getGroupInfoRequest(groupCodeRequest).enqueue(new Callback<JsonObject>() {
@@ -392,13 +410,13 @@ public class MemberMainActivity extends AppCompatActivity {
                         if (response.body() != null) {
                             Gson gson = new Gson();
                             GroupInfoVO groupInfoVO = gson.fromJson(response.body().get("groupInfo").toString(), GroupInfoVO.class);
-                            Log.d("groupInfo getName" , groupInfoVO.getName());
-                            Log.d("groupInfo getStartDate" , groupInfoVO.getStartDate());
-                            Log.d("groupInfo getWeekCount" , groupInfoVO.getWeekCount());
-                            if(groupInfoVO.getSubtitle()!=null&&!groupInfoVO.getSubtitle().equals("")) {
+                            Log.d("groupInfo getName", groupInfoVO.getName());
+                            Log.d("groupInfo getStartDate", groupInfoVO.getStartDate());
+                            Log.d("groupInfo getWeekCount", groupInfoVO.getWeekCount());
+                            if (groupInfoVO.getSubtitle() != null && !groupInfoVO.getSubtitle().equals("")) {
                                 Log.d("groupInfo getSubtitle", groupInfoVO.getSubtitle());
                                 subTitle = groupInfoVO.getSubtitle();
-                            }else{
+                            } else {
                                 subTitle = "";
                             }
 
@@ -406,9 +424,9 @@ public class MemberMainActivity extends AppCompatActivity {
 
                             intent.putExtra("userInfoVO", vo);
                             intent.putExtra("fileUrl", fileUrl);
-                            intent.putExtra("medalVideo",medalVideo);
-                            intent.putExtra("videoIdx",videoIdx);
-                            intent.putExtra("subTitle",subTitle);
+                            intent.putExtra("medalVideo", medalVideo);
+                            intent.putExtra("videoIdx", videoIdx);
+                            intent.putExtra("subTitle", subTitle);
                             startActivity(intent);
 
                             overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);

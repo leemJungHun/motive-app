@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_16"
             android:text="@string/photo_change"
-            android:textColor="#1d429a"
+            android:textColor="@color/light_blue"
             android:textSize="@dimen/font_20sp"
             app:layout_constraintStart_toEndOf="@id/profile_view"
             app:layout_constraintTop_toBottomOf="@id/my_info_name" />
@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="superbrain"
-            android:textColor="#1d429a"
+            android:textColor="#808080"
             android:textSize="@dimen/font_20sp"
             android:layout_marginTop="@dimen/margin_16"
             android:layout_marginEnd="@dimen/margin_32"
@@ -114,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="superbrain@superbrain.co.kr"
-            android:textColor="#1d429a"
+            android:textColor="#808080"
             android:textSize="@dimen/font_20sp"
             android:layout_marginTop="@dimen/margin_16"
             android:layout_marginEnd="@dimen/margin_32"
@@ -138,7 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="비밀번호 변경하기"
-            android:textColor="#1d429a"
+            android:textColor="@color/light_blue"
             android:textSize="@dimen/font_20sp"
             app:layout_constraintEnd_toEndOf="@id/boundary"
             app:layout_constraintTop_toBottomOf="@id/explainTextEmail"
@@ -185,7 +185,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="로그아웃 "
-            android:textColor="#202020"
+            android:textColor="@color/light_blue"
             android:textSize="@dimen/font_20sp"
             android:layout_marginTop="@dimen/margin_16"
             app:layout_constraintStart_toStartOf="@id/boundary"
@@ -208,7 +208,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="회원탈퇴 "
-            android:textColor="#202020"
+            android:textColor="@color/light_blue"
             android:textSize="@dimen/font_20sp"
             android:layout_marginTop="@dimen/margin_16"
             app:layout_constraintStart_toStartOf="@id/boundary"
@@ -226,6 +226,16 @@
             app:layout_constraintBottom_toBottomOf="@id/explainTextWithdrawal"
             />
 
+        <TextView
+            android:id="@+id/openLicence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오픈소스 라이선스 "
+            android:textColor="@color/light_blue"
+            android:textSize="@dimen/font_20sp"
+            android:layout_marginTop="@dimen/margin_16"
+            app:layout_constraintStart_toStartOf="@id/boundary"
+            app:layout_constraintTop_toBottomOf="@id/explainTextWithdrawal" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

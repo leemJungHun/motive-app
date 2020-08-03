@@ -38,7 +38,7 @@ public class NotificationJobFireBaseService extends JobService {
                 .build();
 
         HttpRequestService httpRequestService = retrofit.create(HttpRequestService.class);
-
+        
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         String loginId = auto.getString("saveId", null);
         assert loginId != null;
@@ -99,6 +99,7 @@ public class NotificationJobFireBaseService extends JobService {
             Log.d("alarmTimeMillis", " "+alarmTimeMillis);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 assert manager != null;
+
                 manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmTimeMillis, pendingIntent);
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 assert manager != null;

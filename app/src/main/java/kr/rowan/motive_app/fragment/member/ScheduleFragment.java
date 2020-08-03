@@ -57,9 +57,12 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
     private ArrayList<String> attendDates = new ArrayList<>();
     private ArrayList<String> medalDates = new ArrayList<>();
     private boolean dayStart = true;
+    private boolean isMeet = true;
 
     private int scheduleIndex = 0;
     private int medalIndex = 0;
+    private int weekSort = 0;
+    private int preSumWeekSort = 0;
 
     private UserInfoVO vo;
 
@@ -121,6 +124,13 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
                                     for (JsonElement element : jsonArray) {
                                         GroupScheduleVO groupScheduleVO = gson.fromJson(element, GroupScheduleVO.class);
                                         String breakAway = groupScheduleVO.getBreakAway();
+                                        if (groupScheduleVO.getDayOfWeek().equals("비대면")) {
+                                            isMeet = false;
+                                            binding.scheduleContentText.setText("1주차");
+                                        } else {
+                                            isMeet = true;
+                                            binding.scheduleContentText.setText("센터 방문");
+                                        }
                                         if ("N".equals(breakAway) || "n".equals(breakAway)) {
                                             String attendDate = groupScheduleVO.getAttendDate().substring(0, 10);
                                             attendDates.add(attendDate);
@@ -196,7 +206,7 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
                     if (pos != -1) {
                         Log.e("prevPos", String.valueOf(prevPos));
                         CalendarItem item = adapter.updateItem(pos, prevPos);
-                        onContentView(item.isFuture(), item.isSchedule());
+                        onContentView(item.isFuture(), item.isSchedule(), item.getWeekSort());
                         prevPos = pos;
                     }
                 }
@@ -216,6 +226,8 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
     };
 
     private void setCalendarView() {
+        preSumWeekSort=0;
+        weekSort = 0;
         firstCal.set(Calendar.DATE, 1);
 
 
@@ -260,11 +272,13 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
                 if (Integer.parseInt(scheduleDate[2]) == cal.get(Calendar.DATE)) {
                     binding.scheduleContentView.setVisibility(View.VISIBLE);
                 }
+            } else if (Integer.parseInt(scheduleDate[0]) == year && Integer.parseInt(scheduleDate[1]) < (month + 1)) {
+                preSumWeekSort++;
             }
         }
 
-        if (medalDates.size()!=0) {
-            for (int i = medalDates.size()-1; i >= 0; i--) {
+        if (medalDates.size() != 0) {
+            for (int i = medalDates.size() - 1; i >= 0; i--) {
                 String[] medalDate = medalDates.get(i).split("-");
                 Log.e("medalDate", medalDates.get(i));
                 if (Integer.parseInt(medalDate[0]) == year && Integer.parseInt(medalDate[1]) == (month + 1)) {
@@ -279,12 +293,11 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
 
         boolean isFuture = !(nowCal.get(Calendar.MONTH) >= month);
 
-
         for (int i = 1; i < lastDay + 1 + (7 - lastDayNum); i++) {
             if (i < firstCal.get(Calendar.DAY_OF_WEEK) && dayStart) {
-                mItem.add(new CalendarItem(String.valueOf(beforeLastDay - beforeLastDayNum + i), false, false, false, false, false, false));
+                mItem.add(new CalendarItem(String.valueOf(beforeLastDay - beforeLastDayNum + i), false, false, false, false, false, false, 0));
             } else if (i > lastDay) {
-                mItem.add(new CalendarItem(String.valueOf(i - lastDay), false, false, false, false, false, false));
+                mItem.add(new CalendarItem(String.valueOf(i - lastDay), false, false, false, false, false, false, 0));
             } else {
                 if (dayStart) {
                     i = 1;
@@ -296,6 +309,7 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
 
                 boolean hasSchedule = false;
                 if (haveSchedule.size() != 0) {
+                    Log.d("haveSchedule", haveSchedule.get(scheduleIndex) + " ");
                     hasSchedule = i == haveSchedule.get(scheduleIndex);
                     if (hasSchedule) {
                         if (scheduleIndex < haveSchedule.size() - 1) {
@@ -318,7 +332,14 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
                 if (i == day) {
                     prevPos = i + firstCal.get(Calendar.DAY_OF_WEEK) - 2;
                 }
-                mItem.add(new CalendarItem(String.valueOf(i), i == day, hasSchedule, hasGold, hasSilver, isFuture, true));
+                if (hasSchedule) {
+                    weekSort++;
+                }
+                if (hasSchedule && day == 1 && !isMeet) {
+                    String weekText = preSumWeekSort + 1 + "주차";
+                    binding.scheduleContentText.setText(weekText);
+                }
+                mItem.add(new CalendarItem(String.valueOf(i), i == day, hasSchedule, hasGold, hasSilver, isFuture, true, preSumWeekSort + weekSort));
             }
         }
         Log.e("medalIndex", medalIndex + "");
@@ -350,10 +371,15 @@ public class ScheduleFragment extends RootScheduleFragment implements View.OnCli
     }
 
     @Override
-    public void onContentView(boolean isFuture, boolean onView) {
+    public void onContentView(boolean isFuture, boolean onView, int weekSort) {
         binding.scheduleContentIcon.setImageResource(isFuture ? R.drawable.schedule_point : R.drawable.schedule_point_gray);
-        binding.scheduleContentText.setText(isFuture ? "센터 방문" : "센터 방문 완료");
         binding.scheduleContentView.setVisibility(onView ? View.VISIBLE : View.GONE);
+        if (!isMeet) {
+            String weekText = weekSort + "주차";
+            binding.scheduleContentText.setText(weekText);
+        } else {
+            binding.scheduleContentText.setText(isFuture ? "센터 방문" : "센터 방문 완료");
+        }
     }
 
 

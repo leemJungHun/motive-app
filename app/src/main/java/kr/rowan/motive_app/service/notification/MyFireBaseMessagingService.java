@@ -38,8 +38,15 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(@NotNull RemoteMessage remoteMessage) {
-
         if (remoteMessage.getData().size() > 0) {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            assert pm != null;
+            @SuppressLint("InvalidWakeLockTag")
+            PowerManager.WakeLock wakeLock = pm.newWakeLock(
+                    PowerManager.PARTIAL_WAKE_LOCK|PowerManager.ON_AFTER_RELEASE|PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
+            wakeLock.acquire(3000);
+
+            wakeLock.release();
             sendNotification(remoteMessage);
         }
     }
@@ -53,17 +60,18 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         Log.d("title", " " + title);
         Log.d("message", " " + message);
 
+
+
+        Intent popupIntent = new Intent(this, PopupActivity.class);
+        popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        popupIntent.putExtra("data", message);
+        startActivity(popupIntent);
+
+
+
         Intent intent;
         intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        assert pm != null;
-        @SuppressLint("InvalidWakeLockTag")
-        PowerManager.WakeLock wakeLock = pm.newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK|PowerManager.ON_AFTER_RELEASE|PowerManager.ACQUIRE_CAUSES_WAKEUP, "TAG");
-        wakeLock.acquire(3000);
-
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
@@ -141,9 +149,6 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
 
         }
 
-        Intent popupIntent = new Intent(this, PopupActivity.class);
-        popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        popupIntent.putExtra("data", message);
-        startActivity(popupIntent);
+
     }
 }

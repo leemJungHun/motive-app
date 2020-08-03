@@ -2,11 +2,14 @@ package kr.rowan.motive_app.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
 
 import kr.rowan.motive_app.R;
 
@@ -32,14 +35,19 @@ public class PopupActivity extends Activity {
     }
 
     //확인 버튼 클릭
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void mOnClose(View v){
         //데이터 전달하기
         if (v.getId() == R.id.start_btn) {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
+            finish();
+        }else {
+            //액티비티(팝업) 닫기
+            moveTaskToBack(true);
+            finishAndRemoveTask();
         }
-        //액티비티(팝업) 닫기
-        finish();
     }
 
     @Override

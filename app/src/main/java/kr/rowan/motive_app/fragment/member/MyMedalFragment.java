@@ -3,8 +3,6 @@ package kr.rowan.motive_app.fragment.member;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.opengl.EGL14;
 import android.opengl.EGLConfig;
@@ -14,6 +12,7 @@ import android.opengl.EGLSurface;
 import android.opengl.GLES20;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,6 +49,7 @@ import kr.rowan.motive_app.network.HttpRequestService;
 import kr.rowan.motive_app.network.dto.GetAllMedalInfoRequest;
 import kr.rowan.motive_app.network.vo.MedalInfoVO;
 import kr.rowan.motive_app.network.vo.UserInfoVO;
+import kr.rowan.motive_app.util.GlideApp;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -74,8 +75,11 @@ public class MyMedalFragment extends Fragment {
     private double sizeValueY = 0;
     private int scrollValue = 1;
     private int scrollLimit = 0;
+    private int maxTextureSize;
     private ArrayList<MedalInfoVO> medalInfoVOS = new ArrayList<>();
     private FragmentActivity activity;
+    private boolean isResize = false;
+
 
     private int goldMedalCnt, silverMedalCnt, blackMedalCnt, totalPoint, currentCnt, weekCount;
 
@@ -107,18 +111,20 @@ public class MyMedalFragment extends Fragment {
     public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
         if (enter && nextAnim == R.anim.pull_in_right || enter && nextAnim == R.anim.pull_in_left) {
             Animation anim = AnimationUtils.loadAnimation(activity, nextAnim);
+            binding.progressBar.show();
             anim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
 
                 }
+
                 @SuppressLint("ClickableViewAccessibility")
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     binding.medalMapScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-                        Log.d("scrollY",scrollY+" ");
+                        Log.d("scrollY", scrollY + " ");
                         mScrollViewHeight = binding.medalResultLayout.getHeight();
-                        if (scrollY>scrollLimit){
+                        if (scrollY > scrollLimit) {
                             v.setScrollY(scrollLimit);
                         }
                         if (scrollY <= 300) {
@@ -144,7 +150,10 @@ public class MyMedalFragment extends Fragment {
                     if (vo.getGroupCode() != null && !vo.getGroupCode().equals("null")) {
                         binding.centerValue.setVisibility(View.VISIBLE);
                         binding.lastMedal.setVisibility(View.VISIBLE);
-                        setMedal();
+
+
+                        setMaxTextureSize();
+
                     }
                 }
 
@@ -206,20 +215,21 @@ public class MyMedalFragment extends Fragment {
                             weekCount = jsonArray.size();
                             for (int index = 0; index < jsonArray.size(); index++) {
                                 if (index < currentCnt) {
+                                    medalCheck = 1;
                                     final MedalInfoVO medalInfoVO = gson.fromJson(jsonArray.get(index).toString(), MedalInfoVO.class);
                                     medalInfoVOS.add(medalInfoVO);
                                     if (medalInfoVO.getGoldMedalCnt() == 1) {
                                         goldMedalCnt++;
                                         totalPoint += 100;
-                                        medalCheck=0;
+                                        medalCheck = 0;
                                     } else if (medalInfoVO.getSilverMedalCnt() == 1) {
                                         silverMedalCnt++;
                                         totalPoint += 100;
-                                        medalCheck=0;
-                                    } else if (index!=0&&index!=currentCnt-1) {
+                                        medalCheck = 0;
+                                    } else if (index != 0 && index != currentCnt - 1) {
                                         blackMedalCnt++;
                                         totalPoint -= 50;
-                                        medalCheck=0;
+                                        medalCheck = 0;
                                     }
                                 }
                             }
@@ -228,17 +238,17 @@ public class MyMedalFragment extends Fragment {
                             binding.blackCntTxtView.setText(String.valueOf(blackMedalCnt));
                             String totalCnt = totalPoint + "만냥";
                             binding.totalCntTxtView.setText(totalCnt);
-                            Log.e("jsonArray.size",jsonArray.size()+" ");
-                            double achievePercentage = ((double) (currentCnt-medalCheck) / jsonArray.size()) * 100.0;
+                            Log.e("jsonArray.size", jsonArray.size() + " ");
+                            double achievePercentage = ((double) (currentCnt - medalCheck) / jsonArray.size()) * 100.0;
                             achievePercentage = Double.parseDouble(String.format(Locale.KOREAN, "%.1f", achievePercentage));
 
                             String myGoal = "진행률 " + achievePercentage + "%";
                             binding.myGoalTxtView.setText(myGoal);
-                            if (achievePercentage>0){
+                            if (achievePercentage > 0) {
                                 binding.achieveView.setVisibility(View.VISIBLE);
                                 binding.achieveBarGreen.setVisibility(View.VISIBLE);
                             }
-                            Log.e("achievePercentage"," " + achievePercentage);
+                            Log.e("achievePercentage", " " + achievePercentage);
                             binding.achieveView.getLayoutParams().width = (int) (mScreenWidth * (achievePercentage / 100));
                             int barWidth = binding.barGray.getWidth();
                             Log.e("achievePercentage", (int) (barWidth * (achievePercentage / 100)) + " ");
@@ -252,7 +262,6 @@ public class MyMedalFragment extends Fragment {
 
                             Log.e(TAG, "medal info \n gold = " + goldMedalCnt + " \n silver = " + silverMedalCnt + "\n black = " + blackMedalCnt + "\n totalPoint = " + totalPoint);
 
-
                         }
                     }
                 }
@@ -263,6 +272,7 @@ public class MyMedalFragment extends Fragment {
                 }
             });
         }
+
         return binding.getRoot();
 
     }
@@ -303,40 +313,82 @@ public class MyMedalFragment extends Fragment {
         int[] maxSize = new int[1];
         GLES20.glGetIntegerv(GLES20.GL_MAX_TEXTURE_SIZE, maxSize, 0);
 
-        int maxTextureSize = maxSize[0];
+        maxTextureSize = maxSize[0];
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(getResources(), R.drawable.motive_leaderboard_img, options);
-        int imageHeight = options.outHeight;
-        int imageWidth = options.outWidth;
-        String imageType = options.outMimeType;
-        Log.d("imageHeight", imageHeight + " imageWidth:" + imageWidth + " imageType:" + imageType);
+        //motive_leaderboard_img size check;
+        int imageHeight = binding.mapImage.getHeight();
+        int imageWidth = binding.mapImage.getWidth();
+        Log.d("imageHeight", imageHeight + " imageWidth:" + imageWidth);
         Log.d("디바이스 이미지 최대 크기", " " + maxTextureSize);
 
+        //motive_fog_img size check;
+
+        int[] fogHeight = {binding.fogImage1.getHeight(), binding.fogImage2.getHeight(), binding.fogImage3.getHeight(), binding.fogImage4.getHeight(), binding.fogImage5.getHeight()};
+        int[] fogWidth = {binding.fogImage1.getWidth(), binding.fogImage2.getWidth(), binding.fogImage3.getWidth(), binding.fogImage4.getWidth(), binding.fogImage5.getWidth()};
+
         if (imageHeight < maxTextureSize && imageWidth < maxTextureSize) {
-            binding.mapImage.setImageResource(R.drawable.motive_leaderboard_img);
+            Log.e("size", "origin");
+            isResize = false;
         } else {
+            isResize = true;
+            Log.e("size", "resize");
             double scaling;
             if (imageHeight >= imageWidth) {
                 scaling = (double) imageHeight / (maxTextureSize - 100);
             } else {
                 scaling = (double) imageWidth / (maxTextureSize - 100);
             }
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.motive_leaderboard_img);
-            Bitmap resized = Bitmap.createScaledBitmap(bitmap, (int) (imageWidth / scaling), (int) (imageHeight / scaling), true);
-            binding.mapImage.setImageBitmap(resized);
+            Log.d("scaling", scaling + " ");
+
+
+            //leader board Resize
+            //Bitmap leaderResized = Bitmap.createScaledBitmap(leaderBitmap, (int) (imageWidth / scaling), (int) (imageHeight / scaling), true);
+            //Glide.with(this).load(leaderResized).into(binding.mapImage);
+            GlideApp.with(activity.getApplicationContext())
+                    .load(R.drawable.motive_leaderboard_img)
+                    .override((int) (imageWidth / scaling), (int) (imageHeight / scaling))
+                    .into(binding.mapImage);
+
+            //fog Resize
+            ArrayList<Integer> fogBitmap = new ArrayList<>();
+
+            fogBitmap.add(R.drawable.motive_leaderboard_img_01);
+            fogBitmap.add(R.drawable.motive_leaderboard_img_02);
+            fogBitmap.add(R.drawable.motive_leaderboard_img_03);
+            fogBitmap.add(R.drawable.motive_leaderboard_img_04);
+            fogBitmap.add(R.drawable.motive_leaderboard_img_05);
+
+
+            ArrayList<ImageView> fogImage = new ArrayList<>();
+            fogImage.add(binding.fogImage1);
+            fogImage.add(binding.fogImage2);
+            fogImage.add(binding.fogImage3);
+            fogImage.add(binding.fogImage4);
+            fogImage.add(binding.fogImage5);
+
+
+            for (int i = 0; i < fogBitmap.size(); i++) {
+                GlideApp.with(activity.getApplicationContext())
+                        .load(fogBitmap.get(i))
+                        .override((int) (fogWidth[i] / scaling), (int) (fogHeight[i] / scaling))
+                        .into(fogImage.get(i));
+            }
         }
+
 
         EGL14.eglMakeCurrent(dpy, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_SURFACE,
                 EGL14.EGL_NO_CONTEXT);
         EGL14.eglDestroySurface(dpy, surf);
         EGL14.eglDestroyContext(dpy, ctx);
         EGL14.eglTerminate(dpy);
+
+        Handler handler = new Handler();
+        handler.postDelayed(this::setMedal, 1000);
     }
 
     private void setMedal() {
-        setMaxTextureSize();
+        // 2초간 멈추게 하고싶다면
+
         binding.medalMapScrollView.post(() -> {
             Log.d("medalResultGetY", " " + binding.medalResultLayout.getHeight());
             DisplayMetrics dm = Objects.requireNonNull(getActivity()).getApplicationContext().getResources().getDisplayMetrics();
@@ -364,10 +416,9 @@ public class MyMedalFragment extends Fragment {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_g);
                                 } else if (medalInfoVOS.get(i - 20).getSilverMedalCnt() == 1) {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_s);
-                                } else if (i!=20&&i!=20+currentCnt-1){
+                                } else if (i != 20 && i != 20 + currentCnt - 1) {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_b);
                                 }
-                                setValueX = (float) (mapWidth * ((xValues[i] - sizeValueX - 6) / 1.2 / 100));
                             }
                             binding.fogImage1.setVisibility(View.VISIBLE);
                             fogHeight = binding.fogImage1.getHeight();
@@ -396,15 +447,14 @@ public class MyMedalFragment extends Fragment {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_g);
                                 } else if (medalInfoVOS.get(i - 16).getSilverMedalCnt() == 1) {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_s);
-                                } else if (i!=16&&i!=16+currentCnt-1){
+                                } else if (i != 16 && i != 16 + currentCnt - 1) {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_b);
                                 }
-                                setValueX = (float) (mapWidth * ((xValues[i] - sizeValueX - 6) / 1.2 / 100));
                             }
                             binding.fogImage2.setVisibility(View.VISIBLE);
                             fogHeight = binding.fogImage2.getHeight();
                             duration = 1250;
-                            scrollValue = (int) (mapHeight - fogHeight - deviceHeight+600);
+                            scrollValue = (int) (mapHeight - fogHeight - deviceHeight + 600);
                             Log.d("mapHeight", mapHeight + " ");
                             Log.d("deviceHeight", deviceHeight + " ");
                             Log.d("fogHeight2", fogHeight + " ");
@@ -428,10 +478,9 @@ public class MyMedalFragment extends Fragment {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_g);
                                 } else if (medalInfoVOS.get(i - 12).getSilverMedalCnt() == 1) {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_s);
-                                } else if (i!=12&&i!=12+currentCnt-1){
+                                } else if (i != 12 && i != 12 + currentCnt - 1) {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_b);
                                 }
-                                setValueX = (float) (mapWidth * ((xValues[i] - sizeValueX - 6) / 1.2 / 100));
                             }
                             binding.fogImage3.setVisibility(View.VISIBLE);
                             fogHeight = binding.fogImage3.getHeight();
@@ -459,10 +508,9 @@ public class MyMedalFragment extends Fragment {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_g);
                                 } else if (medalInfoVOS.get(i - 8).getSilverMedalCnt() == 1) {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_s);
-                                } else if (i!=8&&i!=8+currentCnt-1){
+                                } else if (i != 8 && i != 8 + currentCnt - 1) {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_b);
                                 }
-                                setValueX = (float) (mapWidth * ((xValues[i] - sizeValueX - 6) / 1.2 / 100));
                             }
                             binding.fogImage4.setVisibility(View.VISIBLE);
                             fogHeight = binding.fogImage4.getHeight();
@@ -490,10 +538,9 @@ public class MyMedalFragment extends Fragment {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_g);
                                 } else if (medalInfoVOS.get(i - 4).getSilverMedalCnt() == 1) {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_s);
-                                } else if (i!=4&&i!=4+currentCnt-1){
+                                } else if (i != 4 && i != 4 + currentCnt - 1) {
                                     medalLayout.setMedal(R.drawable.motive_img_013_medal_b);
                                 }
-                                setValueX = (float) (mapWidth * ((xValues[i] - sizeValueX - 6) / 1.2 / 100));
                             }
                             binding.fogImage5.setVisibility(View.VISIBLE);
                             fogHeight = binding.fogImage5.getHeight();
@@ -518,13 +565,12 @@ public class MyMedalFragment extends Fragment {
                                 medalLayout.setMedal(R.drawable.motive_img_013_medal_g);
                             } else if (medalInfoVOS.get(i).getSilverMedalCnt() == 1) {
                                 medalLayout.setMedal(R.drawable.motive_img_013_medal_s);
-                            } else if (i!=0&&i!=currentCnt-1){
+                            } else if (i != 0 && i != currentCnt - 1) {
                                 medalLayout.setMedal(R.drawable.motive_img_013_medal_b);
                             }
-                            setValueX = (float) (mapWidth * ((xValues[i] - sizeValueX - 6) / 1.2 / 100));
-                            if (i == 3) {
+                            /*if (i == 3) {
                                 setValueX = (float) (mapWidth * ((xValues[i] - sizeValueX - 2) / 1.2 / 100));
-                            }
+                            }*/
                         }
                         if ((i + 1) % 4 == 0) {
                             medalLayout.setTextBack(R.drawable.medal_text_back_green);
@@ -539,7 +585,7 @@ public class MyMedalFragment extends Fragment {
                         binding.lastMedalImg.setImageResource(R.drawable.motive_img_013_medal_g);
                     } else if (medalInfoVOS.get(23).getSilverMedalCnt() == 1) {
                         binding.lastMedalImg.setImageResource(R.drawable.motive_img_013_medal_s);
-                    } else{
+                    } else {
                         binding.lastMedalImg.setImageResource(R.drawable.motive_img_013_medal_b);
                     }
                 }
@@ -548,6 +594,7 @@ public class MyMedalFragment extends Fragment {
             }
             scrollLimit = mapHeight - fogHeight - deviceHeight + 1000;
             ObjectAnimator.ofInt(binding.medalMapScrollView, "scrollY", scrollValue).setDuration(duration).start();
+            binding.progressBar.hide();
         });
     }
 

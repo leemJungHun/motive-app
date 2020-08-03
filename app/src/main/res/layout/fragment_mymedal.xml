@@ -30,6 +30,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:src="@drawable/motive_leaderboard_img"
+                        android:adjustViewBounds="true"
                         android:scaleType="fitXY"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -97,6 +98,7 @@
                     android:layout_height="wrap_content"
                     android:scaleType="fitXY"
                     android:src="@drawable/motive_leaderboard_img_01"
+                    android:adjustViewBounds="true"
                     app:layout_constraintBottom_toBottomOf="@id/myMedalLayout" />
                 <ImageView
                     android:id="@+id/fogImage2"
@@ -105,6 +107,7 @@
                     android:layout_height="wrap_content"
                     android:scaleType="fitXY"
                     android:src="@drawable/motive_leaderboard_img_02"
+                    android:adjustViewBounds="true"
                     app:layout_constraintBottom_toBottomOf="@id/myMedalLayout" />
                 <ImageView
                     android:id="@+id/fogImage3"
@@ -113,6 +116,7 @@
                     android:layout_height="wrap_content"
                     android:scaleType="fitXY"
                     android:src="@drawable/motive_leaderboard_img_03"
+                    android:adjustViewBounds="true"
                     app:layout_constraintBottom_toBottomOf="@id/myMedalLayout" />
                 <ImageView
                     android:id="@+id/fogImage4"
@@ -121,6 +125,7 @@
                     android:layout_height="wrap_content"
                     android:scaleType="fitXY"
                     android:src="@drawable/motive_leaderboard_img_04"
+                    android:adjustViewBounds="true"
                     app:layout_constraintBottom_toBottomOf="@id/myMedalLayout" />
 
                 <ImageView
@@ -130,6 +135,7 @@
                     android:layout_height="wrap_content"
                     android:scaleType="fitXY"
                     android:src="@drawable/motive_leaderboard_img_05"
+                    android:adjustViewBounds="true"
                     app:layout_constraintBottom_toBottomOf="@id/myMedalLayout" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -446,6 +452,17 @@
                 tools:text="0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progressBar"
+            android:translationZ="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="200dp"
+            android:layout_height="200dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

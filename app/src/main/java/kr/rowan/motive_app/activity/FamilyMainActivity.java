@@ -35,6 +35,7 @@ import kr.rowan.motive_app.activity.registration.ChangePassActivity;
 import kr.rowan.motive_app.activity.registration.FindFamilyActivity;
 import kr.rowan.motive_app.data.FamilyFindItem;
 import kr.rowan.motive_app.databinding.ActivityFamilyMainBinding;
+import kr.rowan.motive_app.fragment.OpenSourceLicenceFragment;
 import kr.rowan.motive_app.fragment.family.FamilyInfoFragment;
 import kr.rowan.motive_app.fragment.family.MyFamilyFragment;
 import kr.rowan.motive_app.fragment.family.MyFamilyScheduleFragment;
@@ -113,9 +114,9 @@ public class FamilyMainActivity extends AppCompatActivity {
                         FamilyFindItem familyFindItem = new FamilyFindItem();
                         familyFindItem.setUserId(myFamilyListVO.getId());
                         familyFindItem.setRelation(myFamilyListVO.getRelation());
-                        if (myFamilyListVO.getProfileImageUrl()!=null) {
+                        if (myFamilyListVO.getProfileImageUrl() != null) {
                             familyFindItem.setImageUrl(myFamilyListVO.getProfileImageUrl());
-                        }else{
+                        } else {
                             familyFindItem.setImageUrl("");
                         }
                         familyFindItem.setName(myFamilyListVO.getName());
@@ -152,7 +153,7 @@ public class FamilyMainActivity extends AppCompatActivity {
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = item -> {
-        if(!moveFragment) {
+        if (!moveFragment) {
             args = new Bundle();
             args.putSerializable("familyInfoVO", vo);
         }
@@ -162,6 +163,7 @@ public class FamilyMainActivity extends AppCompatActivity {
                 nowFragment = new MyFamilyFragment();
                 nowFragment.setArguments(args);
                 binding.currentFragmentNameTextView.setText(getString(R.string.my_family));
+                binding.addFamily.setVisibility(View.VISIBLE);
                 binding.leftIconImageView.setVisibility(View.GONE);
                 binding.rightIconImageView.setVisibility(View.GONE);
                 setStartFragment();
@@ -171,6 +173,7 @@ public class FamilyMainActivity extends AppCompatActivity {
                 nowFragment = new VideoUploadFragment();
                 nowFragment.setArguments(args);
                 binding.currentFragmentNameTextView.setText(getString(R.string.my_video_info));
+                binding.addFamily.setVisibility(View.GONE);
                 binding.rightIconImageView.setVisibility(View.GONE);
                 binding.leftIconImageView.setVisibility(View.GONE);
                 setStartFragment();
@@ -179,14 +182,18 @@ public class FamilyMainActivity extends AppCompatActivity {
                 check = 2;
                 nowFragment = new MyFamilyScheduleFragment();
                 nowFragment.setArguments(args);
+                binding.addFamily.setVisibility(View.GONE);
                 binding.currentFragmentNameTextView.setText(getString(R.string.my_schedule_info));
+                binding.rightIconImageView.setVisibility(View.GONE);
+                binding.leftIconImageView.setVisibility(View.GONE);
                 setStartFragment();
-                moveFragment=false;
+                moveFragment = false;
                 return true;
             case R.id.myInfo:
                 check = 3;
                 nowFragment = new FamilyInfoFragment();
                 nowFragment.setArguments(args);
+                binding.addFamily.setVisibility(View.GONE);
                 binding.currentFragmentNameTextView.setText(getString(R.string.my_info));
                 binding.rightIconImageView.setVisibility(View.GONE);
                 binding.leftIconImageView.setVisibility(View.GONE);
@@ -205,24 +212,33 @@ public class FamilyMainActivity extends AppCompatActivity {
         if (nowFragment instanceof MyFamilyScheduleFragment) {
             switch (view.getId()) {
                 case R.id.leftIconImageView:
-                    if(((MyFamilyScheduleFragment) nowFragment).familyIndex != 0) {
+                    if (((MyFamilyScheduleFragment) nowFragment).familyIndex != 0) {
                         ((MyFamilyScheduleFragment) nowFragment).familyIndex--;
                     }
                     break;
                 case R.id.rightIconImageView:
-                    if(((MyFamilyScheduleFragment) nowFragment).familyIndex < ((MyFamilyScheduleFragment) nowFragment).familyListVOS.size() - 1) {
+                    if (((MyFamilyScheduleFragment) nowFragment).familyIndex < ((MyFamilyScheduleFragment) nowFragment).familyListVOS.size() - 1) {
                         ((MyFamilyScheduleFragment) nowFragment).familyIndex++;
                     }
                     break;
             }
             ((MyFamilyScheduleFragment) nowFragment).getUserSchedule();
+        }else if (check==4&view.getId()==R.id.leftIconImageView) {
+            check = 3;
+            nowFragment = new FamilyInfoFragment();
+            nowFragment.setArguments(args);
+            binding.addFamily.setVisibility(View.GONE);
+            binding.currentFragmentNameTextView.setText(getString(R.string.my_info));
+            binding.rightIconImageView.setVisibility(View.GONE);
+            binding.leftIconImageView.setVisibility(View.GONE);
+            setStartFragment();
         }
-        if (view.getId()==R.id.add_family){
+        if (view.getId() == R.id.add_family) {
             Intent intent = new Intent(getApplicationContext(), FindFamilyActivity.class);
             intent.putExtra("familyInfoVO", vo);
             intent.putExtra("type", "family");
             intent.putExtra("addFamily", "Y");
-            intent.putParcelableArrayListExtra("nowFamilyList",familyItems);
+            intent.putParcelableArrayListExtra("nowFamilyList", familyItems);
             startActivity(intent);
 
             overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
@@ -232,6 +248,17 @@ public class FamilyMainActivity extends AppCompatActivity {
 
     public void updateFamilyName(String familyName) {
         binding.currentFragmentNameTextView.setText(familyName);
+    }
+
+    public void openSourceFragment() {
+        check = 4;
+        binding.currentFragmentNameTextView.setText(getString(R.string.openSource));
+        binding.addFamily.setVisibility(View.GONE);
+        binding.rightIconImageView.setVisibility(View.GONE);
+        binding.leftIconImageView.setVisibility(View.VISIBLE);
+        nowFragment = new OpenSourceLicenceFragment();
+        nowFragment.setArguments(args);
+        setStartFragment();
     }
 
     public void setStartFragment() {
@@ -302,9 +329,9 @@ public class FamilyMainActivity extends AppCompatActivity {
         httpRequestService.logOut(request).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(@NotNull Call<JsonObject> call, @NotNull Response<JsonObject> response) {
-                if(response.body()!=null){
+                if (response.body() != null) {
                     Log.d("logout", " " + response.body().get("result").toString());
-                    if(response.body().get("result").toString().replace("\"","").equals("ok")) {
+                    if (response.body().get("result").toString().replace("\"", "").equals("ok")) {
                         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = auto.edit();
                         //editor.clear()는 auto에 들어있는 모든 정보를 기기에서 지웁니다.
@@ -329,7 +356,6 @@ public class FamilyMainActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
     @Override

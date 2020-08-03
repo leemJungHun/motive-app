@@ -111,6 +111,7 @@ public class VideoUploadFragment extends Fragment implements View.OnClickListene
                 }
             }
         }
+
     }
 
     private int getPlayTime(String path) {

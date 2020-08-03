@@ -81,8 +81,15 @@
     <string name="jump">건너뛰기</string>
 
     <string name="isFuture">isFuture</string>
-    <string name="medal_select_text">지난 한 주 동안 열심히 하셨나요?\n열심히 하셨으면 금메달,\n노력이 좀더 필요하다면 은메달을\n선택해 주세요</string>
+    <string name="medal_select_text">지난 한 주 동안 열심히 하셨나요?\n열심히 하셨으면 금메달,\n노력이 좀 더 필요하다면 은메달을\n선택해 주세요</string>
+    <string name="guide_text">금메달 또는 은메달을\n클릭해주세요.</string>
+    <string name="guide_text2">확인 버튼을 클릭해주세요.</string>
     <string name="cheering_message_g">칭찬의 박수 짝.짝.짝\n이번 주도 힘내세요!</string>
     <string name="cheering_message_s">항상 응원합니다!</string>
+    <string name="openSource">오픈 소스</string>
+    <string name="oss_notice_motive">OSS Notice | MOTIVE</string>
+    <string name="open_source_text_1">This application is Copyright © ROWAN Inc. All rights reserved.</string>
+    <string name="open_source_text_2">The following sets forth attribution notices for third party software that may be contained in this application.</string>
+    <string name="apache_license_version_2_0">Apache License Version 2.0</string>
 
 </resources>

@@ -213,6 +213,7 @@ public class LoginActivity extends AppCompatActivity {
                     intent.putExtra("userInfoVO", userInfoVO);
                     intent.putExtra("type", "users");
                     intent.putExtra("medalVideo", medalVideo);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
                     finish();
@@ -224,6 +225,7 @@ public class LoginActivity extends AppCompatActivity {
                     intent = new Intent(getApplicationContext(), FamilyMainActivity.class);
                     intent.putExtra("familyInfoVO", familyInfoVO);
                     intent.putExtra("type", "family");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
                     finish();

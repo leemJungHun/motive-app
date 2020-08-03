@@ -58,6 +58,8 @@ public class MyFamilyScheduleFragment extends RootScheduleFragment implements Vi
     private boolean dayStart = true;
     public int familyIndex = 0;
     private ArrayList<String> attendDates = new ArrayList<>();
+    private int weekSort = 0;
+    private int preSumWeekSort = 0;
 
 
     private int scheduleIndex = 0;
@@ -69,6 +71,7 @@ public class MyFamilyScheduleFragment extends RootScheduleFragment implements Vi
     private HttpRequestService httpRequestService;
     private DayItemDecoration dayItemDecoration;
 
+    private boolean isMeet = true;
 
     private FamilyMainActivity activity;
 
@@ -201,7 +204,7 @@ public class MyFamilyScheduleFragment extends RootScheduleFragment implements Vi
                     if (pos != -1) {
                         Log.e("prevPos", String.valueOf(prevPos));
                         CalendarItem item = adapter.updateItem(pos, prevPos);
-                        onContentView(item.isFuture(), item.isSchedule());
+                        onContentView(item.isFuture(), item.isSchedule(),item.getWeekSort());
                         prevPos = pos;
                     }
                 }
@@ -221,6 +224,8 @@ public class MyFamilyScheduleFragment extends RootScheduleFragment implements Vi
     };
 
     private void setCalendarView(boolean isUpdate) {
+        preSumWeekSort=0;
+        weekSort = 0;
         firstCal.set(Calendar.DATE, 1);
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
@@ -268,18 +273,19 @@ public class MyFamilyScheduleFragment extends RootScheduleFragment implements Vi
                 if (Integer.parseInt(scheduleDate[2]) == cal.get(Calendar.DATE)) {
                     binding.scheduleContentView.setVisibility(View.VISIBLE);
                 }
+            }else if (Integer.parseInt(scheduleDate[0]) == year && Integer.parseInt(scheduleDate[1]) < (month + 1)) {
+                preSumWeekSort++;
             }
         }
 
         Collections.sort(haveSchedule);
 
         boolean isFuture = !(nowMonth >= month);
-
         for (int i = 1; i < lastDay + 1 + (7 - lastDayNum); i++) {
             if (i < firstCal.get(Calendar.DAY_OF_WEEK) && dayStart) {
-                mItem.add(new CalendarItem(String.valueOf(beforeLastDay - beforeLastDayNum + i), false, false, false, false, false, false));
+                mItem.add(new CalendarItem(String.valueOf(beforeLastDay - beforeLastDayNum + i), false, false, false, false, false, false,0));
             } else if(i > lastDay) {
-                mItem.add(new CalendarItem(String.valueOf(i - lastDay), false, false, false, false, false, false));
+                mItem.add(new CalendarItem(String.valueOf(i - lastDay), false, false, false, false, false, false,0));
             } else {
                 if (dayStart) {
                     i = 1;
@@ -301,7 +307,16 @@ public class MyFamilyScheduleFragment extends RootScheduleFragment implements Vi
                     prevPos = i + firstCal.get(Calendar.DAY_OF_WEEK) - 2;
                     Log.e("schedule", "isSelect = " + prevPos);
                 }
-                mItem.add(new CalendarItem(String.valueOf(i), i == dayOfMonth, hasSchedule, false, false, isFuture, true));
+                if (hasSchedule){
+                    weekSort++;
+                    Log.d("weekSort", weekSort+" ");
+                    Log.d("preSumWeekSort+weekSort", preSumWeekSort+weekSort+" ");
+                }
+                if(hasSchedule&&dayOfMonth==1&&!isMeet){
+                    String weekText = preSumWeekSort+1+"주차";
+                    binding.scheduleContentText.setText(weekText);
+                }
+                mItem.add(new CalendarItem(String.valueOf(i), i == dayOfMonth, hasSchedule, false, false, isFuture, true,preSumWeekSort+weekSort));
             }
         }
 
@@ -352,6 +367,13 @@ public class MyFamilyScheduleFragment extends RootScheduleFragment implements Vi
                                     for (JsonElement element : jsonArray) {
                                         GroupScheduleVO groupScheduleVO = gson.fromJson(element, GroupScheduleVO.class);
                                         String breakAway = groupScheduleVO.getBreakAway();
+                                        if(groupScheduleVO.getDayOfWeek().equals("비대면")){
+                                            isMeet = false;
+                                            binding.scheduleContentText.setText("1주차");
+                                        }else{
+                                            isMeet = true;
+                                            binding.scheduleContentText.setText("센터 방문");
+                                        }
                                         if (breakAway.equals("N") || breakAway.equals("n")) {
                                             String attendDate = groupScheduleVO.getAttendDate().substring(0, 10);
                                             attendDates.add(attendDate);
@@ -383,15 +405,13 @@ public class MyFamilyScheduleFragment extends RootScheduleFragment implements Vi
         scheduleIndex = 0;
         if (v == binding.tvPrevMonth) {
             cal.add(Calendar.MONTH, -1);
-            cal.set(Calendar.DATE, 1);
             firstCal.add(Calendar.MONTH, -1);
-            setCalendarView(true);
         } else if (v == binding.tvNextMonth) {
             cal.add(Calendar.MONTH, +1);
-            cal.set(Calendar.DATE, 1);
             firstCal.add(Calendar.MONTH, +1);
-            setCalendarView(true);
         }
+        cal.set(Calendar.DATE, 1);
+        setCalendarView(true);
     }
 
     @Override
@@ -400,9 +420,14 @@ public class MyFamilyScheduleFragment extends RootScheduleFragment implements Vi
     }
 
     @Override
-    public void onContentView(boolean isFuture, boolean onView) {
+    public void onContentView(boolean isFuture, boolean onView, int weekSort) {
         binding.scheduleContentIcon.setImageResource(isFuture ? R.drawable.schedule_point : R.drawable.schedule_point_gray);
-        binding.scheduleContentText.setText(isFuture ? "센터 방문" : "센터 방문 완료");
         binding.scheduleContentView.setVisibility(onView ? View.VISIBLE : View.GONE);
+        if(!isMeet) {
+            String weekText = weekSort+"주차";
+            binding.scheduleContentText.setText(weekText);
+        }else{
+            binding.scheduleContentText.setText(isFuture ? "센터 방문" : "센터 방문 완료");
+        }
     }
 }

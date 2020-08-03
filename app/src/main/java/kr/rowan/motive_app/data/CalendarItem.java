@@ -8,10 +8,9 @@ public class CalendarItem {
     private boolean haveSilverMedal;
     private boolean isFuture;
     private boolean isThisMonth;
+    private int weekSort;
 
-    public CalendarItem(){}
-
-    public CalendarItem(String day, boolean isSelect, boolean isSchedule, boolean haveGoldMedal, boolean haveSilverMedal, boolean isFuture, boolean isThisMonth) {
+    public CalendarItem(String day, boolean isSelect, boolean isSchedule, boolean haveGoldMedal, boolean haveSilverMedal, boolean isFuture, boolean isThisMonth, int weekSort) {
         this.day = day;
         this.isSelect = isSelect;
         this.isSchedule = isSchedule;
@@ -19,15 +18,7 @@ public class CalendarItem {
         this.haveSilverMedal = haveSilverMedal;
         this.isFuture = isFuture;
         this.isThisMonth = isThisMonth;
-    }
-
-    public CalendarItem(String day, boolean isSelect, boolean isSchedule, boolean haveGoldMedal, boolean haveSilverMedal, boolean isFuture) {
-        this.day = day;
-        this.isSelect = isSelect;
-        this.isSchedule = isSchedule;
-        this.haveGoldMedal = haveGoldMedal;
-        this.haveSilverMedal = haveSilverMedal;
-        this.isFuture = isFuture;
+        this.weekSort = weekSort;
     }
 
     public String getDay() {
@@ -80,5 +71,13 @@ public class CalendarItem {
 
     public boolean isThisMonth() {
         return isThisMonth;
+    }
+
+    public int getWeekSort() {
+        return weekSort;
+    }
+
+    public void setWeekSort(int weekSort) {
+        this.weekSort = weekSort;
     }
 }

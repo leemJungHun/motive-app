@@ -114,6 +114,7 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
         binding.explainTextWithdrawal.setOnClickListener(this);
         binding.photoChange.setOnClickListener(this);
         binding.photoChangeIcon.setOnClickListener(this);
+        binding.openLicence.setOnClickListener(this);
 
         //set
         binding.myInfoName.setText(vo.getName());
@@ -151,6 +152,8 @@ public class FamilyInfoFragment extends Fragment implements View.OnClickListener
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "이미지를 선택하세요."), 0);
+        }else if(v == binding.openLicence){
+            activity.openSourceFragment();
         }
     }
 
